@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Float - Visual Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .container {
+            background: #ecf0f1;
+            padding: 15px;
+            margin: 15px 0;
+            overflow: auto;
+        }
+
+        .box {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            margin: 5px;
+            width: 120px;
+        }
+
+        .text-content {
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .float-left { float: left; }
+        .float-right { float: right; }
+        .float-none { float: none; }
+
+        .clear-left { clear: left; }
+        .clear-right { clear: right; }
+        .clear-both { clear: both; }
+
+        .sample-label {
+            font-size: 12px;
+            margin-top: 10px;
+            color: #666;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Float Test</h1>
+        <p>Testing float values: left, right, none, and clear properties</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+                <div class="sample-label">float: left</div>
+                <div class="container">
+                    <div class="box float-left">Float Left</div>
+                    <p class="text-content">
+                        This text wraps around the floated box. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    </p>
+                </div>
+
+                <div class="sample-label">float: right</div>
+                <div class="container">
+                    <div class="box float-right">Float Right</div>
+                    <p class="text-content">
+                        This text wraps around the right-floated box. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    </p>
+                </div>
+
+                <div class="sample-label">float: left (multiple)</div>
+                <div class="container">
+                    <div class="box float-left">Box 1</div>
+                    <div class="box float-left">Box 2</div>
+                    <div class="box float-left">Box 3</div>
+                    <p class="text-content">
+                        Multiple floated boxes. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    </p>
+                </div>
+
+                <div class="sample-label">float: left + float: right</div>
+                <div class="container">
+                    <div class="box float-left">Left</div>
+                    <div class="box float-right">Right</div>
+                    <p class="text-content">
+                        Content between left and right floated boxes. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    </p>
+                </div>
+
+                <div class="sample-label">clear: left</div>
+                <div class="container">
+                    <div class="box float-left">Float 1</div>
+                    <div class="box float-left">Float 2</div>
+                    <div class="box float-left clear-left">Clear Left</div>
+                    <p class="text-content">This paragraph comes after cleared floats.</p>
+                </div>
+
+                <div class="sample-label">clear: both</div>
+                <div class="container">
+                    <div class="box float-left">Left</div>
+                    <div class="box float-right">Right</div>
+                    <div class="box clear-both" style="width: auto; background: #e74c3c;">Clear Both</div>
+                </div>
+
+                <div class="sample-label">float: none (default)</div>
+                <div class="container">
+                    <div class="box float-none">No Float 1</div>
+                    <div class="box float-none">No Float 2</div>
+                    <p class="text-content">These boxes don't float - normal block behavior.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Float</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

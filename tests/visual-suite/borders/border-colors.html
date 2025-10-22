@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Border Colors - Visual Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .sample {
+            width: 150px;
+            height: 100px;
+            margin: 10px;
+            display: inline-block;
+            border-width: 8px;
+            border-style: solid;
+        }
+
+        .border-single { border-color: #3498db; }
+        .border-hex { border-color: #e74c3c; }
+        .border-rgb { border-color: rgb(46, 204, 113); }
+        .border-rgba { border-color: rgba(155, 89, 182, 0.7); }
+        .border-hsl { border-color: hsl(48, 100%, 50%); }
+        .border-hsla { border-color: hsla(16, 100%, 66%, 0.8); }
+        .border-transparent { border-color: transparent; background: #ecf0f1; }
+        .border-currentcolor { color: #e74c3c; border-color: currentColor; }
+
+        .border-multi-2 {
+            border-style: solid;
+            border-width: 8px;
+            border-top-color: #3498db;
+            border-bottom-color: #e74c3c;
+        }
+
+        .border-multi-4 {
+            border-style: solid;
+            border-width: 8px;
+            border-top-color: #3498db;
+            border-right-color: #2ecc71;
+            border-bottom-color: #e74c3c;
+            border-left-color: #f39c12;
+        }
+
+        .border-named { border-color: coral; }
+        .border-gradient-simulation {
+            border: 8px solid;
+            border-image: linear-gradient(45deg, #3498db, #e74c3c) 1;
+        }
+
+        .sample-label {
+            text-align: center;
+            font-size: 11px;
+            margin-top: 5px;
+            color: #666;
+            max-width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Border Colors Test</h1>
+        <p>Testing various border-color formats: named, hex, rgb, rgba, hsl, hsla, transparent, currentColor, and multi-side colors</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+                <div>
+                    <div class="sample border-single"></div>
+                    <div class="sample-label">#3498db (hex)</div>
+                </div>
+                <div>
+                    <div class="sample border-hex"></div>
+                    <div class="sample-label">#e74c3c (hex)</div>
+                </div>
+                <div>
+                    <div class="sample border-rgb"></div>
+                    <div class="sample-label">rgb(46, 204, 113)</div>
+                </div>
+                <div>
+                    <div class="sample border-rgba"></div>
+                    <div class="sample-label">rgba(155, 89, 182, 0.7)</div>
+                </div>
+                <div>
+                    <div class="sample border-hsl"></div>
+                    <div class="sample-label">hsl(48, 100%, 50%)</div>
+                </div>
+                <div>
+                    <div class="sample border-hsla"></div>
+                    <div class="sample-label">hsla(16, 100%, 66%, 0.8)</div>
+                </div>
+                <div>
+                    <div class="sample border-transparent"></div>
+                    <div class="sample-label">transparent</div>
+                </div>
+                <div>
+                    <div class="sample border-currentcolor"></div>
+                    <div class="sample-label">currentColor</div>
+                </div>
+                <div>
+                    <div class="sample border-named"></div>
+                    <div class="sample-label">coral (named)</div>
+                </div>
+                <div>
+                    <div class="sample border-multi-2"></div>
+                    <div class="sample-label">top/bottom colors</div>
+                </div>
+                <div>
+                    <div class="sample border-multi-4"></div>
+                    <div class="sample-label">4 different sides</div>
+                </div>
+                <div>
+                    <div class="sample border-gradient-simulation"></div>
+                    <div class="sample-label">border-image gradient</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Border Colors</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

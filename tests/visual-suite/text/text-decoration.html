@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Decoration - Visual Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .sample { padding: 15px; margin: 10px 0; font-size: 18px; }
+        .td-none { text-decoration: none; }
+        .td-underline { text-decoration: underline; }
+        .td-overline { text-decoration: overline; }
+        .td-line-through { text-decoration: line-through; }
+        .td-underline-overline { text-decoration: underline overline; }
+        .td-underline-red { text-decoration: underline; text-decoration-color: red; }
+        .td-underline-wavy { text-decoration: underline; text-decoration-style: wavy; }
+        .td-underline-dotted { text-decoration: underline; text-decoration-style: dotted; }
+        .td-underline-dashed { text-decoration: underline; text-decoration-style: dashed; }
+        .td-underline-double { text-decoration: underline; text-decoration-style: double; }
+        .td-underline-thick { text-decoration: underline; text-decoration-thickness: 3px; }
+        .td-complex { text-decoration: underline wavy #3498db; text-decoration-thickness: 2px; }
+        .sample-label { font-size: 11px; color: #666; font-weight: 600; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Text Decoration Test</h1>
+        <p>Testing text-decoration: none, underline, overline, line-through, styles, colors, thickness</p>
+    </header>
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+                <div class="sample-label">text-decoration: none</div>
+                <div class="sample td-none">The quick brown fox jumps over the lazy dog</div>
+                <div class="sample-label">text-decoration: underline</div>
+                <div class="sample td-underline">The quick brown fox jumps over the lazy dog</div>
+                <div class="sample-label">text-decoration: overline</div>
+                <div class="sample td-overline">The quick brown fox jumps over the lazy dog</div>
+                <div class="sample-label">text-decoration: line-through</div>
+                <div class="sample td-line-through">The quick brown fox jumps over the lazy dog</div>
+                <div class="sample-label">text-decoration: underline overline</div>
+                <div class="sample td-underline-overline">The quick brown fox jumps over the lazy dog</div>
+                <div class="sample-label">underline + red color</div>
+                <div class="sample td-underline-red">The quick brown fox jumps over the lazy dog</div>
+                <div class="sample-label">underline + wavy style</div>
+                <div class="sample td-underline-wavy">The quick brown fox jumps over the lazy dog</div>
+                <div class="sample-label">underline + dotted style</div>
+                <div class="sample td-underline-dotted">The quick brown fox jumps over the lazy dog</div>
+                <div class="sample-label">underline + dashed style</div>
+                <div class="sample td-underline-dashed">The quick brown fox jumps over the lazy dog</div>
+                <div class="sample-label">underline + double style</div>
+                <div class="sample td-underline-double">The quick brown fox jumps over the lazy dog</div>
+                <div class="sample-label">underline + 3px thickness</div>
+                <div class="sample td-underline-thick">The quick brown fox jumps over the lazy dog</div>
+                <div class="sample-label">complex: wavy blue underline 2px</div>
+                <div class="sample td-complex">The quick brown fox jumps over the lazy dog</div>
+            </div>
+        </div>
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>html2canvas Visual Testing Suite - Text Decoration</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

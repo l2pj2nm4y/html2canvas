@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overflow - Visual Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .container {
+            width: 250px;
+            height: 120px;
+            margin: 15px;
+            display: inline-block;
+            vertical-align: top;
+            border: 2px solid #3498db;
+            background: #ecf0f1;
+        }
+
+        .content {
+            background: #3498db;
+            color: white;
+            padding: 10px;
+            width: 300px;
+            height: 150px;
+        }
+
+        .overflow-visible { overflow: visible; }
+        .overflow-hidden { overflow: hidden; }
+        .overflow-scroll { overflow: scroll; }
+        .overflow-auto { overflow: auto; }
+
+        .overflow-x-hidden { overflow-x: hidden; overflow-y: visible; }
+        .overflow-y-hidden { overflow-x: visible; overflow-y: hidden; }
+        .overflow-x-scroll { overflow-x: scroll; overflow-y: hidden; }
+        .overflow-y-scroll { overflow-x: hidden; overflow-y: scroll; }
+
+        .overflow-x-auto { overflow-x: auto; overflow-y: hidden; }
+        .overflow-y-auto { overflow-x: hidden; overflow-y: auto; }
+
+        .text-overflow-container {
+            width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            border: 2px solid #e74c3c;
+            padding: 10px;
+            margin: 10px;
+            background: white;
+        }
+
+        .sample-label {
+            font-size: 11px;
+            color: #666;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Overflow Test</h1>
+        <p>Testing overflow values: visible, hidden, scroll, auto, and text-overflow ellipsis</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+                <div>
+                    <div class="container overflow-visible">
+                        <div class="content">overflow: visible (content overflows outside)</div>
+                    </div>
+                    <div class="sample-label">overflow: visible</div>
+                </div>
+
+                <div>
+                    <div class="container overflow-hidden">
+                        <div class="content">overflow: hidden (content clipped)</div>
+                    </div>
+                    <div class="sample-label">overflow: hidden</div>
+                </div>
+
+                <div>
+                    <div class="container overflow-scroll">
+                        <div class="content">overflow: scroll (scrollbars always shown)</div>
+                    </div>
+                    <div class="sample-label">overflow: scroll</div>
+                </div>
+
+                <div>
+                    <div class="container overflow-auto">
+                        <div class="content">overflow: auto (scrollbars when needed)</div>
+                    </div>
+                    <div class="sample-label">overflow: auto</div>
+                </div>
+
+                <div>
+                    <div class="container overflow-x-hidden">
+                        <div class="content">overflow-x: hidden, overflow-y: visible</div>
+                    </div>
+                    <div class="sample-label">overflow-x: hidden</div>
+                </div>
+
+                <div>
+                    <div class="container overflow-y-hidden">
+                        <div class="content">overflow-x: visible, overflow-y: hidden</div>
+                    </div>
+                    <div class="sample-label">overflow-y: hidden</div>
+                </div>
+
+                <div>
+                    <div class="container overflow-x-scroll">
+                        <div class="content">overflow-x: scroll, overflow-y: hidden</div>
+                    </div>
+                    <div class="sample-label">overflow-x: scroll</div>
+                </div>
+
+                <div>
+                    <div class="container overflow-y-scroll">
+                        <div class="content">overflow-x: hidden, overflow-y: scroll</div>
+                    </div>
+                    <div class="sample-label">overflow-y: scroll</div>
+                </div>
+
+                <div>
+                    <div class="container overflow-x-auto">
+                        <div class="content">overflow-x: auto, overflow-y: hidden</div>
+                    </div>
+                    <div class="sample-label">overflow-x: auto</div>
+                </div>
+
+                <div>
+                    <div class="container overflow-y-auto">
+                        <div class="content">overflow-x: hidden, overflow-y: auto</div>
+                    </div>
+                    <div class="sample-label">overflow-y: auto</div>
+                </div>
+
+                <div style="clear: both; padding-top: 20px;">
+                    <div class="text-overflow-container">
+                        This is a very long text that will be truncated with ellipsis
+                    </div>
+                    <div class="sample-label">text-overflow: ellipsis</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Overflow</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

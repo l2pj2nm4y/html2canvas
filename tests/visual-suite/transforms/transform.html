@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transform - Visual Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .container { background: #ecf0f1; padding: 80px; margin: 15px 0; min-height: 150px; position: relative; }
+        .box { background: #3498db; color: white; padding: 20px; width: 100px; text-align: center; margin: auto; }
+        .t-none { transform: none; }
+        .t-translate { transform: translate(50px, 30px); }
+        .t-translateX { transform: translateX(50px); }
+        .t-translateY { transform: translateY(30px); }
+        .t-scale { transform: scale(1.5); }
+        .t-scaleX { transform: scaleX(1.5); }
+        .t-scaleY { transform: scaleY(1.5); }
+        .t-rotate { transform: rotate(45deg); }
+        .t-skew { transform: skew(15deg, 10deg); }
+        .t-skewX { transform: skewX(20deg); }
+        .t-skewY { transform: skewY(15deg); }
+        .t-matrix { transform: matrix(1, 0.5, -0.5, 1, 30, 10); }
+        .t-multiple { transform: translate(30px, 20px) rotate(30deg) scale(1.2); }
+        .t-3d { transform: rotateX(45deg) rotateY(45deg); }
+        .sample-label { font-size: 11px; color: #666; font-weight: 600; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Transform Test</h1>
+        <p>Testing transform functions: translate, scale, rotate, skew, matrix, and combinations</p>
+    </header>
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+                <div class="sample-label">transform: none</div>
+                <div class="container"><div class="box t-none">None</div></div>
+                <div class="sample-label">transform: translate(50px, 30px)</div>
+                <div class="container"><div class="box t-translate">Translate</div></div>
+                <div class="sample-label">transform: translateX(50px)</div>
+                <div class="container"><div class="box t-translateX">TranslateX</div></div>
+                <div class="sample-label">transform: translateY(30px)</div>
+                <div class="container"><div class="box t-translateY">TranslateY</div></div>
+                <div class="sample-label">transform: scale(1.5)</div>
+                <div class="container"><div class="box t-scale">Scale</div></div>
+                <div class="sample-label">transform: scaleX(1.5)</div>
+                <div class="container"><div class="box t-scaleX">ScaleX</div></div>
+                <div class="sample-label">transform: scaleY(1.5)</div>
+                <div class="container"><div class="box t-scaleY">ScaleY</div></div>
+                <div class="sample-label">transform: rotate(45deg)</div>
+                <div class="container"><div class="box t-rotate">Rotate</div></div>
+                <div class="sample-label">transform: skew(15deg, 10deg)</div>
+                <div class="container"><div class="box t-skew">Skew</div></div>
+                <div class="sample-label">transform: skewX(20deg)</div>
+                <div class="container"><div class="box t-skewX">SkewX</div></div>
+                <div class="sample-label">transform: skewY(15deg)</div>
+                <div class="container"><div class="box t-skewY">SkewY</div></div>
+                <div class="sample-label">transform: matrix(1, 0.5, -0.5, 1, 30, 10)</div>
+                <div class="container"><div class="box t-matrix">Matrix</div></div>
+                <div class="sample-label">Multiple: translate + rotate + scale</div>
+                <div class="container"><div class="box t-multiple">Combined</div></div>
+                <div class="sample-label">3D: rotateX(45deg) rotateY(45deg)</div>
+                <div class="container"><div class="box t-3d">3D Rotate</div></div>
+            </div>
+        </div>
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>html2canvas Visual Testing Suite - Transform</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

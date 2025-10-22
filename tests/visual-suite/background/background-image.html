@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Image - Visual Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .sample {
+            width: 200px;
+            height: 150px;
+            margin: 10px;
+            display: inline-block;
+            border: 1px solid #ddd;
+        }
+
+        .bg-url {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="40" fill="%233498db"/></svg>');
+        }
+
+        .bg-linear {
+            background-image: linear-gradient(to right, #3498db, #e74c3c);
+        }
+
+        .bg-linear-multi {
+            background-image: linear-gradient(45deg, #3498db 0%, #9b59b6 50%, #e74c3c 100%);
+        }
+
+        .bg-radial {
+            background-image: radial-gradient(circle, #3498db, #2c3e50);
+        }
+
+        .bg-radial-ellipse {
+            background-image: radial-gradient(ellipse at center, #e74c3c 0%, #c0392b 100%);
+        }
+
+        .bg-repeating-linear {
+            background-image: repeating-linear-gradient(45deg, #3498db, #3498db 10px, #2980b9 10px, #2980b9 20px);
+        }
+
+        .bg-repeating-radial {
+            background-image: repeating-radial-gradient(circle, #2ecc71, #2ecc71 10px, #27ae60 10px, #27ae60 20px);
+        }
+
+        .bg-multiple {
+            background-image:
+                linear-gradient(rgba(52, 152, 219, 0.5), rgba(52, 152, 219, 0.5)),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"><rect width="50" height="50" fill="%23ecf0f1"/><circle cx="25" cy="25" r="20" fill="%23e74c3c"/></svg>');
+        }
+
+        .bg-conic {
+            background-image: conic-gradient(from 0deg, #3498db, #9b59b6, #e74c3c, #f39c12, #2ecc71, #3498db);
+        }
+
+        .sample-label {
+            text-align: center;
+            font-size: 11px;
+            margin-top: 5px;
+            color: #666;
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Background Image Test</h1>
+        <p>Testing various background-image types: URLs, gradients, and multiple backgrounds</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+                <div>
+                    <div class="sample bg-url"></div>
+                    <div class="sample-label">url(SVG data URI)</div>
+                </div>
+                <div>
+                    <div class="sample bg-linear"></div>
+                    <div class="sample-label">linear-gradient(to right, blue, red)</div>
+                </div>
+                <div>
+                    <div class="sample bg-linear-multi"></div>
+                    <div class="sample-label">linear-gradient(45deg, multi-stop)</div>
+                </div>
+                <div>
+                    <div class="sample bg-radial"></div>
+                    <div class="sample-label">radial-gradient(circle)</div>
+                </div>
+                <div>
+                    <div class="sample bg-radial-ellipse"></div>
+                    <div class="sample-label">radial-gradient(ellipse at center)</div>
+                </div>
+                <div>
+                    <div class="sample bg-repeating-linear"></div>
+                    <div class="sample-label">repeating-linear-gradient(45deg)</div>
+                </div>
+                <div>
+                    <div class="sample bg-repeating-radial"></div>
+                    <div class="sample-label">repeating-radial-gradient(circle)</div>
+                </div>
+                <div>
+                    <div class="sample bg-multiple"></div>
+                    <div class="sample-label">Multiple backgrounds (gradient + SVG)</div>
+                </div>
+                <div>
+                    <div class="sample bg-conic"></div>
+                    <div class="sample-label">conic-gradient(color wheel)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Background Image</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

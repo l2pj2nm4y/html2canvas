@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Font Size - Visual Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .sample { padding: 10px; margin: 10px 0; }
+        .fs-8px { font-size: 8px; }
+        .fs-10px { font-size: 10px; }
+        .fs-12px { font-size: 12px; }
+        .fs-14px { font-size: 14px; }
+        .fs-16px { font-size: 16px; }
+        .fs-18px { font-size: 18px; }
+        .fs-24px { font-size: 24px; }
+        .fs-32px { font-size: 32px; }
+        .fs-48px { font-size: 48px; }
+        .fs-64px { font-size: 64px; }
+
+        .fs-xx-small { font-size: xx-small; }
+        .fs-x-small { font-size: x-small; }
+        .fs-small { font-size: small; }
+        .fs-medium { font-size: medium; }
+        .fs-large { font-size: large; }
+        .fs-x-large { font-size: x-large; }
+        .fs-xx-large { font-size: xx-large; }
+
+        .fs-smaller { font-size: smaller; }
+        .fs-larger { font-size: larger; }
+
+        .fs-em { font-size: 1.5em; }
+        .fs-rem { font-size: 2rem; }
+        .fs-percent { font-size: 150%; }
+
+        .sample-label { font-size: 11px; color: #666; font-weight: 600; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Font Size Test</h1>
+        <p>Testing various font-size values: pixels, keywords, em, rem, percentages</p>
+    </header>
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+                <div class="sample-label">8px, 10px, 12px</div>
+                <div class="sample fs-8px">Font size 8px</div>
+                <div class="sample fs-10px">Font size 10px</div>
+                <div class="sample fs-12px">Font size 12px</div>
+
+                <div class="sample-label">14px, 16px, 18px</div>
+                <div class="sample fs-14px">Font size 14px</div>
+                <div class="sample fs-16px">Font size 16px</div>
+                <div class="sample fs-18px">Font size 18px</div>
+
+                <div class="sample-label">24px, 32px, 48px, 64px</div>
+                <div class="sample fs-24px">Font size 24px</div>
+                <div class="sample fs-32px">Font size 32px</div>
+                <div class="sample fs-48px">Font size 48px</div>
+                <div class="sample fs-64px">Font size 64px</div>
+
+                <div class="sample-label">Absolute keywords</div>
+                <div class="sample fs-xx-small">xx-small</div>
+                <div class="sample fs-x-small">x-small</div>
+                <div class="sample fs-small">small</div>
+                <div class="sample fs-medium">medium</div>
+                <div class="sample fs-large">large</div>
+                <div class="sample fs-x-large">x-large</div>
+                <div class="sample fs-xx-large">xx-large</div>
+
+                <div class="sample-label">Relative keywords & units</div>
+                <div class="sample fs-smaller">smaller</div>
+                <div class="sample fs-larger">larger</div>
+                <div class="sample fs-em">1.5em</div>
+                <div class="sample fs-rem">2rem</div>
+                <div class="sample fs-percent">150%</div>
+            </div>
+        </div>
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>html2canvas Visual Testing Suite - Font Size</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

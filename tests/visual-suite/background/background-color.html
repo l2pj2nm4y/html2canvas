@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Color - Visual Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .sample {
+            width: 150px;
+            height: 100px;
+            margin: 10px;
+            display: inline-block;
+            border: 1px solid #ddd;
+        }
+
+        .bg-red { background-color: red; }
+        .bg-hex { background-color: #3498db; }
+        .bg-rgb { background-color: rgb(46, 204, 113); }
+        .bg-rgba { background-color: rgba(231, 76, 60, 0.7); }
+        .bg-hsl { background-color: hsl(280, 70%, 60%); }
+        .bg-hsla { background-color: hsla(48, 100%, 50%, 0.8); }
+        .bg-transparent { background-color: transparent; border: 2px dashed #999; }
+        .bg-named { background-color: coral; }
+        .bg-currentcolor { color: #e74c3c; background-color: currentColor; }
+
+        .sample-label {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 5px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Background Color Test</h1>
+        <p>Testing various background-color formats and values</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+                <div>
+                    <div class="sample bg-red"></div>
+                    <div class="sample-label">red (named)</div>
+                </div>
+                <div>
+                    <div class="sample bg-hex"></div>
+                    <div class="sample-label">#3498db (hex)</div>
+                </div>
+                <div>
+                    <div class="sample bg-rgb"></div>
+                    <div class="sample-label">rgb(46, 204, 113)</div>
+                </div>
+                <div>
+                    <div class="sample bg-rgba"></div>
+                    <div class="sample-label">rgba(231, 76, 60, 0.7)</div>
+                </div>
+                <div>
+                    <div class="sample bg-hsl"></div>
+                    <div class="sample-label">hsl(280, 70%, 60%)</div>
+                </div>
+                <div>
+                    <div class="sample bg-hsla"></div>
+                    <div class="sample-label">hsla(48, 100%, 50%, 0.8)</div>
+                </div>
+                <div>
+                    <div class="sample bg-transparent"></div>
+                    <div class="sample-label">transparent</div>
+                </div>
+                <div>
+                    <div class="sample bg-named"></div>
+                    <div class="sample-label">coral (named)</div>
+                </div>
+                <div>
+                    <div class="sample bg-currentcolor"></div>
+                    <div class="sample-label">currentColor</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Background Color</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

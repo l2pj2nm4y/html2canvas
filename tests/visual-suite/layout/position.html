@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Position - Visual Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .container {
+            background: #ecf0f1;
+            padding: 15px;
+            margin: 15px 0;
+            min-height: 150px;
+            position: relative;
+        }
+
+        .box {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            width: 100px;
+            text-align: center;
+        }
+
+        .reference-box {
+            background: #95a5a6;
+            color: white;
+            padding: 15px;
+            width: 100px;
+            text-align: center;
+            opacity: 0.5;
+        }
+
+        .pos-static { position: static; }
+        .pos-relative { position: relative; top: 20px; left: 30px; }
+        .pos-absolute { position: absolute; top: 10px; right: 10px; }
+        .pos-fixed { position: fixed; bottom: 10px; right: 10px; z-index: 1000; background: #e74c3c; }
+        .pos-sticky { position: sticky; top: 0; background: #2ecc71; }
+
+        .offset-top-left { top: 10px; left: 10px; }
+        .offset-bottom-right { bottom: 10px; right: 10px; }
+        .offset-negative { top: -10px; left: -10px; }
+        .offset-percent { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+        .sample-label {
+            font-size: 12px;
+            margin-top: 10px;
+            color: #666;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Position Test</h1>
+        <p>Testing position values: static, relative, absolute, fixed, sticky, and offset properties</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+                <div class="sample-label">position: static (default)</div>
+                <div class="container">
+                    <div class="box pos-static">Static</div>
+                    <div class="reference-box">Reference</div>
+                </div>
+
+                <div class="sample-label">position: relative (top: 20px, left: 30px)</div>
+                <div class="container">
+                    <div class="box pos-relative">Relative</div>
+                    <div class="reference-box">Reference</div>
+                </div>
+
+                <div class="sample-label">position: absolute (top: 10px, right: 10px)</div>
+                <div class="container">
+                    <div class="reference-box">Reference</div>
+                    <div class="box pos-absolute offset-top-left" style="top: 10px; right: 10px;">Absolute</div>
+                </div>
+
+                <div class="sample-label">position: absolute (bottom: 10px, right: 10px)</div>
+                <div class="container">
+                    <div class="reference-box">Reference</div>
+                    <div class="box pos-absolute offset-bottom-right">Absolute</div>
+                </div>
+
+                <div class="sample-label">position: absolute (centered with transform)</div>
+                <div class="container">
+                    <div class="reference-box">Reference</div>
+                    <div class="box pos-absolute offset-percent">Centered</div>
+                </div>
+
+                <div class="sample-label">position: absolute (negative offset)</div>
+                <div class="container">
+                    <div class="reference-box">Reference</div>
+                    <div class="box pos-absolute offset-negative">Negative</div>
+                </div>
+
+                <div class="sample-label">Multiple positioned elements</div>
+                <div class="container">
+                    <div class="box pos-absolute" style="top: 10px; left: 10px;">Top Left</div>
+                    <div class="box pos-absolute" style="top: 10px; right: 10px;">Top Right</div>
+                    <div class="box pos-absolute" style="bottom: 10px; left: 10px;">Bottom Left</div>
+                    <div class="box pos-absolute" style="bottom: 10px; right: 10px;">Bottom Right</div>
+                </div>
+
+                <div class="sample-label">Overlapping positions (z-index demo)</div>
+                <div class="container">
+                    <div class="box pos-absolute" style="top: 20px; left: 20px; z-index: 1;">Z-Index 1</div>
+                    <div class="box pos-absolute" style="top: 40px; left: 40px; z-index: 3; background: #e74c3c;">Z-Index 3</div>
+                    <div class="box pos-absolute" style="top: 60px; left: 60px; z-index: 2; background: #2ecc71;">Z-Index 2</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Position</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display - Visual Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .container {
+            background: #ecf0f1;
+            padding: 10px;
+            margin: 10px;
+            min-height: 100px;
+        }
+
+        .item {
+            background: #3498db;
+            color: white;
+            padding: 10px;
+            margin: 5px;
+        }
+
+        .display-block .item { display: block; width: 150px; }
+        .display-inline .item { display: inline; }
+        .display-inline-block .item { display: inline-block; width: 80px; }
+        .display-none .item:nth-child(2) { display: none; }
+
+        .display-flex {
+            display: flex;
+            gap: 10px;
+        }
+
+        .display-inline-flex {
+            display: inline-flex;
+            gap: 10px;
+        }
+
+        .display-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .display-inline-grid {
+            display: inline-grid;
+            grid-template-columns: repeat(2, 80px);
+            gap: 10px;
+        }
+
+        .display-table {
+            display: table;
+            width: 100%;
+        }
+
+        .display-table-row {
+            display: table-row;
+        }
+
+        .display-table-cell {
+            display: table-cell;
+            border: 1px solid #2980b9;
+            padding: 10px;
+        }
+
+        .sample-label {
+            font-size: 12px;
+            margin-top: 5px;
+            color: #666;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Display Test</h1>
+        <p>Testing various display values: block, inline, inline-block, flex, grid, table, and none</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+                <div class="sample-label">display: block</div>
+                <div class="container display-block">
+                    <div class="item">Block 1</div>
+                    <div class="item">Block 2</div>
+                    <div class="item">Block 3</div>
+                </div>
+
+                <div class="sample-label">display: inline</div>
+                <div class="container display-inline">
+                    <div class="item">Inline 1</div>
+                    <div class="item">Inline 2</div>
+                    <div class="item">Inline 3</div>
+                </div>
+
+                <div class="sample-label">display: inline-block</div>
+                <div class="container display-inline-block">
+                    <div class="item">IB 1</div>
+                    <div class="item">IB 2</div>
+                    <div class="item">IB 3</div>
+                </div>
+
+                <div class="sample-label">display: none (middle item hidden)</div>
+                <div class="container display-none">
+                    <div class="item">Item 1</div>
+                    <div class="item">Item 2 (hidden)</div>
+                    <div class="item">Item 3</div>
+                </div>
+
+                <div class="sample-label">display: flex</div>
+                <div class="container display-flex">
+                    <div class="item">Flex 1</div>
+                    <div class="item">Flex 2</div>
+                    <div class="item">Flex 3</div>
+                </div>
+
+                <div class="sample-label">display: inline-flex</div>
+                <div class="container">
+                    <div class="display-inline-flex">
+                        <div class="item">IF 1</div>
+                        <div class="item">IF 2</div>
+                    </div>
+                    <div class="display-inline-flex">
+                        <div class="item">IF 3</div>
+                        <div class="item">IF 4</div>
+                    </div>
+                </div>
+
+                <div class="sample-label">display: grid</div>
+                <div class="container display-grid">
+                    <div class="item">Grid 1</div>
+                    <div class="item">Grid 2</div>
+                    <div class="item">Grid 3</div>
+                    <div class="item">Grid 4</div>
+                    <div class="item">Grid 5</div>
+                    <div class="item">Grid 6</div>
+                </div>
+
+                <div class="sample-label">display: table, table-row, table-cell</div>
+                <div class="container display-table">
+                    <div class="display-table-row">
+                        <div class="display-table-cell">Cell 1</div>
+                        <div class="display-table-cell">Cell 2</div>
+                        <div class="display-table-cell">Cell 3</div>
+                    </div>
+                    <div class="display-table-row">
+                        <div class="display-table-cell">Cell 4</div>
+                        <div class="display-table-cell">Cell 5</div>
+                        <div class="display-table-cell">Cell 6</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Display</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

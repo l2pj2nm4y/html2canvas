@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Border Radius - Visual Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .sample {
+            width: 150px;
+            height: 100px;
+            margin: 10px;
+            display: inline-block;
+            background: #3498db;
+            border: 4px solid #2980b9;
+        }
+
+        .radius-none { border-radius: 0; }
+        .radius-small { border-radius: 5px; }
+        .radius-medium { border-radius: 15px; }
+        .radius-large { border-radius: 30px; }
+        .radius-circle { border-radius: 50%; width: 100px; height: 100px; }
+        .radius-pill { border-radius: 50px; }
+
+        .radius-top-left { border-top-left-radius: 40px; }
+        .radius-top-right { border-top-right-radius: 40px; }
+        .radius-bottom-left { border-bottom-left-radius: 40px; }
+        .radius-bottom-right { border-bottom-right-radius: 40px; }
+
+        .radius-mixed-2 { border-radius: 20px 40px; }
+        .radius-mixed-3 { border-radius: 10px 30px 50px; }
+        .radius-mixed-4 { border-radius: 5px 20px 35px 50px; }
+
+        .radius-ellipse { border-radius: 50px / 25px; }
+        .radius-percent { border-radius: 20%; }
+
+        .radius-complex {
+            border-top-left-radius: 50px 25px;
+            border-top-right-radius: 25px 50px;
+            border-bottom-right-radius: 50px 25px;
+            border-bottom-left-radius: 25px 50px;
+        }
+
+        .sample-label {
+            text-align: center;
+            font-size: 11px;
+            margin-top: 5px;
+            color: #666;
+            max-width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Border Radius Test</h1>
+        <p>Testing various border-radius values: uniform, individual corners, elliptical, percentages, and shorthand</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+                <div>
+                    <div class="sample radius-none"></div>
+                    <div class="sample-label">0 (no radius)</div>
+                </div>
+                <div>
+                    <div class="sample radius-small"></div>
+                    <div class="sample-label">5px</div>
+                </div>
+                <div>
+                    <div class="sample radius-medium"></div>
+                    <div class="sample-label">15px</div>
+                </div>
+                <div>
+                    <div class="sample radius-large"></div>
+                    <div class="sample-label">30px</div>
+                </div>
+                <div>
+                    <div class="sample radius-circle"></div>
+                    <div class="sample-label">50% (circle)</div>
+                </div>
+                <div>
+                    <div class="sample radius-pill"></div>
+                    <div class="sample-label">50px (pill)</div>
+                </div>
+                <div>
+                    <div class="sample radius-top-left"></div>
+                    <div class="sample-label">top-left: 40px</div>
+                </div>
+                <div>
+                    <div class="sample radius-top-right"></div>
+                    <div class="sample-label">top-right: 40px</div>
+                </div>
+                <div>
+                    <div class="sample radius-bottom-left"></div>
+                    <div class="sample-label">bottom-left: 40px</div>
+                </div>
+                <div>
+                    <div class="sample radius-bottom-right"></div>
+                    <div class="sample-label">bottom-right: 40px</div>
+                </div>
+                <div>
+                    <div class="sample radius-mixed-2"></div>
+                    <div class="sample-label">20px 40px (2-value)</div>
+                </div>
+                <div>
+                    <div class="sample radius-mixed-3"></div>
+                    <div class="sample-label">10px 30px 50px (3-value)</div>
+                </div>
+                <div>
+                    <div class="sample radius-mixed-4"></div>
+                    <div class="sample-label">5px 20px 35px 50px (4-value)</div>
+                </div>
+                <div>
+                    <div class="sample radius-ellipse"></div>
+                    <div class="sample-label">50px / 25px (elliptical)</div>
+                </div>
+                <div>
+                    <div class="sample radius-percent"></div>
+                    <div class="sample-label">20% (percentage)</div>
+                </div>
+                <div>
+                    <div class="sample radius-complex"></div>
+                    <div class="sample-label">complex elliptical</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Border Radius</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

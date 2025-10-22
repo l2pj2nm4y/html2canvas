@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Shadow - Visual Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .sample { padding: 20px; margin: 15px 0; font-size: 24px; font-weight: 600; }
+        .ts-none { text-shadow: none; }
+        .ts-simple { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .ts-offset { text-shadow: 5px 5px 10px rgba(0,0,0,0.7); }
+        .ts-blur { text-shadow: 0 0 10px rgba(52,152,219,0.8); }
+        .ts-color { text-shadow: 3px 3px 6px #e74c3c; }
+        .ts-glow { text-shadow: 0 0 20px #2ecc71, 0 0 30px #2ecc71; }
+        .ts-multiple { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), -2px -2px 4px rgba(255,255,255,0.5); }
+        .ts-outline { text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; }
+        .ts-3d { text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1); }
+        .sample-label { font-size: 11px; color: #666; font-weight: 600; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Text Shadow Test</h1>
+        <p>Testing text-shadow: offset, blur, color, glow, multiple shadows, 3D effects</p>
+    </header>
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+                <div class="sample-label">text-shadow: none</div>
+                <div class="sample ts-none">Sample Text</div>
+                <div class="sample-label">Simple shadow: 2px 2px 4px rgba(0,0,0,0.5)</div>
+                <div class="sample ts-simple">Sample Text</div>
+                <div class="sample-label">Offset shadow: 5px 5px 10px rgba(0,0,0,0.7)</div>
+                <div class="sample ts-offset">Sample Text</div>
+                <div class="sample-label">Blur glow: 0 0 10px rgba(52,152,219,0.8)</div>
+                <div class="sample ts-blur">Sample Text</div>
+                <div class="sample-label">Colored shadow: 3px 3px 6px #e74c3c</div>
+                <div class="sample ts-color">Sample Text</div>
+                <div class="sample-label">Double glow effect</div>
+                <div class="sample ts-glow">Sample Text</div>
+                <div class="sample-label">Multiple shadows (neumorphism)</div>
+                <div class="sample ts-multiple">Sample Text</div>
+                <div class="sample-label">Text outline effect</div>
+                <div class="sample ts-outline" style="color: white;">Sample Text</div>
+                <div class="sample-label">3D layered effect</div>
+                <div class="sample ts-3d">Sample Text</div>
+            </div>
+        </div>
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>html2canvas Visual Testing Suite - Text Shadow</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

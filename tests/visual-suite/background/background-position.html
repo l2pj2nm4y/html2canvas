@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Position - Visual Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .sample {
+            width: 180px;
+            height: 120px;
+            margin: 10px;
+            display: inline-block;
+            border: 1px solid #ddd;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><circle cx="30" cy="30" r="25" fill="%233498db"/></svg>');
+            background-repeat: no-repeat;
+            background-color: #ecf0f1;
+        }
+
+        .pos-top-left { background-position: top left; }
+        .pos-top-center { background-position: top center; }
+        .pos-top-right { background-position: top right; }
+        .pos-center-left { background-position: center left; }
+        .pos-center { background-position: center; }
+        .pos-center-right { background-position: center right; }
+        .pos-bottom-left { background-position: bottom left; }
+        .pos-bottom-center { background-position: bottom center; }
+        .pos-bottom-right { background-position: bottom right; }
+        .pos-percent { background-position: 75% 25%; }
+        .pos-pixels { background-position: 20px 30px; }
+        .pos-mixed { background-position: right 10px bottom 15px; }
+
+        .sample-label {
+            text-align: center;
+            font-size: 11px;
+            margin-top: 5px;
+            color: #666;
+            max-width: 180px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Background Position Test</h1>
+        <p>Testing various background-position values: keywords, percentages, lengths, and mixed units</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+                <div>
+                    <div class="sample pos-top-left"></div>
+                    <div class="sample-label">top left</div>
+                </div>
+                <div>
+                    <div class="sample pos-top-center"></div>
+                    <div class="sample-label">top center</div>
+                </div>
+                <div>
+                    <div class="sample pos-top-right"></div>
+                    <div class="sample-label">top right</div>
+                </div>
+                <div>
+                    <div class="sample pos-center-left"></div>
+                    <div class="sample-label">center left</div>
+                </div>
+                <div>
+                    <div class="sample pos-center"></div>
+                    <div class="sample-label">center</div>
+                </div>
+                <div>
+                    <div class="sample pos-center-right"></div>
+                    <div class="sample-label">center right</div>
+                </div>
+                <div>
+                    <div class="sample pos-bottom-left"></div>
+                    <div class="sample-label">bottom left</div>
+                </div>
+                <div>
+                    <div class="sample pos-bottom-center"></div>
+                    <div class="sample-label">bottom center</div>
+                </div>
+                <div>
+                    <div class="sample pos-bottom-right"></div>
+                    <div class="sample-label">bottom right</div>
+                </div>
+                <div>
+                    <div class="sample pos-percent"></div>
+                    <div class="sample-label">75% 25% (percentage)</div>
+                </div>
+                <div>
+                    <div class="sample pos-pixels"></div>
+                    <div class="sample-label">20px 30px (pixels)</div>
+                </div>
+                <div>
+                    <div class="sample pos-mixed"></div>
+                    <div class="sample-label">right 10px bottom 15px</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Background Position</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>
