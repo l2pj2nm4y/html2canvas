@@ -23,7 +23,16 @@ The script is still in a **very experimental state**, so I don't recommend using
 
 ### Browser compatibility ###
 
-The library should work fine on the following browsers (with `Promise` polyfill):
+**Version 2.0+** requires modern browsers:
+
+* Chrome 84+ (2020)
+* Firefox 63+ (2018)
+* Safari 14.1+ (2021)
+* Edge 84+ (2020)
+
+Native `Promise` support is required (no polyfill needed).
+
+**Version 1.x** supports older browsers (with `Promise` polyfill):
 
 * Firefox 3.5+
 * Google Chrome
@@ -32,6 +41,24 @@ The library should work fine on the following browsers (with `Promise` polyfill)
 * Safari 6+
 
 As each CSS property needs to be manually built to be supported, there are a number of properties that are not yet supported.
+
+### New in Version 2.0 ###
+
+**Modern CSS Property Support:**
+
+* `object-fit` - Control how images/video scale within containers (fill, contain, cover, none, scale-down)
+* `object-position` - Position replaced elements within containers
+* `aspect-ratio` - Maintain specific width-to-height ratios for elements (auto, numbers, ratio format)
+* `gap`, `row-gap`, `column-gap` - Spacing between flex/grid items (length, percentage values)
+* `inset`, `top`, `right`, `bottom`, `left` - Position offsets for positioned elements
+* `rotate`, `scale`, `translate` - Individual transform properties (modern alternative to transform shorthand)
+* `mix-blend-mode` - Blending modes for layer compositing (16 modes supported)
+* `accent-color` - Custom colors for form controls
+* `backdrop-filter` - Graphical effects behind elements
+* `object-view-box` - Advanced view box control for replaced elements
+* `scroll-snap-type`, `scroll-snap-align` - Scroll snapping behavior
+
+**Total: 20 new CSS properties added in v2.0**
 
 ### Usage ###
 

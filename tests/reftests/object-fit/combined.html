@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>object-fit with object-position</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 200px;
+            height: 150px;
+            border: 2px solid #333;
+            display: inline-block;
+            margin: 10px;
+            background: #f0f0f0;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+        }
+        .contain-left-top {
+            object-fit: contain;
+            object-position: left top;
+        }
+        .contain-right-bottom {
+            object-fit: contain;
+            object-position: right bottom;
+        }
+        .contain-center {
+            object-fit: contain;
+            object-position: center center;
+        }
+        .cover-left {
+            object-fit: cover;
+            object-position: left center;
+        }
+        .cover-top {
+            object-fit: cover;
+            object-position: center top;
+        }
+        h3 {
+            text-align: center;
+            margin-top: 0;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>object-fit with object-position</h1>
+    <p>Testing various combinations of object-fit and object-position properties.</p>
+
+    <div>
+        <h3>contain + left top</h3>
+        <div class="container">
+            <img class="contain-left-top" src="../../assets/image_1.jpg" alt="Wide image">
+        </div>
+    </div>
+
+    <div>
+        <h3>contain + right bottom</h3>
+        <div class="container">
+            <img class="contain-right-bottom" src="../../assets/image_1.jpg" alt="Wide image">
+        </div>
+    </div>
+
+    <div>
+        <h3>contain + center (default)</h3>
+        <div class="container">
+            <img class="contain-center" src="../../assets/image2_1.jpg" alt="Tall image">
+        </div>
+    </div>
+
+    <div>
+        <h3>cover + left center</h3>
+        <div class="container">
+            <img class="cover-left" src="../../assets/image_1.jpg" alt="Wide image">
+        </div>
+    </div>
+
+    <div>
+        <h3>cover + center top</h3>
+        <div class="container">
+            <img class="cover-top" src="../../assets/image2_1.jpg" alt="Tall image">
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>combined individual transforms</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: inline-block;
+            margin: 40px;
+            text-align: center;
+        }
+        .box {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 5px;
+            margin: 40px auto;
+        }
+        .rotate-scale {
+            rotate: 45deg;
+            scale: 1.5;
+        }
+        .rotate-translate {
+            rotate: 30deg;
+            translate: 30px 20px;
+        }
+        .scale-translate {
+            scale: 1.5;
+            translate: 20px 10px;
+        }
+        .all-three {
+            rotate: 45deg;
+            scale: 1.2;
+            translate: 30px 20px;
+        }
+        h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Combined Individual Transform Properties</h1>
+    <p>Combining rotate, scale, and translate properties.</p>
+
+    <div class="container">
+        <h3>rotate: 45deg<br>scale: 1.5</h3>
+        <div class="box rotate-scale">Rotate<br>+ Scale</div>
+    </div>
+
+    <div class="container">
+        <h3>rotate: 30deg<br>translate: 30px 20px</h3>
+        <div class="box rotate-translate">Rotate<br>+ Translate</div>
+    </div>
+
+    <div class="container">
+        <h3>scale: 1.5<br>translate: 20px 10px</h3>
+        <div class="box scale-translate">Scale<br>+ Translate</div>
+    </div>
+
+    <div class="container">
+        <h3>rotate: 45deg<br>scale: 1.2<br>translate: 30px 20px</h3>
+        <div class="box all-three">All<br>Three</div>
+    </div>
+</body>
+</html>

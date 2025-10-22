@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>aspect-ratio: auto</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 200px;
+            border: 2px solid #333;
+            display: inline-block;
+            margin: 10px;
+            background: #f0f0f0;
+        }
+        .box {
+            aspect-ratio: auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        h3 {
+            text-align: center;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>aspect-ratio: auto (Default)</h1>
+    <p>Elements should use their natural aspect ratio or content-based height.</p>
+
+    <div>
+        <h3>Auto with Content</h3>
+        <div class="container">
+            <div class="box">
+                This box has auto aspect ratio and will size based on content.
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h3>Auto with Less Content</h3>
+        <div class="container">
+            <div class="box">
+                Short content
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h3>Auto with More Content</h3>
+        <div class="container">
+            <div class="box">
+                This box has auto aspect ratio with more content to demonstrate how the height adjusts based on the amount of text present in the element.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

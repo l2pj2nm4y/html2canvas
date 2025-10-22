@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>gap: grid layout</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            border: 2px solid #333;
+            padding: 10px;
+            margin: 10px 0;
+            background: #f0f0f0;
+            width: fit-content;
+        }
+        .item {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-weight: bold;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .gap-10 {
+            gap: 10px;
+        }
+        .gap-20 {
+            gap: 20px;
+        }
+        .gap-30 {
+            gap: 30px;
+        }
+        .gap-row-10-col-20 {
+            row-gap: 10px;
+            column-gap: 20px;
+        }
+        .gap-row-20-col-10 {
+            row-gap: 20px;
+            column-gap: 10px;
+        }
+        h3 {
+            margin-top: 20px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>gap Property with Grid</h1>
+
+    <h3>gap: 10px</h3>
+    <div class="container gap-10">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+    </div>
+
+    <h3>gap: 20px</h3>
+    <div class="container gap-20">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+    </div>
+
+    <h3>gap: 30px</h3>
+    <div class="container gap-30">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+    </div>
+
+    <h3>row-gap: 10px; column-gap: 20px</h3>
+    <div class="container gap-row-10-col-20">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+    </div>
+
+    <h3>row-gap: 20px; column-gap: 10px</h3>
+    <div class="container gap-row-20-col-10">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+    </div>
+</body>
+</html>

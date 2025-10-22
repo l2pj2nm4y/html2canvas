@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>translate property</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            position: relative;
+            width: 200px;
+            height: 150px;
+            border: 2px dashed #ccc;
+            margin: 20px;
+            display: inline-block;
+        }
+        .reference {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 2px solid #999;
+            background: rgba(200, 200, 200, 0.3);
+            top: 35px;
+            left: 60px;
+        }
+        .box {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 5px;
+            top: 35px;
+            left: 60px;
+        }
+        .translate-50px {
+            translate: 50px;
+        }
+        .translate-50px-30px {
+            translate: 50px 30px;
+        }
+        .translate-minus-30px-20px {
+            translate: -30px 20px;
+        }
+        .translate-20-percent {
+            translate: 20%;
+        }
+        .translate-50px-minus-20px {
+            translate: 50px -20px;
+        }
+        h3 {
+            margin: 20px 0 5px 0;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>translate Property</h1>
+    <p>Individual transform property for translation. Gray box shows original position.</p>
+
+    <h3>translate: 50px (x only)</h3>
+    <div class="container">
+        <div class="reference"></div>
+        <div class="box translate-50px">50px</div>
+    </div>
+
+    <h3>translate: 50px 30px</h3>
+    <div class="container">
+        <div class="reference"></div>
+        <div class="box translate-50px-30px">50px 30px</div>
+    </div>
+
+    <h3>translate: -30px 20px</h3>
+    <div class="container">
+        <div class="reference"></div>
+        <div class="box translate-minus-30px-20px">-30px 20px</div>
+    </div>
+
+    <h3>translate: 20%</h3>
+    <div class="container">
+        <div class="reference"></div>
+        <div class="box translate-20-percent">20%</div>
+    </div>
+
+    <h3>translate: 50px -20px</h3>
+    <div class="container">
+        <div class="reference"></div>
+        <div class="box translate-50px-minus-20px">50px -20px</div>
+    </div>
+</body>
+</html>

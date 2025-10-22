@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>scale property</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: inline-block;
+            margin: 30px;
+            text-align: center;
+        }
+        .box {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 5px;
+            margin: 40px auto;
+        }
+        .scale-1-5 {
+            scale: 1.5;
+        }
+        .scale-2 {
+            scale: 2;
+        }
+        .scale-0-5 {
+            scale: 0.5;
+        }
+        .scale-2-1 {
+            scale: 2 1;
+        }
+        .scale-1-2 {
+            scale: 1 2;
+        }
+        .scale-1-5-0-5 {
+            scale: 1.5 0.5;
+        }
+        h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>scale Property</h1>
+    <p>Individual transform property for scaling.</p>
+
+    <div class="container">
+        <h3>scale: 1.5</h3>
+        <div class="box scale-1-5">1.5</div>
+    </div>
+
+    <div class="container">
+        <h3>scale: 2</h3>
+        <div class="box scale-2">2</div>
+    </div>
+
+    <div class="container">
+        <h3>scale: 0.5</h3>
+        <div class="box scale-0-5">0.5</div>
+    </div>
+
+    <div class="container">
+        <h3>scale: 2 1</h3>
+        <div class="box scale-2-1">2 1</div>
+    </div>
+
+    <div class="container">
+        <h3>scale: 1 2</h3>
+        <div class="box scale-1-2">1 2</div>
+    </div>
+
+    <div class="container">
+        <h3>scale: 1.5 0.5</h3>
+        <div class="box scale-1-5-0-5">1.5 0.5</div>
+    </div>
+</body>
+</html>

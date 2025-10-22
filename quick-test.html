@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Test - New CSS Properties</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 { color: #667eea; }
+
+        /* Test 1: aspect-ratio */
+        .aspect-ratio-test {
+            aspect-ratio: 16/9;
+            width: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border-radius: 5px;
+        }
+
+        /* Test 2: gap */
+        .gap-test {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .gap-item {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        /* Test 3: rotate */
+        .rotate-test {
+            rotate: 45deg;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 5px;
+            margin: 40px auto;
+        }
+
+        /* Test 4: scale */
+        .scale-test {
+            scale: 1.5;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 5px;
+            margin: 40px auto;
+        }
+
+        /* Test 5: translate */
+        .translate-test {
+            translate: 50px 20px;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px 10px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        #output {
+            margin-top: 20px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Quick Test - New CSS Properties</h1>
+
+    <div id="test-content">
+        <div class="test-box">
+            <h2>1. aspect-ratio: 16/9</h2>
+            <div class="aspect-ratio-test">16:9 Aspect Ratio</div>
+        </div>
+
+        <div class="test-box">
+            <h2>2. gap: 15px (flexbox)</h2>
+            <div class="gap-test">
+                <div class="gap-item">1</div>
+                <div class="gap-item">2</div>
+                <div class="gap-item">3</div>
+                <div class="gap-item">4</div>
+            </div>
+        </div>
+
+        <div class="test-box">
+            <h2>3. rotate: 45deg</h2>
+            <div class="rotate-test">45°</div>
+        </div>
+
+        <div class="test-box">
+            <h2>4. scale: 1.5</h2>
+            <div class="scale-test">1.5x</div>
+        </div>
+
+        <div class="test-box">
+            <h2>5. translate: 50px 20px</h2>
+            <div class="translate-test">Translated</div>
+        </div>
+    </div>
+
+    <div style="text-align: center;">
+        <button onclick="testRefTests()">🔗 Open Reference Tests</button>
+        <button onclick="location.reload()">🔄 Reload</button>
+    </div>
+
+    <div id="output"></div>
+
+    <script>
+        function testRefTests() {
+            const tests = [
+                'tests/reftests/aspect-ratio/16-9.html',
+                'tests/reftests/gap/flexbox.html',
+                'tests/reftests/transform-individual/rotate.html',
+                'tests/reftests/transform-individual/scale.html',
+                'tests/reftests/transform-individual/translate.html',
+                'tests/reftests/object-fit/cover.html'
+            ];
+
+            const testWindow = window.open('', '_blank');
+            testWindow.document.write(`
+                <html>
+                <head>
+                    <title>Reference Tests</title>
+                    <style>
+                        body { font-family: Arial; margin: 20px; background: #f5f5f5; }
+                        h1 { color: #667eea; }
+                        ul { list-style: none; padding: 0; }
+                        li { margin: 10px 0; }
+                        a {
+                            display: block;
+                            padding: 15px;
+                            background: white;
+                            text-decoration: none;
+                            color: #333;
+                            border-radius: 5px;
+                            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                        }
+                        a:hover { background: #667eea; color: white; }
+                    </style>
+                </head>
+                <body>
+                    <h1>📋 Visual Reference Tests</h1>
+                    <p>Click any test to view it in your browser:</p>
+                    <ul>
+                        ${tests.map(test => `<li><a href="${test}" target="_blank">${test.split('/').pop().replace('.html', '')}</a></li>`).join('')}
+                    </ul>
+                    <h2>All Test Categories:</h2>
+                    <ul>
+                        <li><a href="tests/reftests/aspect-ratio/" target="_blank">📐 Aspect Ratio Tests</a></li>
+                        <li><a href="tests/reftests/gap/" target="_blank">📏 Gap Tests</a></li>
+                        <li><a href="tests/reftests/inset/" target="_blank">📍 Inset/Positioning Tests</a></li>
+                        <li><a href="tests/reftests/object-fit/" target="_blank">🖼️ Object-Fit Tests</a></li>
+                        <li><a href="tests/reftests/transform-individual/" target="_blank">🔄 Transform Tests</a></li>
+                    </ul>
+                </body>
+                </html>
+            `);
+        }
+    </script>
+</body>
+</html>

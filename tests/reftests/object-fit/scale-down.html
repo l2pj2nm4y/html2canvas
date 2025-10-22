@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>object-fit: scale-down</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 200px;
+            height: 150px;
+            border: 2px solid #333;
+            display: inline-block;
+            margin: 10px;
+            background: #f0f0f0;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: scale-down;
+        }
+        h3 {
+            text-align: center;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>object-fit: scale-down</h1>
+    <p>Images should use the smaller of 'none' or 'contain'. Large images scaled down, small images shown at original size.</p>
+
+    <div>
+        <h3>Wide Image (2:1)</h3>
+        <div class="container">
+            <img src="../../assets/image_1.jpg" alt="Wide image">
+        </div>
+    </div>
+
+    <div>
+        <h3>Tall Image (1:2)</h3>
+        <div class="container">
+            <img src="../../assets/image2_1.jpg" alt="Tall image">
+        </div>
+    </div>
+
+    <div>
+        <h3>Small Image (50x50)</h3>
+        <div class="container">
+            <img src="../../assets/bg-sliver.png" alt="Small image">
+        </div>
+    </div>
+</body>
+</html>

@@ -56,22 +56,61 @@ export class InputElementContainer extends ElementContainer {
         this.value = getInputValue(input);
 
         if (this.type === CHECKBOX || this.type === RADIO) {
-            this.styles.backgroundColor = 0xdededeff;
-            this.styles.borderTopColor =
-                this.styles.borderRightColor =
-                this.styles.borderBottomColor =
-                this.styles.borderLeftColor =
-                    0xa5a5a5ff;
-            this.styles.borderTopWidth =
-                this.styles.borderRightWidth =
-                this.styles.borderBottomWidth =
-                this.styles.borderLeftWidth =
-                    1;
-            this.styles.borderTopStyle =
-                this.styles.borderRightStyle =
-                this.styles.borderBottomStyle =
-                this.styles.borderLeftStyle =
-                    BORDER_STYLE.SOLID;
+            // If accent-color is set and the input is checked, style accordingly
+            // Checkbox: solid background, no border
+            // Radio: white background with accent-color border
+            if (this.checked && this.styles.accentColor !== null) {
+                if (this.type === CHECKBOX) {
+                    // Checkbox: solid accent color background, no border
+                    this.styles.backgroundColor = this.styles.accentColor;
+                    this.styles.borderTopWidth =
+                        this.styles.borderRightWidth =
+                        this.styles.borderBottomWidth =
+                        this.styles.borderLeftWidth =
+                            0;
+                    this.styles.borderTopStyle =
+                        this.styles.borderRightStyle =
+                        this.styles.borderBottomStyle =
+                        this.styles.borderLeftStyle =
+                            BORDER_STYLE.NONE;
+                } else {
+                    // Radio: white background with thin accent color border
+                    this.styles.backgroundColor = 0xffffffff; // white
+                    this.styles.borderTopColor =
+                        this.styles.borderRightColor =
+                        this.styles.borderBottomColor =
+                        this.styles.borderLeftColor =
+                            this.styles.accentColor;
+                    this.styles.borderTopWidth =
+                        this.styles.borderRightWidth =
+                        this.styles.borderBottomWidth =
+                        this.styles.borderLeftWidth =
+                            2; // thin border
+                    this.styles.borderTopStyle =
+                        this.styles.borderRightStyle =
+                        this.styles.borderBottomStyle =
+                        this.styles.borderLeftStyle =
+                            BORDER_STYLE.SOLID;
+                }
+            } else {
+                // Default unchecked or no accent-color styling
+                this.styles.backgroundColor = 0xdededeff;
+                this.styles.borderTopColor =
+                    this.styles.borderRightColor =
+                    this.styles.borderBottomColor =
+                    this.styles.borderLeftColor =
+                        0xa5a5a5ff;
+                this.styles.borderTopWidth =
+                    this.styles.borderRightWidth =
+                    this.styles.borderBottomWidth =
+                    this.styles.borderLeftWidth =
+                        1;
+                this.styles.borderTopStyle =
+                    this.styles.borderRightStyle =
+                    this.styles.borderBottomStyle =
+                    this.styles.borderLeftStyle =
+                        BORDER_STYLE.SOLID;
+            }
             this.styles.backgroundClip = [BACKGROUND_CLIP.BORDER_BOX];
             this.styles.backgroundOrigin = [BACKGROUND_ORIGIN.BORDER_BOX];
             this.bounds = reformatInputBounds(this.bounds);

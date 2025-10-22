@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>html2canvas v2.0 - New CSS Properties Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .controls {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .demo-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .demo-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 16px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+
+        .demo-item .description {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .demo-content {
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: #fafafa;
+            border-radius: 4px;
+            min-height: 100px;
+        }
+
+        .output-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        #canvas-output {
+            border: 2px solid #007bff;
+            border-radius: 4px;
+            max-width: 100%;
+            margin-top: 10px;
+        }
+
+        /* ==== TIER 1 PROPERTIES ==== */
+
+        /* object-fit */
+        .object-fit-demo img {
+            width: 150px;
+            height: 100px;
+            object-fit: cover;
+            border: 2px solid #333;
+        }
+
+        /* object-position */
+        .object-position-demo img {
+            width: 150px;
+            height: 100px;
+            object-fit: none;
+            object-position: center top;
+            border: 2px solid #333;
+        }
+
+        /* aspect-ratio */
+        .aspect-ratio-demo {
+            width: 150px;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+        }
+
+        /* gap (flexbox) */
+        .gap-demo {
+            display: flex;
+            gap: 15px;
+        }
+
+        .gap-demo .box {
+            width: 40px;
+            height: 40px;
+            background: #28a745;
+            border-radius: 4px;
+        }
+
+        /* row-gap & column-gap (grid) */
+        .grid-gap-demo {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            row-gap: 10px;
+            column-gap: 15px;
+        }
+
+        .grid-gap-demo .box {
+            height: 30px;
+            background: #ffc107;
+            border-radius: 4px;
+        }
+
+        /* inset */
+        .inset-demo {
+            position: relative;
+            height: 120px;
+            background: #e9ecef;
+            border-radius: 4px;
+        }
+
+        .inset-demo .positioned {
+            position: absolute;
+            inset: 20px;
+            background: #dc3545;
+            border-radius: 4px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* rotate */
+        .rotate-demo .box {
+            width: 80px;
+            height: 80px;
+            background: #17a2b8;
+            margin: 20px auto;
+            rotate: 25deg;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* scale */
+        .scale-demo .box {
+            width: 60px;
+            height: 60px;
+            background: #6f42c1;
+            margin: 30px auto;
+            scale: 1.3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* translate */
+        .translate-demo {
+            position: relative;
+            height: 100px;
+            background: #e9ecef;
+            border-radius: 4px;
+        }
+
+        .translate-demo .box {
+            width: 60px;
+            height: 60px;
+            background: #fd7e14;
+            translate: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        /* ==== TIER 2 PROPERTIES ==== */
+
+        /* mix-blend-mode */
+        .blend-demo {
+            position: relative;
+            height: 100px;
+            background: linear-gradient(to right, #f093fb 0%, #f5576c 100%);
+            border-radius: 4px;
+        }
+
+        .blend-demo .overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 100px;
+            height: 60px;
+            background: #4facfe;
+            mix-blend-mode: multiply;
+            border-radius: 4px;
+        }
+
+        /* accent-color */
+        .accent-demo {
+            padding: 10px;
+        }
+
+        .accent-demo input[type="checkbox"],
+        .accent-demo input[type="radio"] {
+            accent-color: #dc3545;
+            width: 20px;
+            height: 20px;
+            margin: 5px;
+        }
+
+        .accent-demo label {
+            font-size: 13px;
+            margin-left: 5px;
+        }
+
+        /* backdrop-filter */
+        .backdrop-demo {
+            position: relative;
+            height: 120px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23667eea" width="50" height="50"/><rect fill="%23764ba2" x="50" width="50" height="50"/><rect fill="%23f093fb" y="50" width="50" height="50"/><rect fill="%23f5576c" x="50" y="50" width="50" height="50"/></svg>');
+            background-size: 40px 40px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .backdrop-demo .glass {
+            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.3);
+            padding: 15px 25px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* object-view-box */
+        .view-box-demo img {
+            width: 150px;
+            height: 100px;
+            object-fit: fill;
+            object-view-box: inset(20% 10% 20% 10%);
+            border: 2px solid #333;
+        }
+
+        /* scroll-snap-type */
+        .scroll-snap-demo {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 10px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 4px;
+        }
+
+        .scroll-snap-demo .item {
+            scroll-snap-align: center;
+            flex: 0 0 80%;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>html2canvas v2.0 - New CSS Properties Demo</h1>
+        <p>This page demonstrates all 20 new CSS properties added in version 2.0</p>
+    </div>
+
+    <div class="controls">
+        <button onclick="convertToCanvas()">🎨 Convert to Canvas</button>
+        <button onclick="location.reload()">🔄 Reset</button>
+        <span id="status" style="margin-left: 15px; color: #666;"></span>
+    </div>
+
+    <div id="test-content">
+        <h2 style="color: #333; margin-bottom: 15px;">Tier 1 Properties</h2>
+
+        <div class="demo-grid">
+            <!-- object-fit -->
+            <div class="demo-item">
+                <h3>object-fit: cover</h3>
+                <div class="description">Image scaled to cover container while preserving aspect ratio</div>
+                <div class="demo-content object-fit-demo">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%234facfe' width='300' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='24' font-family='Arial'%3EWide Image%3C/text%3E%3C/svg%3E" alt="Wide image">
+                </div>
+            </div>
+
+            <!-- object-position -->
+            <div class="demo-item">
+                <h3>object-position: center top</h3>
+                <div class="description">Image positioned within its container</div>
+                <div class="demo-content object-position-demo">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='300'%3E%3Crect fill='%2328a745' width='200' height='300'/%3E%3Ctext x='50%25' y='30%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3ETall%3C/text%3E%3Ctext x='50%25' y='40%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3EImage%3C/text%3E%3C/svg%3E" alt="Tall image">
+                </div>
+            </div>
+
+            <!-- aspect-ratio -->
+            <div class="demo-item">
+                <h3>aspect-ratio: 16/9</h3>
+                <div class="description">Fixed width with automatic height based on ratio</div>
+                <div class="demo-content">
+                    <div class="aspect-ratio-demo"></div>
+                </div>
+            </div>
+
+            <!-- gap -->
+            <div class="demo-item">
+                <h3>gap: 15px (Flexbox)</h3>
+                <div class="description">Spacing between flex items</div>
+                <div class="demo-content gap-demo">
+                    <div class="box"></div>
+                    <div class="box"></div>
+                    <div class="box"></div>
+                </div>
+            </div>
+
+            <!-- row-gap & column-gap -->
+            <div class="demo-item">
+                <h3>row-gap: 10px, column-gap: 15px</h3>
+                <div class="description">Grid spacing control</div>
+                <div class="demo-content grid-gap-demo">
+                    <div class="box"></div>
+                    <div class="box"></div>
+                    <div class="box"></div>
+                    <div class="box"></div>
+                    <div class="box"></div>
+                    <div class="box"></div>
+                </div>
+            </div>
+
+            <!-- inset -->
+            <div class="demo-item">
+                <h3>inset: 20px</h3>
+                <div class="description">Shorthand for top, right, bottom, left positioning</div>
+                <div class="demo-content inset-demo">
+                    <div class="positioned">inset: 20px</div>
+                </div>
+            </div>
+
+            <!-- rotate -->
+            <div class="demo-item">
+                <h3>rotate: 25deg</h3>
+                <div class="description">Individual rotation transform</div>
+                <div class="demo-content rotate-demo">
+                    <div class="box">25°</div>
+                </div>
+            </div>
+
+            <!-- scale -->
+            <div class="demo-item">
+                <h3>scale: 1.3</h3>
+                <div class="description">Individual scale transform</div>
+                <div class="demo-content scale-demo">
+                    <div class="box">1.3x</div>
+                </div>
+            </div>
+
+            <!-- translate -->
+            <div class="demo-item">
+                <h3>translate: 40px 20px</h3>
+                <div class="description">Individual translation transform</div>
+                <div class="demo-content translate-demo">
+                    <div class="box">Moved</div>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="color: #333; margin: 30px 0 15px 0;">Tier 2 Properties</h2>
+
+        <div class="demo-grid">
+            <!-- mix-blend-mode -->
+            <div class="demo-item">
+                <h3>mix-blend-mode: multiply</h3>
+                <div class="description">Layer blending effect</div>
+                <div class="demo-content blend-demo">
+                    <div class="overlay"></div>
+                </div>
+            </div>
+
+            <!-- accent-color -->
+            <div class="demo-item">
+                <h3>accent-color: #dc3545</h3>
+                <div class="description">Custom color for form controls</div>
+                <div class="demo-content accent-demo">
+                    <div>
+                        <input type="checkbox" id="cb1" checked>
+                        <label for="cb1">Checkbox</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="r1" name="test" checked>
+                        <label for="r1">Radio</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- backdrop-filter -->
+            <div class="demo-item">
+                <h3>backdrop-filter: blur(5px)</h3>
+                <div class="description">Glass/frosted effect on backgrounds</div>
+                <div class="demo-content backdrop-demo">
+                    <div class="glass">Frosted Glass</div>
+                </div>
+            </div>
+
+            <!-- object-view-box -->
+            <div class="demo-item">
+                <h3>object-view-box: inset(20% 10%)</h3>
+                <div class="description">Crop/zoom region for replaced elements</div>
+                <div class="demo-content view-box-demo">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23ffc107' width='200' height='200'/%3E%3Ccircle cx='100' cy='100' r='60' fill='%23dc3545'/%3E%3C/svg%3E" alt="Circle">
+                </div>
+            </div>
+
+            <!-- scroll-snap-type & scroll-snap-align -->
+            <div class="demo-item">
+                <h3>scroll-snap-type: x mandatory</h3>
+                <div class="description">Scroll snapping behavior (scroll horizontally)</div>
+                <div class="demo-content scroll-snap-demo">
+                    <div class="item">Snap 1</div>
+                    <div class="item">Snap 2</div>
+                    <div class="item">Snap 3</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="output-section" id="output-section" style="display: none;">
+        <h2>Canvas Output</h2>
+        <p>Below is the canvas rendered by html2canvas with all the new CSS properties:</p>
+        <div id="canvas-container"></div>
+    </div>
+
+    <script src="/dist/html2canvas.js?v=accent-color-fixed"></script>
+    <script>
+        async function convertToCanvas() {
+            const statusEl = document.getElementById('status');
+            const outputSection = document.getElementById('output-section');
+            const canvasContainer = document.getElementById('canvas-container');
+
+            try {
+                statusEl.textContent = 'Converting to canvas...';
+                statusEl.style.color = '#007bff';
+
+                const element = document.getElementById('test-content');
+                const canvas = await html2canvas(element, {
+                    backgroundColor: '#f5f5f5',
+                    logging: true,
+                    scale: 2 // Higher quality
+                });
+
+                canvasContainer.innerHTML = '';
+                canvasContainer.appendChild(canvas);
+                canvas.id = 'canvas-output';
+
+                outputSection.style.display = 'block';
+                outputSection.scrollIntoView({ behavior: 'smooth' });
+
+                statusEl.textContent = '✓ Conversion complete!';
+                statusEl.style.color = '#28a745';
+
+                setTimeout(() => {
+                    statusEl.textContent = '';
+                }, 3000);
+
+            } catch (error) {
+                statusEl.textContent = '✗ Error: ' + error.message;
+                statusEl.style.color = '#dc3545';
+                console.error('html2canvas error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

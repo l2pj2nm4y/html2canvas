@@ -27,14 +27,14 @@ import {ReplacedElementContainer} from '../../dom/replaced-elements';
 import {EffectTarget, IElementEffect, isClipEffect, isOpacityEffect, isTransformEffect} from '../effects';
 import {contains} from '../../core/bitwise';
 import {calculateGradientDirection, calculateRadius, processColorStops} from '../../css/types/functions/gradient';
-import {FIFTY_PERCENT, getAbsoluteValue} from '../../css/types/length-percentage';
+import {FIFTY_PERCENT, getAbsoluteValue, LengthPercentage} from '../../css/types/length-percentage';
 import {TEXT_DECORATION_LINE} from '../../css/property-descriptors/text-decoration-line';
 import {FontMetrics} from '../font-metrics';
 import {DISPLAY} from '../../css/property-descriptors/display';
 import {Bounds} from '../../css/layout/bounds';
 import {LIST_STYLE_TYPE} from '../../css/property-descriptors/list-style-type';
 import {computeLineHeight} from '../../css/property-descriptors/line-height';
-import {CHECKBOX, INPUT_COLOR, InputElementContainer, RADIO} from '../../dom/replaced-elements/input-element-container';
+import {CHECKBOX, InputElementContainer, RADIO} from '../../dom/replaced-elements/input-element-container';
 import {TEXT_ALIGN} from '../../css/property-descriptors/text-align';
 import {TextareaElementContainer} from '../../dom/elements/textarea-element-container';
 import {SelectElementContainer} from '../../dom/elements/select-element-container';
@@ -44,6 +44,8 @@ import {PAINT_ORDER_LAYER} from '../../css/property-descriptors/paint-order';
 import {Renderer} from '../renderer';
 import {Context} from '../../core/context';
 import {DIRECTION} from '../../css/property-descriptors/direction';
+import {OBJECT_FIT} from '../../css/property-descriptors/object-fit';
+import {MIX_BLEND_MODE, getCompositeOperation} from '../../css/property-descriptors/mix-blend-mode';
 
 export type RenderConfigurations = RenderOptions & {
     backgroundColor: Color | null;
@@ -59,6 +61,13 @@ export interface RenderOptions {
 }
 
 const MASK_OFFSET = 10000;
+
+interface Rectangle {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
 
 export class CanvasRenderer extends Renderer {
     canvas: HTMLCanvasElement;
@@ -129,7 +138,16 @@ export class CanvasRenderer extends Renderer {
     async renderStack(stack: StackingContext): Promise<void> {
         const styles = stack.element.container.styles;
         if (styles.isVisible()) {
+            // Apply mix-blend-mode if not normal
+            const previousCompositeOperation = this.ctx.globalCompositeOperation;
+            if (styles.mixBlendMode !== MIX_BLEND_MODE.NORMAL) {
+                this.ctx.globalCompositeOperation = getCompositeOperation(styles.mixBlendMode);
+            }
+
             await this.renderStackContent(stack);
+
+            // Restore previous composite operation
+            this.ctx.globalCompositeOperation = previousCompositeOperation;
         }
     }
 
@@ -139,8 +157,29 @@ export class CanvasRenderer extends Renderer {
         }
 
         if (paint.container.styles.isVisible()) {
+            // Handle rotate transform - this is the ONLY transform that needs canvas rendering
+            // because getBoundingClientRect() returns the bounding box size but the content
+            // still needs to be visually rotated
+            const rotateValue = paint.container.styles.rotate;
+
+            if (rotateValue !== null) {
+                this.ctx.save();
+
+                // Rotate around the center of the element
+                const centerX = paint.container.bounds.left + paint.container.bounds.width / 2;
+                const centerY = paint.container.bounds.top + paint.container.bounds.height / 2;
+
+                this.ctx.translate(centerX, centerY);
+                this.ctx.rotate(rotateValue);
+                this.ctx.translate(-centerX, -centerY);
+            }
+
             await this.renderNodeBackgroundAndBorders(paint);
             await this.renderNodeContent(paint);
+
+            if (rotateValue !== null) {
+                this.ctx.restore();
+            }
         }
     }
 
@@ -270,25 +309,155 @@ export class CanvasRenderer extends Renderer {
         curves: BoundCurves,
         image: HTMLImageElement | HTMLCanvasElement
     ): void {
-        if (image && container.intrinsicWidth > 0 && container.intrinsicHeight > 0) {
-            const box = contentBox(container);
-            const path = calculatePaddingBoxPath(curves);
-            this.path(path);
-            this.ctx.save();
-            this.ctx.clip();
-            this.ctx.drawImage(
-                image,
-                0,
-                0,
-                container.intrinsicWidth,
-                container.intrinsicHeight,
-                box.left,
-                box.top,
-                box.width,
-                box.height
-            );
-            this.ctx.restore();
+        if (!image || container.intrinsicWidth <= 0 || container.intrinsicHeight <= 0) {
+            return;
         }
+
+        const box = contentBox(container);
+        const objectFit = container.styles.objectFit;
+        const objectPosition = container.styles.objectPosition;
+
+        // Calculate source and destination rectangles based on object-fit
+        const {sourceRect, destRect} = this.calculateObjectFitLayout(
+            container.intrinsicWidth,
+            container.intrinsicHeight,
+            box,
+            objectFit,
+            objectPosition
+        );
+
+        const path = calculatePaddingBoxPath(curves);
+        this.path(path);
+        this.ctx.save();
+        this.ctx.clip();
+
+        this.ctx.drawImage(
+            image,
+            sourceRect.x,
+            sourceRect.y,
+            sourceRect.width,
+            sourceRect.height,
+            destRect.x,
+            destRect.y,
+            destRect.width,
+            destRect.height
+        );
+
+        this.ctx.restore();
+    }
+
+    private calculateObjectFitLayout(
+        intrinsicWidth: number,
+        intrinsicHeight: number,
+        box: Bounds,
+        objectFit: OBJECT_FIT,
+        objectPosition: LengthPercentage[]
+    ): {sourceRect: Rectangle; destRect: Rectangle} {
+        const containerAspect = box.width / box.height;
+        const imageAspect = intrinsicWidth / intrinsicHeight;
+
+        let destWidth = box.width;
+        let destHeight = box.height;
+        let destX = box.left;
+        let destY = box.top;
+
+        switch (objectFit) {
+            case OBJECT_FIT.CONTAIN:
+                // Scale to fit within container (preserve aspect ratio)
+                if (imageAspect > containerAspect) {
+                    // Image wider than container
+                    destHeight = box.width / imageAspect;
+                } else {
+                    // Image taller than container
+                    destWidth = box.height * imageAspect;
+                }
+                break;
+
+            case OBJECT_FIT.COVER:
+                // Scale to cover container (preserve aspect ratio, may crop)
+                if (imageAspect > containerAspect) {
+                    // Image wider than container
+                    destWidth = box.height * imageAspect;
+                } else {
+                    // Image taller than container
+                    destHeight = box.width / imageAspect;
+                }
+                break;
+
+            case OBJECT_FIT.NONE:
+                // Original size (no scaling)
+                destWidth = intrinsicWidth;
+                destHeight = intrinsicHeight;
+                break;
+
+            case OBJECT_FIT.SCALE_DOWN:
+                // Smaller of 'none' or 'contain'
+                if (intrinsicWidth <= box.width && intrinsicHeight <= box.height) {
+                    // Image fits naturally - use 'none'
+                    destWidth = intrinsicWidth;
+                    destHeight = intrinsicHeight;
+                } else {
+                    // Image too large - use 'contain'
+                    if (imageAspect > containerAspect) {
+                        destHeight = box.width / imageAspect;
+                        destWidth = box.width;
+                    } else {
+                        destWidth = box.height * imageAspect;
+                        destHeight = box.height;
+                    }
+                }
+                break;
+
+            case OBJECT_FIT.FILL:
+            default:
+                // Stretch to fill (default behavior)
+                // destWidth and destHeight already set to box dimensions
+                break;
+        }
+
+        // Apply object-position
+        const posX = objectPosition[0];
+        const posY = objectPosition.length > 1 ? objectPosition[1] : objectPosition[0];
+        const xOffset = getAbsoluteValue(posX, box.width - destWidth);
+        const yOffset = getAbsoluteValue(posY, box.height - destHeight);
+        destX += xOffset;
+        destY += yOffset;
+
+        // Calculate source rectangle
+        // For most cases, we use the entire source image
+        let sourceX = 0;
+        let sourceY = 0;
+        let sourceWidth = intrinsicWidth;
+        let sourceHeight = intrinsicHeight;
+
+        // For 'cover', we may need to clip the source image to show only the visible portion
+        if (objectFit === OBJECT_FIT.COVER) {
+            const scaleX = destWidth / intrinsicWidth;
+            const scaleY = destHeight / intrinsicHeight;
+
+            // Calculate the portion of destination that's visible within the container
+            const visibleLeft = Math.max(destX, box.left);
+            const visibleTop = Math.max(destY, box.top);
+            const visibleRight = Math.min(destX + destWidth, box.left + box.width);
+            const visibleBottom = Math.min(destY + destHeight, box.top + box.height);
+
+            // Convert visible destination area to source coordinates
+            sourceX = (visibleLeft - destX) / scaleX;
+            sourceY = (visibleTop - destY) / scaleY;
+            sourceWidth = (visibleRight - visibleLeft) / scaleX;
+            sourceHeight = (visibleBottom - visibleTop) / scaleY;
+
+            // Adjust destination to match visible area
+            destX = visibleLeft;
+            destY = visibleTop;
+            destWidth = visibleRight - visibleLeft;
+            destHeight = visibleBottom - visibleTop;
+        }
+
+        return {
+            sourceRect: {x: sourceX, y: sourceY, width: sourceWidth, height: sourceHeight},
+            destRect: {x: destX, y: destY, width: destWidth, height: destHeight}
+        };
     }
 
     async renderNodeContent(paint: ElementPaint): Promise<void> {
@@ -354,6 +523,9 @@ export class CanvasRenderer extends Renderer {
             if (container.type === CHECKBOX) {
                 if (container.checked) {
                     this.ctx.save();
+
+                    // Draw white checkmark
+                    // Background is already rendered via renderNodeBackgroundAndBorders
                     this.path([
                         new Vector(container.bounds.left + size * 0.39363, container.bounds.top + size * 0.79),
                         new Vector(container.bounds.left + size * 0.16, container.bounds.top + size * 0.5549),
@@ -363,14 +535,20 @@ export class CanvasRenderer extends Renderer {
                         new Vector(container.bounds.left + size * 0.84, container.bounds.top + size * 0.34085),
                         new Vector(container.bounds.left + size * 0.39363, container.bounds.top + size * 0.79)
                     ]);
-
-                    this.ctx.fillStyle = asString(INPUT_COLOR);
+                    this.ctx.fillStyle = '#ffffff';
                     this.ctx.fill();
                     this.ctx.restore();
                 }
             } else if (container.type === RADIO) {
                 if (container.checked) {
                     this.ctx.save();
+
+                    // Draw accent-colored dot in center
+                    // Background (white) and border (accent color) already rendered via renderNodeBackgroundAndBorders
+                    const accentColorValue = container.styles.accentColor !== null
+                        ? container.styles.accentColor
+                        : 0x2a2a2aff;
+
                     this.ctx.beginPath();
                     this.ctx.arc(
                         container.bounds.left + size / 2,
@@ -380,7 +558,7 @@ export class CanvasRenderer extends Renderer {
                         Math.PI * 2,
                         true
                     );
-                    this.ctx.fillStyle = asString(INPUT_COLOR);
+                    this.ctx.fillStyle = asString(accentColorValue);
                     this.ctx.fill();
                     this.ctx.restore();
                 }

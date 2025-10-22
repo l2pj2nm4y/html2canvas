@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>aspect-ratio with images</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 200px;
+            height: 200px;
+            border: 2px solid #333;
+            display: inline-block;
+            margin: 10px;
+            background: #f0f0f0;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+        }
+        .aspect-16-9 {
+            aspect-ratio: 16/9;
+            height: auto;
+        }
+        .aspect-4-3 {
+            aspect-ratio: 4/3;
+            height: auto;
+        }
+        .aspect-1-1 {
+            aspect-ratio: 1/1;
+            height: auto;
+        }
+        h3 {
+            text-align: center;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>aspect-ratio with Images</h1>
+    <p>Images with aspect-ratio override their natural dimensions.</p>
+
+    <div>
+        <h3>Original (200x200 container)</h3>
+        <div class="container">
+            <img src="../../assets/image.jpg" alt="Original">
+        </div>
+    </div>
+
+    <div>
+        <h3>aspect-ratio: 16/9</h3>
+        <div class="container">
+            <img src="../../assets/image.jpg" alt="16/9" class="aspect-16-9">
+        </div>
+    </div>
+
+    <div>
+        <h3>aspect-ratio: 4/3</h3>
+        <div class="container">
+            <img src="../../assets/image.jpg" alt="4/3" class="aspect-4-3">
+        </div>
+    </div>
+
+    <div>
+        <h3>aspect-ratio: 1/1</h3>
+        <div class="container">
+            <img src="../../assets/image.jpg" alt="1/1" class="aspect-1-1">
+        </div>
+    </div>
+
+    <div>
+        <h3>Combined with object-fit: cover</h3>
+        <div class="container">
+            <img src="../../assets/image.jpg" alt="16/9 cover" class="aspect-16-9" style="object-fit: cover; height: 100%;">
+        </div>
+    </div>
+
+    <div>
+        <h3>Combined with object-fit: contain</h3>
+        <div class="container">
+            <img src="../../assets/image.jpg" alt="16/9 contain" class="aspect-16-9" style="object-fit: contain; height: 100%;">
+        </div>
+    </div>
+</body>
+</html>

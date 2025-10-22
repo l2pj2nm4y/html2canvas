@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>object-fit: fill</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 200px;
+            height: 150px;
+            border: 2px solid #333;
+            display: inline-block;
+            margin: 10px;
+            background: #f0f0f0;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+        }
+        h3 {
+            text-align: center;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>object-fit: fill (Default)</h1>
+    <p>Images should stretch to fill the container, distorting aspect ratio if necessary.</p>
+
+    <div>
+        <h3>Wide Image (2:1)</h3>
+        <div class="container">
+            <img src="../../assets/image_1.jpg" alt="Wide image">
+        </div>
+    </div>
+
+    <div>
+        <h3>Tall Image (1:2)</h3>
+        <div class="container">
+            <img src="../../assets/image2_1.jpg" alt="Tall image">
+        </div>
+    </div>
+
+    <div>
+        <h3>Square Image</h3>
+        <div class="container">
+            <img src="../../assets/image.jpg" alt="Square image">
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>html2canvas object-fit Test</title>
+    <script src="dist/html2canvas.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .test-container {
+            display: inline-block;
+            margin: 20px;
+            vertical-align: top;
+        }
+        .image-box {
+            width: 200px;
+            height: 150px;
+            border: 2px solid #333;
+            background: #f0f0f0;
+            margin-bottom: 10px;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+        }
+        .fill { object-fit: fill; }
+        .contain { object-fit: contain; }
+        .cover { object-fit: cover; }
+        .none { object-fit: none; }
+        .scale-down { object-fit: scale-down; }
+        .contain-left-top {
+            object-fit: contain;
+            object-position: left top;
+        }
+        canvas {
+            border: 2px solid #666;
+        }
+        h3 {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>html2canvas object-fit Implementation Test</h1>
+    <p>Click the button to render all test cases to canvas. Compare browser rendering (top) with canvas output (bottom).</p>
+
+    <button onclick="renderAll()">Render All to Canvas</button>
+
+    <div id="tests">
+        <div class="test-container">
+            <h3>object-fit: fill</h3>
+            <div class="image-box" id="test-fill">
+                <img class="fill" src="tests/assets/image_1.jpg" alt="Wide image">
+            </div>
+            <div id="result-fill"></div>
+        </div>
+
+        <div class="test-container">
+            <h3>object-fit: contain</h3>
+            <div class="image-box" id="test-contain">
+                <img class="contain" src="tests/assets/image_1.jpg" alt="Wide image">
+            </div>
+            <div id="result-contain"></div>
+        </div>
+
+        <div class="test-container">
+            <h3>object-fit: cover</h3>
+            <div class="image-box" id="test-cover">
+                <img class="cover" src="tests/assets/image2_1.jpg" alt="Tall image">
+            </div>
+            <div id="result-cover"></div>
+        </div>
+
+        <div class="test-container">
+            <h3>object-fit: none</h3>
+            <div class="image-box" id="test-none">
+                <img class="none" src="tests/assets/image.jpg" alt="Square image">
+            </div>
+            <div id="result-none"></div>
+        </div>
+
+        <div class="test-container">
+            <h3>object-fit: scale-down</h3>
+            <div class="image-box" id="test-scale-down">
+                <img class="scale-down" src="tests/assets/bg-sliver.png" alt="Small image">
+            </div>
+            <div id="result-scale-down"></div>
+        </div>
+
+        <div class="test-container">
+            <h3>contain + left top</h3>
+            <div class="image-box" id="test-position">
+                <img class="contain-left-top" src="tests/assets/image_1.jpg" alt="Wide image">
+            </div>
+            <div id="result-position"></div>
+        </div>
+    </div>
+
+    <script>
+        async function renderTest(elementId, resultId) {
+            const element = document.getElementById(elementId);
+            const resultDiv = document.getElementById(resultId);
+
+            try {
+                const canvas = await html2canvas(element, {
+                    logging: true,
+                    allowTaint: true,
+                    useCORS: false
+                });
+
+                resultDiv.innerHTML = '';
+                resultDiv.appendChild(canvas);
+                console.log(`✅ Rendered ${elementId}`);
+            } catch (error) {
+                console.error(`❌ Error rendering ${elementId}:`, error);
+                resultDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+
+        async function renderAll() {
+            console.log('Starting render tests...');
+
+            const tests = [
+                ['test-fill', 'result-fill'],
+                ['test-contain', 'result-contain'],
+                ['test-cover', 'result-cover'],
+                ['test-none', 'result-none'],
+                ['test-scale-down', 'result-scale-down'],
+                ['test-position', 'result-position']
+            ];
+
+            for (const [elementId, resultId] of tests) {
+                await renderTest(elementId, resultId);
+            }
+
+            console.log('All tests complete!');
+        }
+    </script>
+</body>
+</html>

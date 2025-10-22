@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>gap: percentage values</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border: 2px solid #333;
+            padding: 10px;
+            margin: 10px 0;
+            background: #f0f0f0;
+            width: 400px;
+        }
+        .item {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-weight: bold;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .gap-5-percent {
+            gap: 5%;
+        }
+        .gap-10-percent {
+            gap: 10%;
+        }
+        .gap-row-5-col-10-percent {
+            row-gap: 5%;
+            column-gap: 10%;
+        }
+        h3 {
+            margin-top: 20px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>gap Property with Percentage Values</h1>
+
+    <h3>gap: 5%</h3>
+    <div class="container gap-5-percent">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+    </div>
+
+    <h3>gap: 10%</h3>
+    <div class="container gap-10-percent">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+    </div>
+
+    <h3>row-gap: 5%; column-gap: 10%</h3>
+    <div class="container gap-row-5-col-10-percent">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+    </div>
+</body>
+</html>

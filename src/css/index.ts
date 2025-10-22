@@ -79,10 +79,26 @@ import {boxShadow} from './property-descriptors/box-shadow';
 import {paintOrder} from './property-descriptors/paint-order';
 import {webkitTextStrokeColor} from './property-descriptors/webkit-text-stroke-color';
 import {webkitTextStrokeWidth} from './property-descriptors/webkit-text-stroke-width';
+import {objectFit, OBJECT_FIT} from './property-descriptors/object-fit';
+import {objectPosition} from './property-descriptors/object-position';
+import {aspectRatio} from './property-descriptors/aspect-ratio';
+import {gap, rowGap, columnGap} from './property-descriptors/gap';
+import {inset, top, right, bottom, left} from './property-descriptors/inset';
+import {rotate} from './property-descriptors/rotate';
+import {scale} from './property-descriptors/scale';
+import {translate} from './property-descriptors/translate';
+import {mixBlendMode, MIX_BLEND_MODE} from './property-descriptors/mix-blend-mode';
+import {accentColor} from './property-descriptors/accent-color';
+import {backdropFilter} from './property-descriptors/backdrop-filter';
+import {objectViewBox} from './property-descriptors/object-view-box';
+import {scrollSnapType, scrollSnapAlign} from './property-descriptors/scroll-snap';
 import {Context} from '../core/context';
 
 export class CSSParsedDeclaration {
+    accentColor: ReturnType<typeof accentColor.parse>;
     animationDuration: ReturnType<typeof duration.parse>;
+    aspectRatio: ReturnType<typeof aspectRatio.parse>;
+    backdropFilter: CSSValue;
     backgroundClip: ReturnType<typeof backgroundClip.parse>;
     backgroundColor: Color;
     backgroundImage: ReturnType<typeof backgroundImage.parse>;
@@ -116,6 +132,14 @@ export class CSSParsedDeclaration {
     fontStyle: ReturnType<typeof fontStyle.parse>;
     fontVariant: ReturnType<typeof fontVariant.parse>;
     fontWeight: ReturnType<typeof fontWeight.parse>;
+    gap: ReturnType<typeof gap.parse>;
+    rowGap: ReturnType<typeof rowGap.parse>;
+    columnGap: ReturnType<typeof columnGap.parse>;
+    inset: CSSValue;
+    top: CSSValue;
+    right: CSSValue;
+    bottom: CSSValue;
+    left: CSSValue;
     letterSpacing: ReturnType<typeof letterSpacing.parse>;
     lineBreak: ReturnType<typeof lineBreak.parse>;
     lineHeight: CSSValue;
@@ -126,6 +150,10 @@ export class CSSParsedDeclaration {
     marginRight: CSSValue;
     marginBottom: CSSValue;
     marginLeft: CSSValue;
+    mixBlendMode: MIX_BLEND_MODE;
+    objectFit: OBJECT_FIT;
+    objectPosition: ReturnType<typeof objectPosition.parse>;
+    objectViewBox: CSSValue;
     opacity: ReturnType<typeof opacity.parse>;
     overflowX: OVERFLOW;
     overflowY: OVERFLOW;
@@ -136,6 +164,11 @@ export class CSSParsedDeclaration {
     paddingLeft: LengthPercentage;
     paintOrder: ReturnType<typeof paintOrder.parse>;
     position: ReturnType<typeof position.parse>;
+    rotate: ReturnType<typeof rotate.parse>;
+    scale: ReturnType<typeof scale.parse>;
+    scrollSnapType: ReturnType<typeof scrollSnapType.parse>;
+    scrollSnapAlign: ReturnType<typeof scrollSnapAlign.parse>;
+    translate: ReturnType<typeof translate.parse>;
     textAlign: ReturnType<typeof textAlign.parse>;
     textDecorationColor: Color;
     textDecorationLine: ReturnType<typeof textDecorationLine.parse>;
@@ -150,7 +183,10 @@ export class CSSParsedDeclaration {
     zIndex: ReturnType<typeof zIndex.parse>;
 
     constructor(context: Context, declaration: CSSStyleDeclaration) {
+        this.accentColor = parse(context, accentColor, declaration.accentColor);
         this.animationDuration = parse(context, duration, declaration.animationDuration);
+        this.aspectRatio = parse(context, aspectRatio, declaration.aspectRatio);
+        this.backdropFilter = parse(context, backdropFilter, declaration.backdropFilter);
         this.backgroundClip = parse(context, backgroundClip, declaration.backgroundClip);
         this.backgroundColor = parse(context, backgroundColor, declaration.backgroundColor);
         this.backgroundImage = parse(context, backgroundImage, declaration.backgroundImage);
@@ -184,6 +220,14 @@ export class CSSParsedDeclaration {
         this.fontStyle = parse(context, fontStyle, declaration.fontStyle);
         this.fontVariant = parse(context, fontVariant, declaration.fontVariant);
         this.fontWeight = parse(context, fontWeight, declaration.fontWeight);
+        this.gap = parse(context, gap, declaration.gap);
+        this.rowGap = parse(context, rowGap, declaration.rowGap);
+        this.columnGap = parse(context, columnGap, declaration.columnGap);
+        this.inset = parse(context, inset, declaration.inset);
+        this.top = parse(context, top, declaration.top);
+        this.right = parse(context, right, declaration.right);
+        this.bottom = parse(context, bottom, declaration.bottom);
+        this.left = parse(context, left, declaration.left);
         this.letterSpacing = parse(context, letterSpacing, declaration.letterSpacing);
         this.lineBreak = parse(context, lineBreak, declaration.lineBreak);
         this.lineHeight = parse(context, lineHeight, declaration.lineHeight);
@@ -194,6 +238,10 @@ export class CSSParsedDeclaration {
         this.marginRight = parse(context, marginRight, declaration.marginRight);
         this.marginBottom = parse(context, marginBottom, declaration.marginBottom);
         this.marginLeft = parse(context, marginLeft, declaration.marginLeft);
+        this.mixBlendMode = parse(context, mixBlendMode, declaration.mixBlendMode);
+        this.objectFit = parse(context, objectFit, declaration.objectFit);
+        this.objectPosition = parse(context, objectPosition, declaration.objectPosition);
+        this.objectViewBox = parse(context, objectViewBox, declaration.objectViewBox);
         this.opacity = parse(context, opacity, declaration.opacity);
         const overflowTuple = parse(context, overflow, declaration.overflow);
         this.overflowX = overflowTuple[0];
@@ -205,6 +253,11 @@ export class CSSParsedDeclaration {
         this.paddingLeft = parse(context, paddingLeft, declaration.paddingLeft);
         this.paintOrder = parse(context, paintOrder, declaration.paintOrder);
         this.position = parse(context, position, declaration.position);
+        this.rotate = parse(context, rotate, declaration.rotate);
+        this.scale = parse(context, scale, declaration.scale);
+        this.scrollSnapType = parse(context, scrollSnapType, declaration.scrollSnapType);
+        this.scrollSnapAlign = parse(context, scrollSnapAlign, declaration.scrollSnapAlign);
+        this.translate = parse(context, translate, declaration.translate);
         this.textAlign = parse(context, textAlign, declaration.textAlign);
         this.textDecorationColor = parse(
             context,
@@ -289,33 +342,38 @@ const parse = (context: Context, descriptor: CSSPropertyDescriptor<any>, style?:
     const value = style !== null && typeof style !== 'undefined' ? style.toString() : descriptor.initialValue;
     tokenizer.write(value);
     const parser = new Parser(tokenizer.read());
-    switch (descriptor.type) {
-        case PropertyDescriptorParsingType.IDENT_VALUE:
-            const token = parser.parseComponentValue();
-            return descriptor.parse(context, isIdentToken(token) ? token.value : descriptor.initialValue);
-        case PropertyDescriptorParsingType.VALUE:
-            return descriptor.parse(context, parser.parseComponentValue());
-        case PropertyDescriptorParsingType.LIST:
-            return descriptor.parse(context, parser.parseComponentValues());
-        case PropertyDescriptorParsingType.TOKEN_VALUE:
-            return parser.parseComponentValue();
-        case PropertyDescriptorParsingType.TYPE_VALUE:
-            switch (descriptor.format) {
-                case 'angle':
-                    return angle.parse(context, parser.parseComponentValue());
-                case 'color':
-                    return colorType.parse(context, parser.parseComponentValue());
-                case 'image':
-                    return image.parse(context, parser.parseComponentValue());
-                case 'length':
-                    const length = parser.parseComponentValue();
-                    return isLength(length) ? length : ZERO_LENGTH;
-                case 'length-percentage':
-                    const value = parser.parseComponentValue();
-                    return isLengthPercentage(value) ? value : ZERO_LENGTH;
-                case 'time':
-                    return time.parse(context, parser.parseComponentValue());
-            }
-            break;
+    try {
+        switch (descriptor.type) {
+            case PropertyDescriptorParsingType.IDENT_VALUE:
+                const token = parser.parseComponentValue();
+                return descriptor.parse(context, isIdentToken(token) ? token.value : descriptor.initialValue);
+            case PropertyDescriptorParsingType.VALUE:
+                return descriptor.parse(context, parser.parseComponentValue());
+            case PropertyDescriptorParsingType.LIST:
+                return descriptor.parse(context, parser.parseComponentValues());
+            case PropertyDescriptorParsingType.TOKEN_VALUE:
+                return parser.parseComponentValue();
+            case PropertyDescriptorParsingType.TYPE_VALUE:
+                switch (descriptor.format) {
+                    case 'angle':
+                        return angle.parse(context, parser.parseComponentValue());
+                    case 'color':
+                        return colorType.parse(context, parser.parseComponentValue());
+                    case 'image':
+                        return image.parse(context, parser.parseComponentValue());
+                    case 'length':
+                        const length = parser.parseComponentValue();
+                        return isLength(length) ? length : ZERO_LENGTH;
+                    case 'length-percentage':
+                        const value = parser.parseComponentValue();
+                        return isLengthPercentage(value) ? value : ZERO_LENGTH;
+                    case 'time':
+                        return time.parse(context, parser.parseComponentValue());
+                }
+                break;
+        }
+    } catch (error) {
+        console.error(`Error parsing CSS property "${descriptor.name}" with value "${value}":`, error);
+        throw error;
     }
 };

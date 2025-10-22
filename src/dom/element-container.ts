@@ -35,6 +35,12 @@ export class ElementContainer {
                 // getBoundingClientRect takes transforms into account
                 element.style.transform = 'none';
             }
+
+            // Individual transform properties also affect getBoundingClientRect
+            // Temporarily disable rotate to get the original (un-rotated) bounds
+            if (this.styles.rotate !== null) {
+                element.style.rotate = 'none';
+            }
         }
 
         this.bounds = parseBounds(this.context, element);

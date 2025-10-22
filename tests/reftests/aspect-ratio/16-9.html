@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>aspect-ratio: 16/9</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: inline-block;
+            margin: 10px;
+            border: 2px solid #333;
+        }
+        .box-16-9 {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .w-200 { width: 200px; }
+        .w-300 { width: 300px; }
+        .w-400 { width: 400px; }
+        h3 {
+            text-align: center;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>aspect-ratio: 16/9 (Widescreen)</h1>
+    <p>Elements should maintain 16:9 aspect ratio regardless of width.</p>
+
+    <div>
+        <h3>Width: 200px</h3>
+        <div class="container">
+            <div class="box-16-9 w-200">16:9</div>
+        </div>
+    </div>
+
+    <div>
+        <h3>Width: 300px</h3>
+        <div class="container">
+            <div class="box-16-9 w-300">16:9</div>
+        </div>
+    </div>
+
+    <div>
+        <h3>Width: 400px</h3>
+        <div class="container">
+            <div class="box-16-9 w-400">16:9</div>
+        </div>
+    </div>
+
+    <div>
+        <h3>Multiple Boxes</h3>
+        <div class="container">
+            <div class="box-16-9 w-200">16:9</div>
+        </div>
+        <div class="container">
+            <div class="box-16-9 w-200">16:9</div>
+        </div>
+        <div class="container">
+            <div class="box-16-9 w-200">16:9</div>
+        </div>
+    </div>
+</body>
+</html>

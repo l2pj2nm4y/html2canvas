@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>aspect-ratio: number values</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: inline-block;
+            margin: 10px;
+            border: 2px solid #333;
+        }
+        .box {
+            width: 200px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .ratio-1-5 {
+            aspect-ratio: 1.5;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        .ratio-2 {
+            aspect-ratio: 2;
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+        .ratio-0-5 {
+            aspect-ratio: 0.5;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+        .ratio-1 {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+        h3 {
+            text-align: center;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>aspect-ratio: Number Values</h1>
+    <p>Elements with aspect-ratio specified as decimal numbers.</p>
+
+    <div>
+        <h3>aspect-ratio: 1.5 (3:2)</h3>
+        <div class="container">
+            <div class="box ratio-1-5">1.5</div>
+        </div>
+    </div>
+
+    <div>
+        <h3>aspect-ratio: 2 (2:1)</h3>
+        <div class="container">
+            <div class="box ratio-2">2.0</div>
+        </div>
+    </div>
+
+    <div>
+        <h3>aspect-ratio: 0.5 (1:2)</h3>
+        <div class="container">
+            <div class="box ratio-0-5">0.5</div>
+        </div>
+    </div>
+
+    <div>
+        <h3>aspect-ratio: 1 (1:1)</h3>
+        <div class="container">
+            <div class="box ratio-1">1.0</div>
+        </div>
+    </div>
+
+    <div>
+        <h3>Combined Display</h3>
+        <div class="container">
+            <div class="box ratio-1-5">1.5</div>
+        </div>
+        <div class="container">
+            <div class="box ratio-2">2.0</div>
+        </div>
+        <div class="container">
+            <div class="box ratio-0-5">0.5</div>
+        </div>
+        <div class="container">
+            <div class="box ratio-1">1.0</div>
+        </div>
+    </div>
+</body>
+</html>
