@@ -1,6 +1,6 @@
 import {IPropertyListDescriptor, PropertyDescriptorParsingType} from '../IPropertyDescriptor';
 import {CSSValue} from '../syntax/parser';
-import {isLengthPercentage, LengthPercentageTuple, parseLengthPercentageTuple} from '../types/length-percentage';
+import {isLengthPercentage, LengthPercentageTuple, parseLengthPercentageTuple, LengthPercentage} from '../types/length-percentage';
 import {Context} from '../../core/context';
 export type BorderRadius = LengthPercentageTuple;
 
@@ -10,7 +10,7 @@ const borderRadiusForSide = (side: string): IPropertyListDescriptor<BorderRadius
     prefix: false,
     type: PropertyDescriptorParsingType.LIST,
     parse: (_context: Context, tokens: CSSValue[]): BorderRadius =>
-        parseLengthPercentageTuple(tokens.filter(isLengthPercentage))
+        parseLengthPercentageTuple(tokens.filter(isLengthPercentage) as LengthPercentage[])
 });
 
 export const borderTopLeftRadius: IPropertyListDescriptor<BorderRadius> = borderRadiusForSide('top-left');

@@ -18,7 +18,7 @@ export const transformOrigin: IPropertyListDescriptor<TransformOrigin> = {
     prefix: true,
     type: PropertyDescriptorParsingType.LIST,
     parse: (_context: Context, tokens: CSSValue[]) => {
-        const origins: LengthPercentage[] = tokens.filter(isLengthPercentage);
+        const origins = tokens.filter(isLengthPercentage) as LengthPercentage[];
 
         if (origins.length !== 2) {
             return DEFAULT;

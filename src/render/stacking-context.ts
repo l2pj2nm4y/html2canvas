@@ -44,8 +44,8 @@ export class ElementPaint {
         }
 
         if (this.container.styles.transform !== null) {
-            const offsetX = this.container.bounds.left + this.container.styles.transformOrigin[0].number;
-            const offsetY = this.container.bounds.top + this.container.styles.transformOrigin[1].number;
+            const offsetX = this.container.bounds.left + (this.container.styles.transformOrigin[0] as {number: number}).number;
+            const offsetY = this.container.bounds.top + (this.container.styles.transformOrigin[1] as {number: number}).number;
             const matrix = this.container.styles.transform;
             this.effects.push(new TransformEffect(offsetX, offsetY, matrix));
         }

@@ -6,6 +6,7 @@ import {Vector} from './vector';
 import {BACKGROUND_REPEAT} from '../css/property-descriptors/background-repeat';
 import {getAbsoluteValue, getAbsoluteValueForTuple, isLengthPercentage} from '../css/types/length-percentage';
 import {CSSValue, isIdentToken} from '../css/syntax/parser';
+import {StringValueToken} from '../css/syntax/tokenizer';
 import {contentBox, paddingBox} from './box-sizing';
 import {Path} from './path';
 import {BACKGROUND_CLIP} from '../css/property-descriptors/background-clip';
@@ -101,11 +102,11 @@ export const calculateBackgroundSize = (
 
     const hasIntrinsicProportion = hasIntrinsicValue(intrinsicProportion);
 
-    if (isIdentToken(first) && (first.value === BACKGROUND_SIZE.CONTAIN || first.value === BACKGROUND_SIZE.COVER)) {
+    if (isIdentToken(first as CSSValue) && ((first as StringValueToken).value === BACKGROUND_SIZE.CONTAIN || (first as StringValueToken).value === BACKGROUND_SIZE.COVER)) {
         if (hasIntrinsicValue(intrinsicProportion)) {
             const targetRatio = bounds.width / bounds.height;
 
-            return targetRatio < intrinsicProportion !== (first.value === BACKGROUND_SIZE.COVER)
+            return targetRatio < intrinsicProportion !== ((first as StringValueToken).value === BACKGROUND_SIZE.COVER)
                 ? [bounds.width, bounds.width / intrinsicProportion]
                 : [bounds.height * intrinsicProportion, bounds.height];
         }
@@ -118,7 +119,7 @@ export const calculateBackgroundSize = (
     const hasIntrinsicDimensions = hasIntrinsicWidth || hasIntrinsicHeight;
 
     // If the background-size is auto or auto auto:
-    if (isAuto(first) && (!second || isAuto(second))) {
+    if (isAuto(first as CSSValue) && (!second || isAuto(second as CSSValue))) {
         // If the image has both horizontal and vertical intrinsic dimensions, it's rendered at that size.
         if (hasIntrinsicWidth && hasIntrinsicHeight) {
             return [intrinsicWidth as number, intrinsicHeight as number];
@@ -163,9 +164,9 @@ export const calculateBackgroundSize = (
             height = getAbsoluteValue(second, bounds.height);
         }
 
-        if (isAuto(first)) {
+        if (isAuto(first as CSSValue)) {
             width = height * (intrinsicProportion as number);
-        } else if (!second || isAuto(second)) {
+        } else if (!second || isAuto(second as CSSValue)) {
             height = width / (intrinsicProportion as number);
         }
 
@@ -186,14 +187,14 @@ export const calculateBackgroundSize = (
         height = getAbsoluteValue(second, bounds.height);
     }
 
-    if (width !== null && (!second || isAuto(second))) {
+    if (width !== null && (!second || isAuto(second as CSSValue))) {
         height =
             hasIntrinsicWidth && hasIntrinsicHeight
                 ? (width / (intrinsicWidth as number)) * (intrinsicHeight as number)
                 : bounds.height;
     }
 
-    if (height !== null && isAuto(first)) {
+    if (height !== null && isAuto(first as CSSValue)) {
         width =
             hasIntrinsicWidth && hasIntrinsicHeight
                 ? (height / (intrinsicHeight as number)) * (intrinsicWidth as number)

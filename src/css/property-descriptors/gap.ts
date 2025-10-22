@@ -16,7 +16,7 @@ export const rowGap: IPropertyListDescriptor<Gap> = {
     prefix: false,
     type: PropertyDescriptorParsingType.LIST,
     parse: (_context: Context, tokens: CSSValue[]): Gap => {
-        const filtered = tokens.filter(isLengthPercentage);
+        const filtered = tokens.filter(isLengthPercentage) as LengthPercentage[];
         return filtered.length > 0 ? filtered[0] : {type: 0, number: 0, flags: 0};
     }
 };
@@ -27,7 +27,7 @@ export const columnGap: IPropertyListDescriptor<Gap> = {
     prefix: false,
     type: PropertyDescriptorParsingType.LIST,
     parse: (_context: Context, tokens: CSSValue[]): Gap => {
-        const filtered = tokens.filter(isLengthPercentage);
+        const filtered = tokens.filter(isLengthPercentage) as LengthPercentage[];
         return filtered.length > 0 ? filtered[0] : {type: 0, number: 0, flags: 0};
     }
 };
@@ -48,7 +48,7 @@ export const gap: IPropertyListDescriptor<GapShorthand> = {
     prefix: false,
     type: PropertyDescriptorParsingType.LIST,
     parse: (_context: Context, tokens: CSSValue[]): GapShorthand => {
-        const filtered = tokens.filter(isLengthPercentage);
+        const filtered = tokens.filter(isLengthPercentage) as LengthPercentage[];
         const defaultGap: Gap = {type: 0, number: 0, flags: 0};
 
         if (filtered.length === 0) {

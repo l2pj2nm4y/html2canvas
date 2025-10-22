@@ -29,7 +29,7 @@ export const translate: IPropertyListDescriptor<Translate | null> = {
             return null;
         }
 
-        const lengths = tokens.filter(isLengthPercentage);
+        const lengths = tokens.filter(isLengthPercentage) as LengthPercentage[];
 
         if (lengths.length === 0) {
             return {x: ZERO_TRANSLATE, y: ZERO_TRANSLATE};

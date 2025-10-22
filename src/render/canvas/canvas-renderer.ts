@@ -17,7 +17,7 @@ import {
     parsePathForBorderStroke
 } from '../border';
 import {calculateBackgroundRendering, getBackgroundValueForIndex} from '../background';
-import {isDimensionToken} from '../../css/syntax/parser';
+import {CSSValue, isDimensionToken} from '../../css/syntax/parser';
 import {segmentGraphemes, TextBounds} from '../../css/layout/text';
 import {ImageElementContainer} from '../../dom/replaced-elements/image-element-container';
 import {contentBox} from '../box-sizing';
@@ -246,9 +246,9 @@ export class CanvasRenderer extends Renderer {
             .filter((variant) => variant === 'normal' || variant === 'small-caps')
             .join('');
         const fontFamily = fixIOSSystemFonts(styles.fontFamily).join(', ');
-        const fontSize = isDimensionToken(styles.fontSize)
-            ? `${styles.fontSize.number}${styles.fontSize.unit}`
-            : `${styles.fontSize.number}px`;
+        const fontSize = isDimensionToken(styles.fontSize as CSSValue)
+            ? `${(styles.fontSize as {number: number; unit: string}).number}${(styles.fontSize as {number: number; unit: string}).unit}`
+            : `${(styles.fontSize as {number: number}).number}px`;
 
         return [
             [styles.fontStyle, fontVariant, styles.fontWeight, fontSize, fontFamily].join(' '),
@@ -679,13 +679,13 @@ export class CanvasRenderer extends Renderer {
                     container.bounds.left,
                     container.bounds.top + getAbsoluteValue(container.styles.paddingTop, container.bounds.width),
                     container.bounds.width,
-                    computeLineHeight(styles.lineHeight, styles.fontSize.number) / 2 + 1
+                    computeLineHeight(styles.lineHeight, (styles.fontSize as {number: number}).number) / 2 + 1
                 );
 
                 this.renderTextWithLetterSpacing(
                     new TextBounds(paint.listValue, bounds),
                     styles.letterSpacing,
-                    computeLineHeight(styles.lineHeight, styles.fontSize.number) / 2 + 2
+                    computeLineHeight(styles.lineHeight, (styles.fontSize as {number: number}).number) / 2 + 2
                 );
                 this.ctx.textBaseline = 'bottom';
                 this.ctx.textAlign = 'left';

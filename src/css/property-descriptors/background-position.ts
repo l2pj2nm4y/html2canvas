@@ -1,6 +1,6 @@
 import {PropertyDescriptorParsingType, IPropertyListDescriptor} from '../IPropertyDescriptor';
-import {CSSValue, parseFunctionArgs, isIdentToken} from '../syntax/parser';
-import {isLengthPercentage, LengthPercentageTuple, parseLengthPercentageTuple, ZERO_LENGTH, HUNDRED_PERCENT} from '../types/length-percentage';
+import {CSSValue, parseFunctionArgs, isIdentToken, isDimensionToken} from '../syntax/parser';
+import {isLengthPercentage, LengthPercentageTuple, parseLengthPercentageTuple, ZERO_LENGTH, LengthPercentage} from '../types/length-percentage';
 import {Context} from '../../core/context';
 import {TokenType} from '../syntax/tokenizer';
 
@@ -9,7 +9,7 @@ export type BackgroundPosition = BackgroundImagePosition[];
 export type BackgroundImagePosition = LengthPercentageTuple;
 
 // Helper to parse 4-value syntax: "right 10px bottom 15px"
-const parseFourValueSyntax = (values: CSSValue[]): CSSValue[] => {
+const parseFourValueSyntax = (values: CSSValue[]): LengthPercentage[] => {
     // Check if we have 4-value syntax: keyword + length/percentage + keyword + length/percentage
     if (values.length === 4) {
         const [first, second, third, fourth] = values;
@@ -24,8 +24,8 @@ const parseFourValueSyntax = (values: CSSValue[]): CSSValue[] => {
             // right/left control x-axis, top/bottom control y-axis
             const isFirstHorizontal = firstKeyword === 'right' || firstKeyword === 'left';
 
-            let xValue: CSSValue = ZERO_LENGTH;
-            let yValue: CSSValue = ZERO_LENGTH;
+            let xValue: LengthPercentage = ZERO_LENGTH;
+            let yValue: LengthPercentage = ZERO_LENGTH;
 
             // Determine x position
             if (isFirstHorizontal) {
@@ -39,10 +39,13 @@ const parseFourValueSyntax = (values: CSSValue[]): CSSValue[] => {
                             flags: second.flags
                         };
                     } else {
-                        // For pixel offsets: right 10px would need calc(100% - 10px)
-                        // which isn't supported in current type system
-                        // Limitation: falls back to 100% (right edge)
-                        xValue = HUNDRED_PERCENT;
+                        // For pixel offsets: right 10px = calc(100% - 10px)
+                        xValue = {
+                            type: 'CALC',
+                            percentage: 100,
+                            offset: -second.number,
+                            unit: isDimensionToken(second) ? second.unit : 'px'
+                        };
                     }
                 } else {
                     // left offset
@@ -58,7 +61,13 @@ const parseFourValueSyntax = (values: CSSValue[]): CSSValue[] => {
                             flags: fourth.flags
                         };
                     } else {
-                        xValue = HUNDRED_PERCENT;
+                        // For pixel offsets: right 10px = calc(100% - 10px)
+                        xValue = {
+                            type: 'CALC',
+                            percentage: 100,
+                            offset: -fourth.number,
+                            unit: isDimensionToken(fourth) ? fourth.unit : 'px'
+                        };
                     }
                 } else {
                     xValue = fourth;
@@ -75,9 +84,13 @@ const parseFourValueSyntax = (values: CSSValue[]): CSSValue[] => {
                             flags: second.flags
                         };
                     } else {
-                        // For pixel offsets: bottom 15px would need calc(100% - 15px)
-                        // Limitation: falls back to 100% (bottom edge)
-                        yValue = HUNDRED_PERCENT;
+                        // For pixel offsets: bottom 15px = calc(100% - 15px)
+                        yValue = {
+                            type: 'CALC',
+                            percentage: 100,
+                            offset: -second.number,
+                            unit: isDimensionToken(second) ? second.unit : 'px'
+                        };
                     }
                 } else {
                     // top offset
@@ -93,8 +106,13 @@ const parseFourValueSyntax = (values: CSSValue[]): CSSValue[] => {
                             flags: fourth.flags
                         };
                     } else {
-                        // Limitation: falls back to 100% (bottom edge)
-                        yValue = HUNDRED_PERCENT;
+                        // For pixel offsets: bottom 15px = calc(100% - 15px)
+                        yValue = {
+                            type: 'CALC',
+                            percentage: 100,
+                            offset: -fourth.number,
+                            unit: isDimensionToken(fourth) ? fourth.unit : 'px'
+                        };
                     }
                 } else {
                     yValue = fourth;
@@ -106,7 +124,7 @@ const parseFourValueSyntax = (values: CSSValue[]): CSSValue[] => {
     }
 
     // Not 4-value syntax, return as-is (filtered to length/percentage)
-    return values.filter(isLengthPercentage);
+    return values.filter(isLengthPercentage) as LengthPercentage[];
 };
 
 export const backgroundPosition: IPropertyListDescriptor<BackgroundPosition> = {
