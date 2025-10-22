@@ -38,6 +38,18 @@
             color: #666;
             max-width: 180px;
         }
+
+        .limitation-badge {
+            display: inline-block;
+            background: #fff3cd;
+            color: #856404;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-top: 3px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
@@ -52,6 +64,17 @@
             <span id="status" class="status"></span>
             <span id="timing" class="timing"></span>
         </div>
+    </div>
+
+    <div style="background: #e7f3ff; border-left: 4px solid #0066cc; padding: 15px; margin: 0 20px 20px 20px; border-radius: 4px;">
+        <p style="margin: 0 0 10px 0; font-size: 14px; color: #004085;">
+            <strong>Note:</strong> CSS4 4-value <code>background-position</code> syntax with <strong>percentage values</strong> is now supported!
+        </p>
+        <p style="margin: 0; font-size: 13px; color: #004085; line-height: 1.5;">
+            The 4-value syntax like <code>right 25% bottom 30%</code> now works correctly. However, pixel-based offsets like <code>right 10px bottom 15px</code>
+            have a limitation: the position falls back to the edge (100%) instead of calculating <code>calc(100% - 10px)</code>.
+            Items marked with <span style="background: #fff3cd; color: #856404; font-size: 11px; padding: 2px 6px; border-radius: 3px; font-weight: 600;">KNOWN LIMITATION</span> indicate this pixel offset constraint.
+        </p>
     </div>
 
     <div class="split-view">
@@ -104,7 +127,7 @@
                 </div>
                 <div>
                     <div class="sample pos-mixed"></div>
-                    <div class="sample-label">right 10px bottom 15px</div>
+                    <div class="sample-label">right 10px bottom 15px<br><span class="limitation-badge">Known Limitation</span></div>
                 </div>
             </div>
         </div>

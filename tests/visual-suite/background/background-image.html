@@ -60,6 +60,18 @@
             color: #666;
             max-width: 200px;
         }
+
+        .limitation-badge {
+            display: inline-block;
+            background: #fff3cd;
+            color: #856404;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-top: 3px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
@@ -74,6 +86,13 @@
             <span id="status" class="status"></span>
             <span id="timing" class="timing"></span>
         </div>
+    </div>
+
+    <div style="background: #e7f3ff; border-left: 4px solid #0066cc; padding: 15px; margin: 0 20px 20px 20px; border-radius: 4px;">
+        <p style="margin: 0; font-size: 14px; color: #004085;">
+            <strong>Note:</strong> Some gradient types are not yet supported by html2canvas and will appear blank in the canvas output.
+            Items marked with <span style="background: #fff3cd; color: #856404; font-size: 11px; padding: 2px 6px; border-radius: 3px; font-weight: 600;">KNOWN LIMITATION</span> document current library capabilities.
+        </p>
     </div>
 
     <div class="split-view">
@@ -98,19 +117,19 @@
                 </div>
                 <div>
                     <div class="sample bg-radial-ellipse"></div>
-                    <div class="sample-label">radial-gradient(ellipse at center)</div>
+                    <div class="sample-label">radial-gradient(ellipse at center)<br><span class="limitation-badge">Known Limitation</span></div>
                 </div>
                 <div>
                     <div class="sample bg-repeating-linear"></div>
-                    <div class="sample-label">repeating-linear-gradient(45deg)</div>
+                    <div class="sample-label">repeating-linear-gradient(45deg)<br><span class="limitation-badge">Known Limitation</span></div>
                 </div>
                 <div>
                     <div class="sample bg-repeating-radial"></div>
-                    <div class="sample-label">repeating-radial-gradient(circle)</div>
+                    <div class="sample-label">repeating-radial-gradient(circle)<br><span class="limitation-badge">Known Limitation</span></div>
                 </div>
                 <div>
                     <div class="sample bg-multiple"></div>
-                    <div class="sample-label">Multiple backgrounds (gradient + SVG)</div>
+                    <div class="sample-label">Multiple backgrounds (gradient + SVG)<br><span class="limitation-badge">Known Limitation</span></div>
                 </div>
                 <div>
                     <div class="sample bg-conic"></div>
