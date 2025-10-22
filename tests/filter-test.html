@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Filter Test - html2canvas v2.0</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .test-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .filter-demo {
+            width: 200px;
+            height: 150px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        /* Individual filter tests */
+        .blur-test { filter: blur(5px); }
+        .brightness-test { filter: brightness(1.5); }
+        .contrast-test { filter: contrast(2); }
+        .grayscale-test { filter: grayscale(1); }
+        .hue-rotate-test { filter: hue-rotate(90deg); }
+        .invert-test { filter: invert(1); }
+        .opacity-test { filter: opacity(0.5); }
+        .saturate-test { filter: saturate(3); }
+        .sepia-test { filter: sepia(1); }
+
+        /* Combined filters */
+        .combined-1 { filter: blur(2px) brightness(1.2); }
+        .combined-2 { filter: contrast(1.5) saturate(1.5); }
+        .combined-3 { filter: grayscale(0.5) sepia(0.3) hue-rotate(45deg); }
+
+        h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        #output {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px 10px;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        canvas {
+            border: 2px solid #333;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSS Filter Property Test - html2canvas v2.0</h1>
+
+    <div id="capture-area">
+        <div class="container">
+            <!-- Blur -->
+            <div class="test-box">
+                <h2>Blur</h2>
+                <div class="filter-demo blur-test">blur(5px)</div>
+                <div class="label">filter: blur(5px)</div>
+            </div>
+
+            <!-- Brightness -->
+            <div class="test-box">
+                <h2>Brightness</h2>
+                <div class="filter-demo brightness-test">brightness(1.5)</div>
+                <div class="label">filter: brightness(1.5)</div>
+            </div>
+
+            <!-- Contrast -->
+            <div class="test-box">
+                <h2>Contrast</h2>
+                <div class="filter-demo contrast-test">contrast(2)</div>
+                <div class="label">filter: contrast(2)</div>
+            </div>
+
+            <!-- Grayscale -->
+            <div class="test-box">
+                <h2>Grayscale</h2>
+                <div class="filter-demo grayscale-test">grayscale(1)</div>
+                <div class="label">filter: grayscale(1)</div>
+            </div>
+
+            <!-- Hue Rotate -->
+            <div class="test-box">
+                <h2>Hue Rotate</h2>
+                <div class="filter-demo hue-rotate-test">hue-rotate(90deg)</div>
+                <div class="label">filter: hue-rotate(90deg)</div>
+            </div>
+
+            <!-- Invert -->
+            <div class="test-box">
+                <h2>Invert</h2>
+                <div class="filter-demo invert-test">invert(1)</div>
+                <div class="label">filter: invert(1)</div>
+            </div>
+
+            <!-- Opacity -->
+            <div class="test-box">
+                <h2>Opacity</h2>
+                <div class="filter-demo opacity-test">opacity(0.5)</div>
+                <div class="label">filter: opacity(0.5)</div>
+            </div>
+
+            <!-- Saturate -->
+            <div class="test-box">
+                <h2>Saturate</h2>
+                <div class="filter-demo saturate-test">saturate(3)</div>
+                <div class="label">filter: saturate(3)</div>
+            </div>
+
+            <!-- Sepia -->
+            <div class="test-box">
+                <h2>Sepia</h2>
+                <div class="filter-demo sepia-test">sepia(1)</div>
+                <div class="label">filter: sepia(1)</div>
+            </div>
+
+            <!-- Combined 1 -->
+            <div class="test-box">
+                <h2>Combined 1</h2>
+                <div class="filter-demo combined-1">blur + brightness</div>
+                <div class="label">filter: blur(2px) brightness(1.2)</div>
+            </div>
+
+            <!-- Combined 2 -->
+            <div class="test-box">
+                <h2>Combined 2</h2>
+                <div class="filter-demo combined-2">contrast + saturate</div>
+                <div class="label">filter: contrast(1.5) saturate(1.5)</div>
+            </div>
+
+            <!-- Combined 3 -->
+            <div class="test-box">
+                <h2>Combined 3</h2>
+                <div class="filter-demo combined-3">grayscale + sepia + hue</div>
+                <div class="label">filter: grayscale(0.5) sepia(0.3) hue-rotate(45deg)</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="output">
+        <button onclick="captureAndCompare()">Capture with html2canvas</button>
+    </div>
+
+    <script src="../dist/html2canvas.js"></script>
+    <script>
+        async function captureAndCompare() {
+            const element = document.getElementById('capture-area');
+
+            console.log('Capturing with html2canvas...');
+
+            try {
+                const canvas = await html2canvas(element, {
+                    logging: true,
+                    backgroundColor: '#f0f0f0'
+                });
+
+                // Display the canvas
+                const output = document.getElementById('output');
+
+                // Clear previous results
+                const existingCanvas = output.querySelector('canvas');
+                if (existingCanvas) {
+                    existingCanvas.remove();
+                }
+
+                const title = document.createElement('h2');
+                title.textContent = 'html2canvas Result:';
+                if (!output.querySelector('h2')) {
+                    output.insertBefore(title, output.firstChild);
+                }
+
+                output.appendChild(canvas);
+
+                console.log('✅ Capture complete!');
+
+            } catch (error) {
+                console.error('❌ Error capturing:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

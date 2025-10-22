@@ -92,6 +92,7 @@ import {accentColor} from './property-descriptors/accent-color';
 import {backdropFilter} from './property-descriptors/backdrop-filter';
 import {objectViewBox} from './property-descriptors/object-view-box';
 import {scrollSnapType, scrollSnapAlign} from './property-descriptors/scroll-snap';
+import {filter} from './property-descriptors/filter';
 import {Context} from '../core/context';
 
 export class CSSParsedDeclaration {
@@ -125,6 +126,7 @@ export class CSSParsedDeclaration {
     boxShadow: ReturnType<typeof boxShadow.parse>;
     color: Color;
     direction: ReturnType<typeof direction.parse>;
+    filter: ReturnType<typeof filter.parse>;
     display: ReturnType<typeof display.parse>;
     float: ReturnType<typeof float.parse>;
     fontFamily: ReturnType<typeof fontFamily.parse>;
@@ -213,6 +215,7 @@ export class CSSParsedDeclaration {
         this.boxShadow = parse(context, boxShadow, declaration.boxShadow);
         this.color = parse(context, color, declaration.color);
         this.direction = parse(context, direction, declaration.direction);
+        this.filter = parse(context, filter, declaration.filter);
         this.display = parse(context, display, declaration.display);
         this.float = parse(context, float, declaration.cssFloat);
         this.fontFamily = parse(context, fontFamily, declaration.fontFamily);

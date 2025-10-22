@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .test-box {
+            width: 200px;
+            height: 150px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 20px;
+            display: inline-block;
+        }
+
+        .grayscale-test { filter: grayscale(1); }
+        .blur-test { filter: blur(5px); }
+        .brightness-test { filter: brightness(1.5); }
+    </style>
+</head>
+<body>
+    <h1>Filter Debug Test</h1>
+
+    <div>
+        <h2>Original (No Filter)</h2>
+        <div class="test-box"></div>
+    </div>
+
+    <div>
+        <h2>Grayscale</h2>
+        <div class="test-box grayscale-test"></div>
+    </div>
+
+    <div>
+        <h2>Blur</h2>
+        <div class="test-box blur-test"></div>
+    </div>
+
+    <div>
+        <h2>Brightness</h2>
+        <div class="test-box brightness-test"></div>
+    </div>
+
+    <div id="output">
+        <button onclick="testCapture()">Capture</button>
+    </div>
+
+    <script src="../dist/html2canvas.js"></script>
+    <script>
+        async function testCapture() {
+            const boxes = document.querySelectorAll('.test-box');
+
+            for (let i = 0; i < boxes.length; i++) {
+                const box = boxes[i];
+                console.log(`\n=== Testing box ${i} ===`);
+                console.log('Element:', box);
+                console.log('Computed filter:', window.getComputedStyle(box).filter);
+
+                try {
+                    const canvas = await html2canvas(box, {
+                        logging: true,
+                        backgroundColor: null
+                    });
+
+                    document.getElementById('output').appendChild(canvas);
+                    console.log('✅ Captured successfully');
+                } catch (error) {
+                    console.error('❌ Error:', error);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

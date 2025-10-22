@@ -46,6 +46,7 @@ import {Context} from '../../core/context';
 import {DIRECTION} from '../../css/property-descriptors/direction';
 import {OBJECT_FIT} from '../../css/property-descriptors/object-fit';
 import {MIX_BLEND_MODE, getCompositeOperation} from '../../css/property-descriptors/mix-blend-mode';
+import {Filter, FILTER_TYPE} from '../../css/property-descriptors/filter';
 
 export type RenderConfigurations = RenderOptions & {
     backgroundColor: Color | null;
@@ -157,28 +158,72 @@ export class CanvasRenderer extends Renderer {
         }
 
         if (paint.container.styles.isVisible()) {
-            // Handle rotate transform - this is the ONLY transform that needs canvas rendering
-            // because getBoundingClientRect() returns the bounding box size but the content
-            // still needs to be visually rotated
+            // Handle CSS filters and transforms
             const rotateValue = paint.container.styles.rotate;
+            const filters = paint.container.styles.filter;
+            const hasFilters = filters.length > 0;
+            const hasTransform = rotateValue !== null;
 
-            if (rotateValue !== null) {
-                this.ctx.save();
+            // If we have filters, render to offscreen canvas first
+            if (hasFilters) {
+                const bounds = paint.container.bounds;
+                const offscreenCanvas = document.createElement('canvas');
+                offscreenCanvas.width = Math.ceil(bounds.width);
+                offscreenCanvas.height = Math.ceil(bounds.height);
+                const offscreenCtx = offscreenCanvas.getContext('2d');
 
-                // Rotate around the center of the element
-                const centerX = paint.container.bounds.left + paint.container.bounds.width / 2;
-                const centerY = paint.container.bounds.top + paint.container.bounds.height / 2;
+                if (offscreenCtx) {
+                    // Save current context state
+                    const savedCtx = this.ctx;
+                    this.ctx = offscreenCtx;
 
-                this.ctx.translate(centerX, centerY);
-                this.ctx.rotate(rotateValue);
-                this.ctx.translate(-centerX, -centerY);
-            }
+                    // Translate to draw at 0,0 on offscreen canvas
+                    this.ctx.translate(-bounds.left, -bounds.top);
 
-            await this.renderNodeBackgroundAndBorders(paint);
-            await this.renderNodeContent(paint);
+                    // Handle rotate transform on offscreen canvas if needed
+                    if (rotateValue !== null) {
+                        this.ctx.save();
+                        const centerX = bounds.left + bounds.width / 2;
+                        const centerY = bounds.top + bounds.height / 2;
+                        this.ctx.translate(centerX, centerY);
+                        this.ctx.rotate(rotateValue);
+                        this.ctx.translate(-centerX, -centerY);
+                    }
 
-            if (rotateValue !== null) {
-                this.ctx.restore();
+                    // Render to offscreen canvas
+                    await this.renderNodeBackgroundAndBorders(paint);
+                    await this.renderNodeContent(paint);
+
+                    if (rotateValue !== null) {
+                        this.ctx.restore();
+                    }
+
+                    // Restore original context
+                    this.ctx = savedCtx;
+
+                    // Apply filter and draw offscreen canvas to main canvas
+                    this.ctx.save();
+                    this.ctx.filter = filterToCanvasFilter(filters);
+                    this.ctx.drawImage(offscreenCanvas, bounds.left, bounds.top);
+                    this.ctx.restore();
+                }
+            } else {
+                // No filters - render normally with optional rotate
+                if (hasTransform && rotateValue !== null) {
+                    this.ctx.save();
+                    const centerX = paint.container.bounds.left + paint.container.bounds.width / 2;
+                    const centerY = paint.container.bounds.top + paint.container.bounds.height / 2;
+                    this.ctx.translate(centerX, centerY);
+                    this.ctx.rotate(rotateValue);
+                    this.ctx.translate(-centerX, -centerY);
+                }
+
+                await this.renderNodeBackgroundAndBorders(paint);
+                await this.renderNodeContent(paint);
+
+                if (hasTransform && rotateValue !== null) {
+                    this.ctx.restore();
+                }
             }
         }
     }
@@ -1132,4 +1177,41 @@ const fixIOSSystemFonts = (fontFamilies: string[]): string[] => {
     return /iPhone OS 15_(0|1)/.test(window.navigator.userAgent)
         ? fontFamilies.filter((fontFamily) => iOSBrokenFonts.indexOf(fontFamily) === -1)
         : fontFamilies;
+};
+
+const filterToCanvasFilter = (filters: Filter[]): string => {
+    if (filters.length === 0) {
+        return 'none';
+    }
+
+    const filterString = filters
+        .map((filter) => {
+            switch (filter.type) {
+                case FILTER_TYPE.BLUR:
+                    return `blur(${getAbsoluteValue(filter.radius, 0)}px)`;
+                case FILTER_TYPE.BRIGHTNESS:
+                    return `brightness(${filter.amount})`;
+                case FILTER_TYPE.CONTRAST:
+                    return `contrast(${filter.amount})`;
+                case FILTER_TYPE.GRAYSCALE:
+                    return `grayscale(${filter.amount})`;
+                case FILTER_TYPE.HUE_ROTATE:
+                    const hueDeg = (filter.angle * 180) / Math.PI;
+                    return `hue-rotate(${hueDeg}deg)`;
+                case FILTER_TYPE.INVERT:
+                    return `invert(${filter.amount})`;
+                case FILTER_TYPE.OPACITY:
+                    return `opacity(${filter.amount})`;
+                case FILTER_TYPE.SATURATE:
+                    return `saturate(${filter.amount})`;
+                case FILTER_TYPE.SEPIA:
+                    return `sepia(${filter.amount})`;
+                default:
+                    return '';
+            }
+        })
+        .filter((f) => f !== '')
+        .join(' ');
+
+    return filterString;
 };
