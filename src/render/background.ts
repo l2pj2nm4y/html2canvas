@@ -38,6 +38,45 @@ export const calculateBackgroundPaintingArea = (backgroundClip: BACKGROUND_CLIP,
     return paddingBox(element);
 };
 
+/**
+ * Calculate adjusted image size for round/space background-repeat modes.
+ * - ROUND: Scale image to fit exactly (no partial images)
+ * - SPACE: Keep image size, but return original size (spacing handled in rendering)
+ */
+const calculateRoundSpaceSize = (
+    repeat: BACKGROUND_REPEAT,
+    imageWidth: number,
+    imageHeight: number,
+    areaWidth: number,
+    areaHeight: number
+): [number, number] => {
+    let adjustedWidth = imageWidth;
+    let adjustedHeight = imageHeight;
+
+    // For ROUND, scale images to fit exactly
+    if (repeat === BACKGROUND_REPEAT.ROUND || repeat === BACKGROUND_REPEAT.SPACE_ROUND || repeat === BACKGROUND_REPEAT.ROUND_SPACE) {
+        // Calculate how many images fit in each dimension
+        const numImagesX = Math.max(1, Math.round(areaWidth / imageWidth));
+        const numImagesY = Math.max(1, Math.round(areaHeight / imageHeight));
+
+        // For ROUND: scale both dimensions
+        if (repeat === BACKGROUND_REPEAT.ROUND) {
+            adjustedWidth = areaWidth / numImagesX;
+            adjustedHeight = areaHeight / numImagesY;
+        }
+        // For SPACE_ROUND: only scale vertically
+        else if (repeat === BACKGROUND_REPEAT.SPACE_ROUND) {
+            adjustedHeight = areaHeight / numImagesY;
+        }
+        // For ROUND_SPACE: only scale horizontally
+        else if (repeat === BACKGROUND_REPEAT.ROUND_SPACE) {
+            adjustedWidth = areaWidth / numImagesX;
+        }
+    }
+
+    return [adjustedWidth, adjustedHeight];
+};
+
 export const calculateBackgroundRendering = (
     container: ElementContainer,
     index: number,
@@ -59,7 +98,19 @@ export const calculateBackgroundRendering = (
         backgroundPositioningArea
     );
 
-    const [sizeWidth, sizeHeight] = backgroundImageSize;
+    let [sizeWidth, sizeHeight] = backgroundImageSize;
+
+    // Adjust size for round/space repeat modes
+    const repeatMode = getBackgroundValueForIndex(container.styles.backgroundRepeat, index);
+    const adjustedSize = calculateRoundSpaceSize(
+        repeatMode,
+        sizeWidth,
+        sizeHeight,
+        backgroundPositioningArea.width,
+        backgroundPositioningArea.height
+    );
+    sizeWidth = adjustedSize[0];
+    sizeHeight = adjustedSize[1];
 
     const position = getAbsoluteValueForTuple(
         getBackgroundValueForIndex(container.styles.backgroundPosition, index),
@@ -68,9 +119,9 @@ export const calculateBackgroundRendering = (
     );
 
     const path = calculateBackgroundRepeatPath(
-        getBackgroundValueForIndex(container.styles.backgroundRepeat, index),
+        repeatMode,
         position,
-        backgroundImageSize,
+        [sizeWidth, sizeHeight],
         backgroundPositioningArea,
         backgroundPaintingArea
     );
@@ -276,7 +327,14 @@ export const calculateBackgroundRepeatPath = (
                     Math.round(backgroundPositioningArea.top + y + height)
                 )
             ];
+        case BACKGROUND_REPEAT.SPACE:
+        case BACKGROUND_REPEAT.ROUND:
+        case BACKGROUND_REPEAT.SPACE_ROUND:
+        case BACKGROUND_REPEAT.ROUND_SPACE:
+        case BACKGROUND_REPEAT.REPEAT:
         default:
+            // For SPACE/ROUND: images are scaled/spaced to fit, then repeated in full painting area
+            // For REPEAT: standard tiled repeat
             return [
                 new Vector(Math.round(backgroundPaintingArea.left), Math.round(backgroundPaintingArea.top)),
                 new Vector(

@@ -50,6 +50,25 @@
         </div>
     </div>
 
+    <div style="background: #d4edda; border-left: 4px solid #28a745; padding: 15px; margin: 0 20px 20px 20px; border-radius: 4px;">
+        <p style="margin: 0 0 10px 0; font-size: 14px; color: #155724;">
+            <strong>✅ CSS3 Support:</strong> <code>background-repeat: round</code> and mixed modes like <code>space round</code> are now fully supported!
+        </p>
+        <p style="margin: 0; font-size: 13px; color: #155724; line-height: 1.5;">
+            The <strong>round</strong> mode now correctly scales images to fit exactly with no partial images. Mixed modes like <code>space round</code> (horizontal spacing + vertical scaling) work perfectly.
+        </p>
+    </div>
+
+    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 0 20px 20px 20px; border-radius: 4px;">
+        <p style="margin: 0 0 10px 0; font-size: 14px; color: #856404;">
+            <strong>⚠️ Known Limitation:</strong> <code>background-repeat: space</code> falls back to regular repeat
+        </p>
+        <p style="margin: 0; font-size: 13px; color: #856404; line-height: 1.5;">
+            The <strong>space</strong> mode currently repeats images without adding spacing between them (appears like normal <code>repeat</code>).
+            Implementing proper spacing requires creating custom pattern canvases, which is planned for a future enhancement.
+        </p>
+    </div>
+
     <div class="split-view">
         <div class="view-panel">
             <div class="panel-header">HTML Version</div>

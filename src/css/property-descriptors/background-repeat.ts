@@ -7,7 +7,11 @@ export const enum BACKGROUND_REPEAT {
     REPEAT = 0,
     NO_REPEAT = 1,
     REPEAT_X = 2,
-    REPEAT_Y = 3
+    REPEAT_Y = 3,
+    SPACE = 4,
+    ROUND = 5,
+    SPACE_ROUND = 6,
+    ROUND_SPACE = 7
 }
 
 export const backgroundRepeat: IPropertyListDescriptor<BackgroundRepeat> = {
@@ -37,6 +41,14 @@ const parseBackgroundRepeat = (value: string): BACKGROUND_REPEAT => {
         case 'repeat-y':
         case 'no-repeat repeat':
             return BACKGROUND_REPEAT.REPEAT_Y;
+        case 'space':
+            return BACKGROUND_REPEAT.SPACE;
+        case 'round':
+            return BACKGROUND_REPEAT.ROUND;
+        case 'space round':
+            return BACKGROUND_REPEAT.SPACE_ROUND;
+        case 'round space':
+            return BACKGROUND_REPEAT.ROUND_SPACE;
         case 'repeat':
         default:
             return BACKGROUND_REPEAT.REPEAT;
