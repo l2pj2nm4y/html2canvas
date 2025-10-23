@@ -31,6 +31,7 @@ import {contains} from '../../core/bitwise';
 import {calculateGradientDirection, calculateRadius, processColorStops} from '../../css/types/functions/gradient';
 import {FIFTY_PERCENT, getAbsoluteValue, LengthPercentage} from '../../css/types/length-percentage';
 import {TEXT_DECORATION_LINE} from '../../css/property-descriptors/text-decoration-line';
+import {TEXT_DECORATION_STYLE} from '../../css/property-descriptors/text-decoration-style';
 import {FontMetrics} from '../font-metrics';
 import {DISPLAY} from '../../css/property-descriptors/display';
 import {Bounds} from '../../css/layout/bounds';
@@ -230,6 +231,98 @@ export class CanvasRenderer extends Renderer {
         }
     }
 
+    /**
+     * Draws a styled text decoration line (underline, overline, line-through)
+     * Supports solid, double, dotted, dashed, and wavy styles
+     */
+    private drawDecorationLine(
+        x: number,
+        y: number,
+        width: number,
+        style: TEXT_DECORATION_STYLE,
+        thickness: number
+    ): void {
+        const lineHeight = Math.max(1, Math.round(thickness));
+
+        switch (style) {
+            case TEXT_DECORATION_STYLE.SOLID:
+                // Standard solid line
+                this.ctx.fillRect(x, Math.round(y), width, lineHeight);
+                break;
+
+            case TEXT_DECORATION_STYLE.DOUBLE:
+                // Two parallel lines with spacing proportional to thickness
+                const doubleSpacing = Math.max(2, lineHeight + 1);
+                this.ctx.fillRect(x, Math.round(y), width, lineHeight);
+                this.ctx.fillRect(x, Math.round(y + doubleSpacing), width, lineHeight);
+                break;
+
+            case TEXT_DECORATION_STYLE.DOTTED:
+                // Dotted line using small filled circles, scaled by thickness
+                this.ctx.save();
+                this.ctx.beginPath();
+                const dotRadius = lineHeight / 2;
+                const dotSpacing = Math.max(3, lineHeight * 2);
+                for (let i = x; i < x + width; i += dotSpacing) {
+                    this.ctx.arc(i, Math.round(y) + dotRadius, dotRadius, 0, Math.PI * 2);
+                }
+                this.ctx.fill();
+                this.ctx.restore();
+                break;
+
+            case TEXT_DECORATION_STYLE.DASHED:
+                // Dashed line using canvas dash pattern, scaled by thickness
+                this.ctx.save();
+                const dashLength = Math.max(4, lineHeight * 3);
+                const gapLength = Math.max(3, lineHeight * 2);
+                this.ctx.setLineDash([dashLength, gapLength]);
+                this.ctx.lineWidth = lineHeight;
+                this.ctx.beginPath();
+                this.ctx.moveTo(x, Math.round(y) + lineHeight / 2);
+                this.ctx.lineTo(x + width, Math.round(y) + lineHeight / 2);
+                this.ctx.stroke();
+                this.ctx.restore();
+                break;
+
+            case TEXT_DECORATION_STYLE.WAVY:
+                // Wavy line using quadratic curves, scaled by thickness
+                this.ctx.save();
+                this.ctx.lineWidth = lineHeight;
+                this.ctx.beginPath();
+                const waveHeight = Math.max(1.5, lineHeight);
+                const waveLength = Math.max(6, lineHeight * 4);
+                let currentX = x;
+
+                this.ctx.moveTo(currentX, Math.round(y) + lineHeight / 2);
+
+                while (currentX < x + width) {
+                    const nextX = Math.min(currentX + waveLength / 2, x + width);
+                    this.ctx.quadraticCurveTo(
+                        currentX + waveLength / 4,
+                        Math.round(y) + lineHeight / 2 - waveHeight,
+                        nextX,
+                        Math.round(y) + lineHeight / 2
+                    );
+                    currentX = nextX;
+
+                    if (currentX < x + width) {
+                        const nextX2 = Math.min(currentX + waveLength / 2, x + width);
+                        this.ctx.quadraticCurveTo(
+                            currentX + waveLength / 4,
+                            Math.round(y) + lineHeight / 2 + waveHeight,
+                            nextX2,
+                            Math.round(y) + lineHeight / 2
+                        );
+                        currentX = nextX2;
+                    }
+                }
+
+                this.ctx.stroke();
+                this.ctx.restore();
+                break;
+        }
+    }
+
     renderTextWithLetterSpacing(text: TextBounds, letterSpacing: number, baseline: number): void {
         if (letterSpacing === 0) {
             this.ctx.fillText(text.text, text.bounds.left, text.bounds.top + baseline);
@@ -274,7 +367,8 @@ export class CanvasRenderer extends Renderer {
             paintOrder.forEach((paintOrderLayer) => {
                 switch (paintOrderLayer) {
                     case PAINT_ORDER_LAYER.FILL:
-                        this.ctx.fillStyle = asString(styles.color);
+                        // Use webkitTextFillColor if set, otherwise fallback to color
+                        this.ctx.fillStyle = asString(styles.webkitTextFillColor);
                         this.renderTextWithLetterSpacing(text, styles.letterSpacing, baseline);
                         const textShadows: TextShadow = styles.textShadow;
 
@@ -299,35 +393,45 @@ export class CanvasRenderer extends Renderer {
 
                         if (styles.textDecorationLine.length) {
                             this.ctx.fillStyle = asString(styles.textDecorationColor || styles.color);
+                            this.ctx.strokeStyle = asString(styles.textDecorationColor || styles.color);
+
+                            const decorationStyle = styles.textDecorationStyle;
+                            // Calculate thickness from CSS value (default to 1px if 'auto')
+                            const thickness = getAbsoluteValue(styles.textDecorationThickness, text.bounds.height);
+                            const underlineOffset = 2; // Offset below baseline for underlines
+
                             styles.textDecorationLine.forEach((textDecorationLine) => {
                                 switch (textDecorationLine) {
                                     case TEXT_DECORATION_LINE.UNDERLINE:
-                                        // Draws a line at the baseline of the font
-                                        // TODO As some browsers display the line as more than 1px if the font-size is big,
-                                        // need to take that into account both in position and size
-                                        this.ctx.fillRect(
+                                        // Underlines should be positioned slightly below the baseline
+                                        // CSS spec: "at or under the alphabetic baseline"
+                                        // Browsers typically render 1-2px below baseline to avoid descenders
+                                        this.drawDecorationLine(
                                             text.bounds.left,
-                                            Math.round(text.bounds.top + baseline),
+                                            text.bounds.top + baseline + underlineOffset,
                                             text.bounds.width,
-                                            1
+                                            decorationStyle,
+                                            thickness
                                         );
+                                        break;
 
-                                        break;
                                     case TEXT_DECORATION_LINE.OVERLINE:
-                                        this.ctx.fillRect(
+                                        this.drawDecorationLine(
                                             text.bounds.left,
-                                            Math.round(text.bounds.top),
+                                            text.bounds.top,
                                             text.bounds.width,
-                                            1
+                                            decorationStyle,
+                                            thickness
                                         );
                                         break;
+
                                     case TEXT_DECORATION_LINE.LINE_THROUGH:
-                                        // TODO try and find exact position for line-through
-                                        this.ctx.fillRect(
+                                        this.drawDecorationLine(
                                             text.bounds.left,
-                                            Math.ceil(text.bounds.top + middle),
+                                            text.bounds.top + middle,
                                             text.bounds.width,
-                                            1
+                                            decorationStyle,
+                                            thickness
                                         );
                                         break;
                                 }

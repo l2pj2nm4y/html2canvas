@@ -1,6 +1,8 @@
 interface CSSStyleDeclaration {
     textDecorationColor: string;
     textDecorationLine: string;
+    textDecorationStyle: string;
+    textDecorationThickness: string;
     overflowWrap: string;
     objectFit: string;
     objectPosition: string;
@@ -22,6 +24,7 @@ interface CSSStyleDeclaration {
     objectViewBox: string;
     scrollSnapType: string;
     scrollSnapAlign: string;
+    webkitTextFillColor: string;
 }
 
 interface DocumentType extends Node, ChildNode {

@@ -62,6 +62,8 @@ import {time} from './types/time';
 import {opacity} from './property-descriptors/opacity';
 import {textDecorationColor} from './property-descriptors/text-decoration-color';
 import {textDecorationLine} from './property-descriptors/text-decoration-line';
+import {textDecorationStyle} from './property-descriptors/text-decoration-style';
+import {textDecorationThickness} from './property-descriptors/text-decoration-thickness';
 import {isLengthPercentage, LengthPercentage, ZERO_LENGTH} from './types/length-percentage';
 import {fontFamily} from './property-descriptors/font-family';
 import {fontSize} from './property-descriptors/font-size';
@@ -79,6 +81,7 @@ import {boxShadow} from './property-descriptors/box-shadow';
 import {paintOrder} from './property-descriptors/paint-order';
 import {webkitTextStrokeColor} from './property-descriptors/webkit-text-stroke-color';
 import {webkitTextStrokeWidth} from './property-descriptors/webkit-text-stroke-width';
+import {webkitTextFillColor} from './property-descriptors/webkit-text-fill-color';
 import {objectFit, OBJECT_FIT} from './property-descriptors/object-fit';
 import {objectPosition} from './property-descriptors/object-position';
 import {aspectRatio} from './property-descriptors/aspect-ratio';
@@ -174,6 +177,8 @@ export class CSSParsedDeclaration {
     textAlign: ReturnType<typeof textAlign.parse>;
     textDecorationColor: Color;
     textDecorationLine: ReturnType<typeof textDecorationLine.parse>;
+    textDecorationStyle: ReturnType<typeof textDecorationStyle.parse>;
+    textDecorationThickness: LengthPercentage;
     textShadow: ReturnType<typeof textShadow.parse>;
     textTransform: ReturnType<typeof textTransform.parse>;
     transform: ReturnType<typeof transform.parse>;
@@ -181,6 +186,7 @@ export class CSSParsedDeclaration {
     visibility: ReturnType<typeof visibility.parse>;
     webkitTextStrokeColor: Color;
     webkitTextStrokeWidth: ReturnType<typeof webkitTextStrokeWidth.parse>;
+    webkitTextFillColor: Color;
     wordBreak: ReturnType<typeof wordBreak.parse>;
     zIndex: ReturnType<typeof zIndex.parse>;
 
@@ -272,6 +278,12 @@ export class CSSParsedDeclaration {
             textDecorationLine,
             declaration.textDecorationLine ?? declaration.textDecoration
         );
+        this.textDecorationStyle = parse(context, textDecorationStyle, declaration.textDecorationStyle);
+        this.textDecorationThickness = parse(
+            context,
+            textDecorationThickness,
+            declaration.textDecorationThickness
+        );
         this.textShadow = parse(context, textShadow, declaration.textShadow);
         this.textTransform = parse(context, textTransform, declaration.textTransform);
         this.transform = parse(context, transform, declaration.transform);
@@ -279,6 +291,11 @@ export class CSSParsedDeclaration {
         this.visibility = parse(context, visibility, declaration.visibility);
         this.webkitTextStrokeColor = parse(context, webkitTextStrokeColor, declaration.webkitTextStrokeColor);
         this.webkitTextStrokeWidth = parse(context, webkitTextStrokeWidth, declaration.webkitTextStrokeWidth);
+        this.webkitTextFillColor = parse(
+            context,
+            webkitTextFillColor,
+            declaration.webkitTextFillColor ?? declaration.color
+        );
         this.wordBreak = parse(context, wordBreak, declaration.wordBreak);
         this.zIndex = parse(context, zIndex, declaration.zIndex);
     }
