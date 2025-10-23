@@ -246,7 +246,7 @@ export class BoundCurves {
         this.bottomRightPaddingBox =
             brh > 0 || brv > 0
                 ? getCurvePoints(
-                      bounds.left + Math.min(bottomWidth, bounds.width - borderLeftWidth),
+                      bounds.left + Math.min(bottomWidth, bounds.width - borderRightWidth),
                       bounds.top + Math.min(rightHeight, bounds.height - borderBottomWidth),
                       Math.max(0, brh - borderRightWidth),
                       Math.max(0, brv - borderBottomWidth),

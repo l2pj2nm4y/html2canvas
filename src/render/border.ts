@@ -118,6 +118,76 @@ export const parsePathForBorderStroke = (curves: BoundCurves, borderSide: number
     }
 };
 
+// For groove/ridge borders: outer half (from border edge to midpoint)
+export const parsePathForBorderRidgeOuter = (curves: BoundCurves, borderSide: number): Path[] => {
+    switch (borderSide) {
+        case 0:
+            return createPathFromCurves(
+                curves.topLeftBorderBox,
+                curves.topLeftBorderStroke,
+                curves.topRightBorderBox,
+                curves.topRightBorderStroke
+            );
+        case 1:
+            return createPathFromCurves(
+                curves.topRightBorderBox,
+                curves.topRightBorderStroke,
+                curves.bottomRightBorderBox,
+                curves.bottomRightBorderStroke
+            );
+        case 2:
+            return createPathFromCurves(
+                curves.bottomRightBorderBox,
+                curves.bottomRightBorderStroke,
+                curves.bottomLeftBorderBox,
+                curves.bottomLeftBorderStroke
+            );
+        case 3:
+        default:
+            return createPathFromCurves(
+                curves.bottomLeftBorderBox,
+                curves.bottomLeftBorderStroke,
+                curves.topLeftBorderBox,
+                curves.topLeftBorderStroke
+            );
+    }
+};
+
+// For groove/ridge borders: inner half (from midpoint to padding edge)
+export const parsePathForBorderRidgeInner = (curves: BoundCurves, borderSide: number): Path[] => {
+    switch (borderSide) {
+        case 0:
+            return createPathFromCurves(
+                curves.topLeftBorderStroke,
+                curves.topLeftPaddingBox,
+                curves.topRightBorderStroke,
+                curves.topRightPaddingBox
+            );
+        case 1:
+            return createPathFromCurves(
+                curves.topRightBorderStroke,
+                curves.topRightPaddingBox,
+                curves.bottomRightBorderStroke,
+                curves.bottomRightPaddingBox
+            );
+        case 2:
+            return createPathFromCurves(
+                curves.bottomRightBorderStroke,
+                curves.bottomRightPaddingBox,
+                curves.bottomLeftBorderStroke,
+                curves.bottomLeftPaddingBox
+            );
+        case 3:
+        default:
+            return createPathFromCurves(
+                curves.bottomLeftBorderStroke,
+                curves.bottomLeftPaddingBox,
+                curves.topLeftBorderStroke,
+                curves.topLeftPaddingBox
+            );
+    }
+};
+
 const createStrokePathFromCurves = (outer1: Path, outer2: Path): Path[] => {
     const path = [];
     if (isBezierCurve(outer1)) {

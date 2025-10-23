@@ -65,10 +65,11 @@ class VisualTestRunner {
         // Clear previous canvas
         this.canvasOutput.innerHTML = '';
 
-        // Add new canvas - maintain exact size for 1:1 comparison
+        // Add new canvas - scale down to match HTML size for 1:1 comparison
+        const scale = window.devicePixelRatio || 1;
         canvas.style.display = 'block';
-        canvas.style.width = canvas.width + 'px';
-        canvas.style.height = canvas.height + 'px';
+        canvas.style.width = (canvas.width / scale) + 'px';
+        canvas.style.height = (canvas.height / scale) + 'px';
         this.canvasOutput.appendChild(canvas);
     }
 

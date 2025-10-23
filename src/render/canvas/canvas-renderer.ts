@@ -14,6 +14,8 @@ import {
     parsePathForBorder,
     parsePathForBorderDoubleInner,
     parsePathForBorderDoubleOuter,
+    parsePathForBorderRidgeInner,
+    parsePathForBorderRidgeOuter,
     parsePathForBorderStroke
 } from '../border';
 import {calculateBackgroundRendering, getBackgroundValueForIndex} from '../background';
@@ -913,6 +915,122 @@ export class CanvasRenderer extends Renderer {
         this.ctx.fill();
     }
 
+    /**
+     * Render 3D border styles (groove, ridge, inset, outset).
+     * These styles create a 3D effect by using lighter and darker color variations.
+     * Groove and ridge use a split-border technique (outer and inner halves with different colors).
+     */
+    async render3DBorder(
+        color: Color,
+        _width: number,
+        style: BORDER_STYLE,
+        side: number,
+        curvePoints: BoundCurves
+    ): Promise<void> {
+        // Calculate lighter and darker color variations for 3D effect
+        const lighterColor = this.getLighterColor(color);
+        const darkerColor = this.getDarkerColor(color);
+
+        // Groove and ridge need split rendering (two-tone effect) using midpoint
+        if (style === BORDER_STYLE.GROOVE || style === BORDER_STYLE.RIDGE) {
+            // Determine outer and inner colors based on style and side
+            // side: 0=top, 1=right, 2=bottom, 3=left
+            let outerColor: Color, innerColor: Color;
+
+            if (style === BORDER_STYLE.GROOVE) {
+                // Groove: appears carved in
+                // Top/Left: dark outer half, light inner half
+                // Bottom/Right: light outer half, dark inner half
+                if (side === 0 || side === 3) {
+                    outerColor = darkerColor;
+                    innerColor = lighterColor;
+                } else {
+                    outerColor = lighterColor;
+                    innerColor = darkerColor;
+                }
+            } else {
+                // Ridge: appears raised (opposite of groove)
+                // Top/Left: light outer half, dark inner half
+                // Bottom/Right: dark outer half, light inner half
+                if (side === 0 || side === 3) {
+                    outerColor = lighterColor;
+                    innerColor = darkerColor;
+                } else {
+                    outerColor = darkerColor;
+                    innerColor = lighterColor;
+                }
+            }
+
+            // Render outer half (border edge to midpoint)
+            const outerPaths = parsePathForBorderRidgeOuter(curvePoints, side);
+            this.path(outerPaths);
+            this.ctx.fillStyle = asString(outerColor);
+            this.ctx.fill();
+
+            // Render inner half (midpoint to padding edge)
+            const innerPaths = parsePathForBorderRidgeInner(curvePoints, side);
+            this.path(innerPaths);
+            this.ctx.fillStyle = asString(innerColor);
+            this.ctx.fill();
+        } else {
+            // Inset and outset use single-color per side
+            let borderColor: Color;
+
+            if (style === BORDER_STYLE.INSET) {
+                // Inset: dark on top/left, light on bottom/right (entire box pressed in)
+                borderColor = side === 0 || side === 3 ? darkerColor : lighterColor;
+            } else {
+                // Outset: light on top/left, dark on bottom/right (entire box raised)
+                borderColor = side === 0 || side === 3 ? lighterColor : darkerColor;
+            }
+
+            // Render the border with the calculated color
+            await this.renderSolidBorder(borderColor, side, curvePoints);
+        }
+    }
+
+    /**
+     * Calculate a lighter version of a color for 3D border effects.
+     * Matches browser behavior by blending with white.
+     */
+    private getLighterColor(color: Color): Color {
+        const alpha = 0xff & color;
+        const blue = 0xff & (color >> 8);
+        const green = 0xff & (color >> 16);
+        const red = 0xff & (color >> 24);
+
+        // Blend with white - approximately 1/3 towards white matches browsers best
+        // Formula: color + (255 - color) * factor
+        const factor = 0.333; // 33% towards white
+
+        const newR = Math.min(255, Math.round(red + (255 - red) * factor));
+        const newG = Math.min(255, Math.round(green + (255 - green) * factor));
+        const newB = Math.min(255, Math.round(blue + (255 - blue) * factor));
+
+        return ((newR << 24) | (newG << 16) | (newB << 8) | alpha) >>> 0;
+    }
+
+    /**
+     * Calculate a darker version of a color for 3D border effects.
+     * Matches browser behavior by blending with black.
+     */
+    private getDarkerColor(color: Color): Color {
+        const alpha = 0xff & color;
+        const blue = 0xff & (color >> 8);
+        const green = 0xff & (color >> 16);
+        const red = 0xff & (color >> 24);
+
+        // Blend with black (browsers typically use approximately 50% blend)
+        // Formula: color * (1 - factor)
+        const factor = 0.5; // Darken by 50%
+
+        const newR = Math.max(0, Math.round(red * (1 - factor)));
+        const newG = Math.max(0, Math.round(green * (1 - factor)));
+        const newB = Math.max(0, Math.round(blue * (1 - factor)));
+
+        return ((newR << 24) | (newG << 16) | (newB << 8) | alpha) >>> 0;
+    }
+
     async renderNodeBackgroundAndBorders(paint: ElementPaint): Promise<void> {
         this.applyEffects(paint.getEffects(EffectTarget.BACKGROUND_BORDERS));
         const styles = paint.container.styles;
@@ -1001,6 +1119,13 @@ export class CanvasRenderer extends Renderer {
                     );
                 } else if (border.style === BORDER_STYLE.DOUBLE) {
                     await this.renderDoubleBorder(border.color, border.width, side, paint.curves);
+                } else if (
+                    border.style === BORDER_STYLE.GROOVE ||
+                    border.style === BORDER_STYLE.RIDGE ||
+                    border.style === BORDER_STYLE.INSET ||
+                    border.style === BORDER_STYLE.OUTSET
+                ) {
+                    await this.render3DBorder(border.color, border.width, border.style, side, paint.curves);
                 } else {
                     await this.renderSolidBorder(border.color, side, paint.curves);
                 }
