@@ -8,22 +8,25 @@ export class Bounds {
     }
 
     static fromClientRect(context: Context, clientRect: ClientRect): Bounds {
+        // Round coordinates to prevent subpixel gaps in canvas rendering
+        // getBoundingClientRect() returns fractional values which can cause thin white lines
         return new Bounds(
-            clientRect.left + context.windowBounds.left,
-            clientRect.top + context.windowBounds.top,
-            clientRect.width,
-            clientRect.height
+            Math.round(clientRect.left + context.windowBounds.left),
+            Math.round(clientRect.top + context.windowBounds.top),
+            Math.round(clientRect.width),
+            Math.round(clientRect.height)
         );
     }
 
     static fromDOMRectList(context: Context, domRectList: DOMRectList): Bounds {
         const domRect = Array.from(domRectList).find((rect) => rect.width !== 0);
+        // Round coordinates to prevent subpixel gaps in canvas rendering
         return domRect
             ? new Bounds(
-                  domRect.left + context.windowBounds.left,
-                  domRect.top + context.windowBounds.top,
-                  domRect.width,
-                  domRect.height
+                  Math.round(domRect.left + context.windowBounds.left),
+                  Math.round(domRect.top + context.windowBounds.top),
+                  Math.round(domRect.width),
+                  Math.round(domRect.height)
               )
             : Bounds.EMPTY;
     }
