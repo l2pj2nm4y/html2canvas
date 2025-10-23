@@ -9,6 +9,26 @@ import {OLElementContainer} from '../dom/elements/ol-element-container';
 import {LIElementContainer} from '../dom/elements/li-element-container';
 import {createCounterText} from '../css/types/functions/counter';
 import {POSITION} from '../css/property-descriptors/position';
+import {Matrix} from '../css/property-descriptors/transform';
+import {getAbsoluteValue} from '../css/types/length-percentage';
+
+/**
+ * Multiply two 2D transformation matrices
+ * Matrix format: [a, b, c, d, e, f] represents:
+ * | a c e |
+ * | b d f |
+ * | 0 0 1 |
+ */
+const multiplyMatrices = (m1: Matrix, m2: Matrix): Matrix => {
+    return [
+        m1[0] * m2[0] + m1[2] * m2[1],           // a
+        m1[1] * m2[0] + m1[3] * m2[1],           // b
+        m1[0] * m2[2] + m1[2] * m2[3],           // c
+        m1[1] * m2[2] + m1[3] * m2[3],           // d
+        m1[0] * m2[4] + m1[2] * m2[5] + m1[4],   // e
+        m1[1] * m2[4] + m1[3] * m2[5] + m1[5]    // f
+    ];
+};
 
 export class StackingContext {
     element: ElementPaint;
@@ -43,10 +63,55 @@ export class ElementPaint {
             this.effects.push(new OpacityEffect(this.container.styles.opacity));
         }
 
-        if (this.container.styles.transform !== null) {
+        // Combine transform property with individual transform properties (rotate, scale, translate)
+        // According to CSS Transforms Level 2, the order is: translate → rotate → scale → transform
+        const hasTransform = this.container.styles.transform !== null;
+        const hasRotate = this.container.styles.rotate !== null;
+        const hasScale = this.container.styles.scale !== null;
+        const hasTranslate = this.container.styles.translate !== null;
+
+        if (hasTransform || hasRotate || hasScale || hasTranslate) {
             const offsetX = this.container.bounds.left + (this.container.styles.transformOrigin[0] as {number: number}).number;
             const offsetY = this.container.bounds.top + (this.container.styles.transformOrigin[1] as {number: number}).number;
-            const matrix = this.container.styles.transform;
+
+            // Start with identity matrix
+            let matrix: Matrix = [1, 0, 0, 1, 0, 0];
+
+            // Apply translate
+            if (hasTranslate) {
+                const translateValue = this.container.styles.translate;
+                if (translateValue) {
+                    // For translate, we need to get the absolute pixel values
+                    // Using container bounds width/height as the reference for percentages
+                    const tx = getAbsoluteValue(translateValue.x, this.container.bounds.width);
+                    const ty = getAbsoluteValue(translateValue.y, this.container.bounds.height);
+                    matrix = multiplyMatrices(matrix, [1, 0, 0, 1, tx, ty]);
+                }
+            }
+
+            // Apply rotate
+            if (hasRotate) {
+                const angle = this.container.styles.rotate;
+                if (angle !== null) {
+                    const cos = Math.cos(angle);
+                    const sin = Math.sin(angle);
+                    matrix = multiplyMatrices(matrix, [cos, sin, -sin, cos, 0, 0]);
+                }
+            }
+
+            // Apply scale
+            if (hasScale) {
+                const scaleValue = this.container.styles.scale;
+                if (scaleValue) {
+                    matrix = multiplyMatrices(matrix, [scaleValue.x, 0, 0, scaleValue.y, 0, 0]);
+                }
+            }
+
+            // Apply transform property last
+            if (hasTransform && this.container.styles.transform !== null) {
+                matrix = multiplyMatrices(matrix, this.container.styles.transform);
+            }
+
             this.effects.push(new TransformEffect(offsetX, offsetY, matrix));
         }
 
