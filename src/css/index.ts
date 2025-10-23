@@ -309,7 +309,7 @@ export class CSSParsedDeclaration {
     }
 
     isTransformed(): boolean {
-        return this.transform !== null;
+        return this.transform !== null || this.rotate !== null || this.scale !== null || this.translate !== null;
     }
 
     isPositioned(): boolean {

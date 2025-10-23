@@ -554,7 +554,10 @@ const iframeLoader = (iframe: HTMLIFrameElement): Promise<HTMLIFrameElement> => 
 const ignoredStyleProperties = [
     'all', // #2476
     'd', // #2483
-    'content' // Safari shows pseudoelements if content is set
+    'content', // Safari shows pseudoelements if content is set
+    'rotate', // Individual transform properties - html2canvas applies these via transform matrix
+    'scale',
+    'translate'
 ];
 
 export const copyCSSStyles = <T extends HTMLElement | SVGElement>(style: CSSStyleDeclaration, target: T): T => {

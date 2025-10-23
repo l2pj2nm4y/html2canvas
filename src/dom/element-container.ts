@@ -37,9 +37,15 @@ export class ElementContainer {
             }
 
             // Individual transform properties also affect getBoundingClientRect
-            // Temporarily disable rotate to get the original (un-rotated) bounds
+            // Temporarily disable them to get the original (untransformed) bounds
             if (this.styles.rotate !== null) {
                 element.style.rotate = 'none';
+            }
+            if (this.styles.scale !== null) {
+                element.style.scale = 'none';
+            }
+            if (this.styles.translate !== null) {
+                element.style.translate = 'none';
             }
         }
 
