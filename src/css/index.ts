@@ -30,6 +30,11 @@ import {
     borderRightWidth,
     borderTopWidth
 } from './property-descriptors/border-width';
+import {borderImageSource} from './property-descriptors/border-image-source';
+import {borderImageSlice} from './property-descriptors/border-image-slice';
+import {borderImageWidth} from './property-descriptors/border-image-width';
+import {borderImageOutset} from './property-descriptors/border-image-outset';
+import {borderImageRepeat} from './property-descriptors/border-image-repeat';
 import {color} from './property-descriptors/color';
 import {direction} from './property-descriptors/direction';
 import {display, DISPLAY} from './property-descriptors/display';
@@ -126,6 +131,11 @@ export class CSSParsedDeclaration {
     borderRightWidth: ReturnType<typeof borderRightWidth.parse>;
     borderBottomWidth: ReturnType<typeof borderBottomWidth.parse>;
     borderLeftWidth: ReturnType<typeof borderLeftWidth.parse>;
+    borderImageSource: ReturnType<typeof borderImageSource.parse>;
+    borderImageSlice: ReturnType<typeof borderImageSlice.parse>;
+    borderImageWidth: ReturnType<typeof borderImageWidth.parse>;
+    borderImageOutset: ReturnType<typeof borderImageOutset.parse>;
+    borderImageRepeat: ReturnType<typeof borderImageRepeat.parse>;
     boxShadow: ReturnType<typeof boxShadow.parse>;
     color: Color;
     direction: ReturnType<typeof direction.parse>;
@@ -218,6 +228,11 @@ export class CSSParsedDeclaration {
         this.borderRightWidth = parse(context, borderRightWidth, declaration.borderRightWidth);
         this.borderBottomWidth = parse(context, borderBottomWidth, declaration.borderBottomWidth);
         this.borderLeftWidth = parse(context, borderLeftWidth, declaration.borderLeftWidth);
+        this.borderImageSource = parse(context, borderImageSource, declaration.borderImageSource);
+        this.borderImageSlice = parse(context, borderImageSlice, declaration.borderImageSlice);
+        this.borderImageWidth = parse(context, borderImageWidth, declaration.borderImageWidth);
+        this.borderImageOutset = parse(context, borderImageOutset, declaration.borderImageOutset);
+        this.borderImageRepeat = parse(context, borderImageRepeat, declaration.borderImageRepeat);
         this.boxShadow = parse(context, boxShadow, declaration.boxShadow);
         this.color = parse(context, color, declaration.color);
         this.direction = parse(context, direction, declaration.direction);

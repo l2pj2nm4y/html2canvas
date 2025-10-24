@@ -267,12 +267,29 @@ Uses `standard-version` for semantic versioning and CHANGELOG generation.
   - `scroll-snap-align`: Snap position alignment (none, start, end, center)
   - Implementation: [scroll-snap.ts](src/css/property-descriptors/scroll-snap.ts)
 
+- **`border-image-*`**: Border image properties (PARTIAL IMPLEMENTATION)
+  - `border-image-source`: Image/gradient source for borders
+  - `border-image-slice`: 9-slice grid subdivision
+  - `border-image-width`: Border image dimensions
+  - `border-image-outset`: Border extension beyond border box
+  - `border-image-repeat`: Tiling behavior (stretch/repeat/round/space)
+  - Implementation: [border-image-*.ts](src/css/property-descriptors/)
+  - **✅ SUPPORTED**: Linear gradients with all angles
+  - **❌ NOT IMPLEMENTED**: Radial gradients, conic gradients, image sources (url)
+  - **⚠️ PARTIAL**: border-image-slice, border-image-repeat (parsed but not used in rendering)
+
 ### Implementation Details
 The rendering logic in [canvas-renderer.ts:276-429](src/render/canvas/canvas-renderer.ts#L276-L429) handles:
 - Aspect ratio preservation for contain/cover
 - Custom positioning via object-position
 - Source clipping for cover mode to avoid rendering outside container
 - Scale-down logic (smaller of 'none' or 'contain')
+
+The border-image rendering in [canvas-renderer.ts:1154-1241](src/render/canvas/canvas-renderer.ts#L1154-L1241) handles:
+- Linear gradient borders with proper angle calculation
+- Per-side gradient clipping
+- All border widths (uniform and asymmetric)
+- Integration with existing border rendering pipeline
 
 ## Important Notes
 

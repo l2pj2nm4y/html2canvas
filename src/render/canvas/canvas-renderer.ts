@@ -9,7 +9,7 @@ import {BACKGROUND_CLIP} from '../../css/property-descriptors/background-clip';
 import {BoundCurves, calculateBorderBoxPath, calculateContentBoxPath, calculatePaddingBoxPath} from '../bound-curves';
 import {BezierCurve, isBezierCurve} from '../bezier-curve';
 import {Vector} from '../vector';
-import {CSSImageType, CSSURLImage, isLinearGradient, isRadialGradient} from '../../css/types/image';
+import {CSSImageType, CSSURLImage, CSSLinearGradientImage, isLinearGradient, isRadialGradient} from '../../css/types/image';
 import {
     parsePathForBorder,
     parsePathForBorderDoubleInner,
@@ -1014,7 +1014,9 @@ export class CanvasRenderer extends Renderer {
 
     async renderSolidBorder(color: Color, side: number, curvePoints: BoundCurves): Promise<void> {
         this.path(parsePathForBorder(curvePoints, side));
-        this.ctx.fillStyle = asString(color);
+        const colorString = asString(color);
+        this.context.logger.debug(`Rendering solid border with color: ${colorString}`);
+        this.ctx.fillStyle = colorString;
         this.ctx.fill();
     }
 
@@ -1149,6 +1151,127 @@ export class CanvasRenderer extends Renderer {
         return ((newR << 24) | (newG << 16) | (newB << 8) | alpha) >>> 0;
     }
 
+    // Helper to create rectangular border path (border-image ignores border-radius)
+    createRectangularBorderPath(
+        bounds: Bounds,
+        borderWidths: {top: number; right: number; bottom: number; left: number},
+        side: number
+    ): Path[] {
+        const {left, top, width, height} = bounds;
+        const right = left + width;
+        const bottom = top + height;
+
+        // Inner rectangle (padding box)
+        const innerLeft = left + borderWidths.left;
+        const innerTop = top + borderWidths.top;
+        const innerRight = right - borderWidths.right;
+        const innerBottom = bottom - borderWidths.bottom;
+
+        switch (side) {
+            case 0: // Top
+                return [
+                    new Vector(left, top),
+                    new Vector(right, top),
+                    new Vector(innerRight, innerTop),
+                    new Vector(innerLeft, innerTop)
+                ];
+            case 1: // Right
+                return [
+                    new Vector(right, top),
+                    new Vector(right, bottom),
+                    new Vector(innerRight, innerBottom),
+                    new Vector(innerRight, innerTop)
+                ];
+            case 2: // Bottom
+                return [
+                    new Vector(right, bottom),
+                    new Vector(left, bottom),
+                    new Vector(innerLeft, innerBottom),
+                    new Vector(innerRight, innerBottom)
+                ];
+            case 3: // Left
+            default:
+                return [
+                    new Vector(left, bottom),
+                    new Vector(left, top),
+                    new Vector(innerLeft, innerTop),
+                    new Vector(innerLeft, innerBottom)
+                ];
+        }
+    }
+
+    async renderBorderImage(paint: ElementPaint): Promise<void> {
+        const styles = paint.container.styles;
+        const source = styles.borderImageSource;
+
+        if (source === null) {
+            return;
+        }
+
+        // Get border widths for each side
+        const bounds = paint.container.bounds;
+        const borderWidths = {
+            top: styles.borderTopWidth,
+            right: styles.borderRightWidth,
+            bottom: styles.borderBottomWidth,
+            left: styles.borderLeftWidth
+        };
+
+        // For the MVP implementation, we'll render each border side with the gradient
+        // This is a simplified approach - full border-image spec is much more complex
+        if (source.type === CSSImageType.LINEAR_GRADIENT) {
+            const gradient = source as CSSLinearGradientImage;
+
+            // Render each border side with the gradient
+            for (let side = 0; side < 4; side++) {
+                const width = side === 0 ? borderWidths.top
+                    : side === 1 ? borderWidths.right
+                    : side === 2 ? borderWidths.bottom
+                    : borderWidths.left;
+
+                if (width > 0) {
+                    await this.renderBorderImageSide(gradient, side, bounds, borderWidths);
+                }
+            }
+        }
+    }
+
+    async renderBorderImageSide(
+        gradient: CSSLinearGradientImage,
+        side: number,
+        bounds: Bounds,
+        borderWidths: {top: number; right: number; bottom: number; left: number}
+    ): Promise<void> {
+        this.ctx.save();
+
+        // CSS spec: border-image overrides border-radius, so we need rectangular corners
+        // Create rectangular clipping path for this border side
+        const borderPath = this.createRectangularBorderPath(bounds, borderWidths, side);
+        this.path(borderPath);
+        this.ctx.clip();
+
+        // Use the existing calculateGradientDirection function to get correct gradient coordinates
+        const width = bounds.width;
+        const height = bounds.height;
+        const [lineLength, x0, x1, y0, y1] = calculateGradientDirection(gradient.angle, width, height);
+
+        // Create gradient with absolute coordinates
+        const canvasGradient = this.ctx.createLinearGradient(
+            bounds.left + x0,
+            bounds.top + y0,
+            bounds.left + x1,
+            bounds.top + y1
+        );
+
+        processColorStops(gradient.stops, lineLength).forEach((colorStop) =>
+            canvasGradient.addColorStop(colorStop.stop, asString(colorStop.color))
+        );
+
+        this.ctx.fillStyle = canvasGradient;
+        this.ctx.fill();
+        this.ctx.restore();
+    }
+
     async renderNodeBackgroundAndBorders(paint: ElementPaint): Promise<void> {
         const bgEffects = paint.getEffects(EffectTarget.BACKGROUND_BORDERS);
         this.context.logger.debug(`Applying ${bgEffects.length} effects for BACKGROUND_BORDERS`);
@@ -1221,39 +1344,46 @@ export class CanvasRenderer extends Renderer {
                 });
         }
 
-        let side = 0;
-        for (const border of borders) {
-            if (border.style !== BORDER_STYLE.NONE && !isTransparent(border.color) && border.width > 0) {
-                if (border.style === BORDER_STYLE.DASHED) {
-                    await this.renderDashedDottedBorder(
-                        border.color,
-                        border.width,
-                        side,
-                        paint.curves,
-                        BORDER_STYLE.DASHED
-                    );
-                } else if (border.style === BORDER_STYLE.DOTTED) {
-                    await this.renderDashedDottedBorder(
-                        border.color,
-                        border.width,
-                        side,
-                        paint.curves,
-                        BORDER_STYLE.DOTTED
-                    );
-                } else if (border.style === BORDER_STYLE.DOUBLE) {
-                    await this.renderDoubleBorder(border.color, border.width, side, paint.curves);
-                } else if (
-                    border.style === BORDER_STYLE.GROOVE ||
-                    border.style === BORDER_STYLE.RIDGE ||
-                    border.style === BORDER_STYLE.INSET ||
-                    border.style === BORDER_STYLE.OUTSET
-                ) {
-                    await this.render3DBorder(border.color, border.width, border.style, side, paint.curves);
-                } else {
-                    await this.renderSolidBorder(border.color, side, paint.curves);
+        // Check if border-image is set
+        if (styles.borderImageSource !== null) {
+            // Render border-image instead of regular borders
+            await this.renderBorderImage(paint);
+        } else {
+            // Render regular borders
+            let side = 0;
+            for (const border of borders) {
+                if (border.style !== BORDER_STYLE.NONE && !isTransparent(border.color) && border.width > 0) {
+                    if (border.style === BORDER_STYLE.DASHED) {
+                        await this.renderDashedDottedBorder(
+                            border.color,
+                            border.width,
+                            side,
+                            paint.curves,
+                            BORDER_STYLE.DASHED
+                        );
+                    } else if (border.style === BORDER_STYLE.DOTTED) {
+                        await this.renderDashedDottedBorder(
+                            border.color,
+                            border.width,
+                            side,
+                            paint.curves,
+                            BORDER_STYLE.DOTTED
+                        );
+                    } else if (border.style === BORDER_STYLE.DOUBLE) {
+                        await this.renderDoubleBorder(border.color, border.width, side, paint.curves);
+                    } else if (
+                        border.style === BORDER_STYLE.GROOVE ||
+                        border.style === BORDER_STYLE.RIDGE ||
+                        border.style === BORDER_STYLE.INSET ||
+                        border.style === BORDER_STYLE.OUTSET
+                    ) {
+                        await this.render3DBorder(border.color, border.width, border.style, side, paint.curves);
+                    } else {
+                        await this.renderSolidBorder(border.color, side, paint.curves);
+                    }
                 }
+                side++;
             }
-            side++;
         }
     }
 
