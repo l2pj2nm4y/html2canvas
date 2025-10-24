@@ -774,30 +774,57 @@ export class CanvasRenderer extends Renderer {
                     const url = (img as CSSURLImage).url;
                     try {
                         image = await this.context.cache.match(url);
-                        this.ctx.drawImage(image, container.bounds.left - (image.width + 10), container.bounds.top);
+
+                        // Calculate vertical position to align with first line of text
+                        const paddingTop = getAbsoluteValue(container.styles.paddingTop, container.bounds.width);
+                        const lineHeight = computeLineHeight(styles.lineHeight, (styles.fontSize as {number: number}).number);
+                        const verticalCenter = container.bounds.top + paddingTop + lineHeight / 2;
+
+                        // Horizontal position: position marker to the left of the container
+                        // Use a small offset (4px) between marker and content
+                        const x = container.bounds.left - image.width - 4;
+                        const y = verticalCenter - image.height / 2; // Center vertically with first line
+
+                        this.ctx.drawImage(image, x, y);
                     } catch (e) {
                         this.context.logger.error(`Error loading list-style-image ${url}`);
                     }
                 }
             } else if (paint.listValue && container.styles.listStyleType !== LIST_STYLE_TYPE.NONE) {
-                const [fontFamily] = this.createFontStyle(styles);
+                // Get the font style for list markers
+                // Browsers typically render markers with bold weight for better visibility
+                const fontVariant = styles.fontVariant
+                    .filter((variant) => variant === 'normal' || variant === 'small-caps')
+                    .join('');
+                const fontFamily = fixIOSSystemFonts(styles.fontFamily).join(', ');
+                const baseFontSize = (styles.fontSize as {number: number}).number;
+                const fontSize = isDimensionToken(styles.fontSize as CSSValue)
+                    ? `${baseFontSize}${(styles.fontSize as {number: number; unit: string}).unit}`
+                    : `${baseFontSize}px`;
 
-                this.ctx.font = fontFamily;
+                // Use bold font weight for markers to match browser rendering
+                const font = [styles.fontStyle, fontVariant, 'bold', fontSize, fontFamily].join(' ');
+
+                this.ctx.font = font;
                 this.ctx.fillStyle = asString(styles.color);
+
+                // Position marker to the left of the container, similar to image markers
+                // Use right alignment so the marker text ends 4px before the container edge
+                const markerX = container.bounds.left - 4;
 
                 this.ctx.textBaseline = 'middle';
                 this.ctx.textAlign = 'right';
                 const bounds = new Bounds(
-                    container.bounds.left,
+                    markerX,
                     container.bounds.top + getAbsoluteValue(container.styles.paddingTop, container.bounds.width),
                     container.bounds.width,
-                    computeLineHeight(styles.lineHeight, (styles.fontSize as {number: number}).number) / 2 + 1
+                    computeLineHeight(styles.lineHeight, baseFontSize) / 2 + 1
                 );
 
                 this.renderTextWithLetterSpacing(
                     new TextBounds(paint.listValue, bounds),
                     styles.letterSpacing,
-                    computeLineHeight(styles.lineHeight, (styles.fontSize as {number: number}).number) / 2 + 2
+                    computeLineHeight(styles.lineHeight, baseFontSize) / 2 + 2
                 );
                 this.ctx.textBaseline = 'bottom';
                 this.ctx.textAlign = 'left';
