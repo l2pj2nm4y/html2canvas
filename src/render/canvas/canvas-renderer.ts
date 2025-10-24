@@ -38,7 +38,7 @@ import {Bounds} from '../../css/layout/bounds';
 import {LIST_STYLE_TYPE} from '../../css/property-descriptors/list-style-type';
 import {LIST_STYLE_POSITION} from '../../css/property-descriptors/list-style-position';
 import {computeLineHeight} from '../../css/property-descriptors/line-height';
-import {CHECKBOX, InputElementContainer, RADIO} from '../../dom/replaced-elements/input-element-container';
+import {CHECKBOX, InputElementContainer, RADIO, RANGE} from '../../dom/replaced-elements/input-element-container';
 import {TEXT_ALIGN} from '../../css/property-descriptors/text-align';
 import {TextareaElementContainer} from '../../dom/elements/textarea-element-container';
 import {SelectElementContainer} from '../../dom/elements/select-element-container';
@@ -697,9 +697,9 @@ export class CanvasRenderer extends Renderer {
                     // Calculate relative luminance (WCAG formula)
                     const luminance = 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
 
-                    // Use white checkmark for dark backgrounds, black for light backgrounds
+                    // Use white checkmark for dark backgrounds, dark gray for light backgrounds
                     // Threshold at 0.40 luminance (matches browser behavior for orange #f39c12 and green #2ecc71)
-                    const checkmarkColor = luminance > 0.40 ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)';
+                    const checkmarkColor = luminance > 0.40 ? 'rgba(59, 59, 59, 1)' : 'rgba(255, 255, 255, 1)';
 
                     // Draw checkmark with appropriate contrast color
                     this.ctx.fillStyle = checkmarkColor;
@@ -740,8 +740,8 @@ export class CanvasRenderer extends Renderer {
                     const bLinear = b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
                     const luminance = 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
 
-                    // Inner ring: use black for light accent colors, white for dark accent colors
-                    const innerRingColor = luminance > 0.40 ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)';
+                    // Inner ring: use dark gray for light accent colors, white for dark accent colors
+                    const innerRingColor = luminance > 0.40 ? 'rgba(59, 59, 59, 1)' : 'rgba(255, 255, 255, 1)';
 
                     const centerX = container.bounds.left + size / 2;
                     const centerY = container.bounds.top + size / 2;
@@ -761,6 +761,117 @@ export class CanvasRenderer extends Renderer {
 
                     this.ctx.restore();
                 }
+            } else if (container.type === RANGE) {
+                // Range slider rendering - matches browser behavior with contrast-based unfilled track
+                this.ctx.save();
+
+                const defaultAccentColor = 0x0078d4ff; // Microsoft blue
+                const accentColorValue = (container.styles.accentColor !== null && container.styles.accentColor !== 0)
+                    ? container.styles.accentColor
+                    : defaultAccentColor;
+
+                // Calculate luminance of accent color to determine unfilled track contrast color
+                const r = ((accentColorValue >> 24) & 0xff) / 255;
+                const g = ((accentColorValue >> 16) & 0xff) / 255;
+                const b = ((accentColorValue >> 8) & 0xff) / 255;
+
+                const rLinear = r <= 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
+                const gLinear = g <= 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
+                const bLinear = b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
+                const luminance = 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
+
+                // Determine if this is a light or dark accent color
+                const isLightAccent = luminance > 0.40;
+
+                // Track and border colors based on accent color luminance
+                // Light accent (green/orange): dark unfilled track rgb(59,59,59)
+                // Dark accent (blue/red): light unfilled track rgb(239,239,239)
+                const unfilledTrackColor = isLightAccent ? 'rgba(59, 59, 59, 1)' : 'rgba(239, 239, 239, 1)';
+
+                // Border color: for dark accents use fixed gray (133,133,133), for light accents darken the track colors
+                const darkAccentBorder = 'rgba(133, 133, 133, 1)'; // Fixed border for dark accents
+
+                // Calculate slider dimensions
+                const trackHeight = 6; // Track height (increased to match browser rendering)
+                const thumbSize = 16; // Thumb size (standard browser default)
+                const trackY = container.bounds.top + (container.bounds.height - trackHeight) / 2;
+                const trackRadius = trackHeight / 2; // Fully rounded ends
+
+                // Helper function to draw rounded rectangle
+                const drawRoundedRect = (x: number, y: number, width: number, height: number, radius: number) => {
+                    if (width < 2 * radius) radius = width / 2;
+                    if (height < 2 * radius) radius = height / 2;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(x + radius, y);
+                    this.ctx.arcTo(x + width, y, x + width, y + height, radius);
+                    this.ctx.arcTo(x + width, y + height, x, y + height, radius);
+                    this.ctx.arcTo(x, y + height, x, y, radius);
+                    this.ctx.arcTo(x, y, x + width, y, radius);
+                    this.ctx.closePath();
+                };
+
+                // Calculate thumb position based on value
+                const range = container.max - container.min;
+                const normalizedValue = range > 0 ? (container.valueAsNumber - container.min) / range : 0;
+                const availableWidth = container.bounds.width - thumbSize;
+                const thumbX = container.bounds.left + availableWidth * normalizedValue + thumbSize / 2;
+
+                // Calculate track widths
+                const filledWidth = availableWidth * normalizedValue + thumbSize / 2;
+                const unfilledStart = container.bounds.left + filledWidth;
+                const unfilledWidth = container.bounds.width - filledWidth;
+
+                // Draw filled track (accent color) with appropriate border
+                if (filledWidth > 0) {
+                    // Fill with accent color
+                    this.ctx.fillStyle = asString(accentColorValue);
+                    drawRoundedRect(container.bounds.left, trackY, filledWidth, trackHeight, trackRadius);
+                    this.ctx.fill();
+
+                    // Border for filled portion
+                    if (isLightAccent) {
+                        // For light accent: use fixed gray border
+                        this.ctx.strokeStyle = darkAccentBorder;
+                    } else {
+                        // For dark accent: darken the accent color for border
+                        const darkenedR = Math.max(0, Math.round(r * 255 * 0.8));
+                        const darkenedG = Math.max(0, Math.round(g * 255 * 0.8));
+                        const darkenedB = Math.max(0, Math.round(b * 255 * 0.8));
+                        this.ctx.strokeStyle = `rgba(${darkenedR}, ${darkenedG}, ${darkenedB}, 1)`;
+                    }
+                    this.ctx.lineWidth = 1;
+                    drawRoundedRect(container.bounds.left, trackY, filledWidth, trackHeight, trackRadius);
+                    this.ctx.stroke();
+                }
+
+                // Draw unfilled track (contrast color) with appropriate border
+                if (unfilledWidth > 0) {
+                    // Fill with contrast color
+                    this.ctx.fillStyle = unfilledTrackColor;
+                    drawRoundedRect(unfilledStart, trackY, unfilledWidth, trackHeight, trackRadius);
+                    this.ctx.fill();
+
+                    // Border for unfilled portion
+                    if (isLightAccent) {
+                        // For light accent: use fixed gray border
+                        this.ctx.strokeStyle = darkAccentBorder;
+                    } else {
+                        // For dark accent: darken the unfilled track color for border
+                        // Unfilled is rgb(239,239,239), so border should be slightly darker
+                        this.ctx.strokeStyle = 'rgba(200, 200, 200, 1)';
+                    }
+                    this.ctx.lineWidth = 1;
+                    drawRoundedRect(unfilledStart, trackY, unfilledWidth, trackHeight, trackRadius);
+                    this.ctx.stroke();
+                }
+
+                // Draw thumb (circular button) - solid accent color
+                this.ctx.beginPath();
+                this.ctx.arc(thumbX, container.bounds.top + container.bounds.height / 2, thumbSize / 2, 0, Math.PI * 2);
+                this.ctx.fillStyle = asString(accentColorValue);
+                this.ctx.fill();
+
+                this.ctx.restore();
             }
         }
 
@@ -1606,7 +1717,7 @@ const isTextInputElement = (
         return true;
     } else if (container instanceof SelectElementContainer) {
         return true;
-    } else if (container instanceof InputElementContainer && container.type !== RADIO && container.type !== CHECKBOX) {
+    } else if (container instanceof InputElementContainer && container.type !== RADIO && container.type !== CHECKBOX && container.type !== RANGE) {
         return true;
     }
     return false;

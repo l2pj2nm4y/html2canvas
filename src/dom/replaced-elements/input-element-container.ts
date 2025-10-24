@@ -42,18 +42,33 @@ const getInputValue = (node: HTMLInputElement): string => {
 export const CHECKBOX = 'checkbox';
 export const RADIO = 'radio';
 export const PASSWORD = 'password';
+export const RANGE = 'range';
 export const INPUT_COLOR = 0x2a2a2aff;
 
 export class InputElementContainer extends ElementContainer {
     readonly type: string;
     readonly checked: boolean;
     readonly value: string;
+    readonly min: number;
+    readonly max: number;
+    readonly valueAsNumber: number;
 
     constructor(context: Context, input: HTMLInputElement) {
         super(context, input);
         this.type = input.type.toLowerCase();
         this.checked = input.checked;
         this.value = getInputValue(input);
+
+        // For range inputs, store min, max, and numeric value
+        if (this.type === RANGE) {
+            this.min = parseFloat(input.min) || 0;
+            this.max = parseFloat(input.max) || 100;
+            this.valueAsNumber = parseFloat(input.value) || 0;
+        } else {
+            this.min = 0;
+            this.max = 100;
+            this.valueAsNumber = 0;
+        }
 
         if (this.type === CHECKBOX || this.type === RADIO) {
             // Default browser accent color (used for 'auto' or when no accent-color is set)
