@@ -27,6 +27,11 @@
             display: inline-block;
             vertical-align: top;
             border: 2px solid #ddd;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
 
         .label {
@@ -57,7 +62,11 @@
 <body>
     <header>
         <h1>Color - Comprehensive Test</h1>
-        <p>Testing all color values and edge cases</p>
+        <p>Testing all color value formats for text rendering</p>
+        <div style="background: #fff3cd; padding: 10px; margin: 10px 0; border: 1px solid #856404; border-radius: 4px;">
+            <strong>What this tests:</strong> The CSS color property controls text color.
+            Tests named colors (red, coral), hex (#3498db), rgb/rgba, hsl/hsla formats, and transparency.
+        </div>
     </header>
 
     <div class="controls">
@@ -75,38 +84,38 @@
 
                 <div class="test-section">
                     <h3>Color Formats</h3>
-                    <div class="sample test-0"></div>
+                    <div class="sample test-0">Sample Text<br>color: red</div>
                     <div class="label">red</div>
-                    <div class="sample test-1"></div>
+                    <div class="sample test-1">Sample Text<br>color: #3498db</div>
                     <div class="label">#3498db</div>
-                    <div class="sample test-2"></div>
+                    <div class="sample test-2">Sample Text<br>rgb(46,204,113)</div>
                     <div class="label">rgb(46,204,113)</div>
-                    <div class="sample test-3"></div>
+                    <div class="sample test-3">Sample Text<br>rgba(231,76,60,0.7)</div>
                     <div class="label">rgba(231,76,60,0.7)</div>
-                    <div class="sample test-4"></div>
+                    <div class="sample test-4">Sample Text<br>hsl(280,70%,60%)</div>
                     <div class="label">hsl(280,70%,60%)</div>
-                    <div class="sample test-5"></div>
+                    <div class="sample test-5">Sample Text<br>hsla(48,100%,50%,0.8)</div>
                     <div class="label">hsla(48,100%,50%,0.8)</div>
                 </div>
 
                 <div class="test-section">
                     <h3>Named Colors</h3>
-                    <div class="sample test-6"></div>
+                    <div class="sample test-6">Sample Text<br>color: coral</div>
                     <div class="label">coral</div>
-                    <div class="sample test-7"></div>
+                    <div class="sample test-7">Sample Text<br>color: dodgerblue</div>
                     <div class="label">dodgerblue</div>
-                    <div class="sample test-8"></div>
+                    <div class="sample test-8">Sample Text<br>color: mediumseagreen</div>
                     <div class="label">mediumseagreen</div>
-                    <div class="sample test-9"></div>
+                    <div class="sample test-9">Sample Text<br>color: gold</div>
                     <div class="label">gold</div>
                 </div>
 
                 <div class="test-section">
                     <h3>With Backgrounds</h3>
-                    <div class="sample test-10"></div>
+                    <div class="sample test-10">White Text on Dark Background</div>
                     <div class="label">White on dark</div>
-                    <div class="sample test-11"></div>
-                    <div class="label">Black on light</div>
+                    <div class="sample test-11">Dark Text on Light Background</div>
+                    <div class="label">Dark on light</div>
                 </div>
 
             </div>
