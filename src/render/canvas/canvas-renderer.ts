@@ -791,19 +791,9 @@ export class CanvasRenderer extends Renderer {
                     }
                 }
             } else if (paint.listValue && container.styles.listStyleType !== LIST_STYLE_TYPE.NONE) {
-                // Get the font style for list markers
-                // Browsers typically render markers with bold weight for better visibility
-                const fontVariant = styles.fontVariant
-                    .filter((variant) => variant === 'normal' || variant === 'small-caps')
-                    .join('');
-                const fontFamily = fixIOSSystemFonts(styles.fontFamily).join(', ');
+                // Get the font style for list markers - use the same font as the list item
+                const [font] = this.createFontStyle(styles);
                 const baseFontSize = (styles.fontSize as {number: number}).number;
-                const fontSize = isDimensionToken(styles.fontSize as CSSValue)
-                    ? `${baseFontSize}${(styles.fontSize as {number: number; unit: string}).unit}`
-                    : `${baseFontSize}px`;
-
-                // Use bold font weight for markers to match browser rendering
-                const font = [styles.fontStyle, fontVariant, 'bold', fontSize, fontFamily].join(' ');
 
                 this.ctx.font = font;
                 this.ctx.fillStyle = asString(styles.color);
