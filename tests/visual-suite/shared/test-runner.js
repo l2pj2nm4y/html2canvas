@@ -40,7 +40,7 @@ class VisualTestRunner {
         try {
             // Capture the HTML samples
             const canvas = await html2canvas(this.htmlSamples, {
-                logging: false,
+                logging: true,
                 backgroundColor: '#ffffff',
                 scale: window.devicePixelRatio || 1
             });

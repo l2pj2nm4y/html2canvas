@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Border Radius - Comprehensive Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .test-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .sample {
+            width: 180px;
+            height: 120px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+            border: 2px solid #ddd;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+            display: inline-block;
+            width: 180px;
+            text-align: center;
+        }
+
+        .test-0 { border: 3px solid #3498db; border-radius: 0px; background: #ecf0f1; }
+        .test-1 { border: 3px solid #e74c3c; border-radius: 5px; background: #fadbd8; }
+        .test-2 { border: 3px solid #2ecc71; border-radius: 10px; background: #d5f4e6; }
+        .test-3 { border: 3px solid #f39c12; border-radius: 20px; background: #fef5e7; }
+        .test-4 { border: 3px solid #9b59b6; border-radius: 50px; background: #f4ecf7; }
+        .test-5 { border: 3px solid #1abc9c; border-radius: 50%; background: #d1f2eb; }
+        .test-6 { border: 3px solid #34495e; border-top-left-radius: 30px; background: #ecf0f1; }
+        .test-7 { border: 3px solid #e67e22; border-top-right-radius: 30px; background: #fdebd0; }
+        .test-8 { border: 3px solid #c0392b; border-bottom-left-radius: 30px; background: #fadbd8; }
+        .test-9 { border: 3px solid #16a085; border-bottom-right-radius: 30px; background: #d1f2eb; }
+        .test-10 { border: 3px solid #8e44ad; border-top-left-radius: 30px; border-bottom-right-radius: 30px; background: #f4ecf7; }
+        .test-11 { border: 3px solid #3498db; border-radius: 50px / 25px; background: #ebf5fb; }
+        .test-12 { border: 3px solid #e74c3c; border-radius: 25px / 50px; background: #fadbd8; }
+        .test-13 { border: 3px solid #2ecc71; border-radius: 30px 60px / 60px 30px; background: #d5f4e6; }
+        .test-14 { border: 3px solid #f39c12; border-radius: 100%; background: #fef5e7; width: 120px; }
+        .test-15 { border: 3px solid #9b59b6; border-radius: 200px; background: #f4ecf7; }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Border Radius - Comprehensive Test</h1>
+        <p>Testing all border radius values and edge cases</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="test-section">
+                    <h3>Uniform Radius</h3>
+                    <div class="sample test-0"></div>
+                    <div class="label">0px</div>
+                    <div class="sample test-1"></div>
+                    <div class="label">5px</div>
+                    <div class="sample test-2"></div>
+                    <div class="label">10px</div>
+                    <div class="sample test-3"></div>
+                    <div class="label">20px</div>
+                    <div class="sample test-4"></div>
+                    <div class="label">50px</div>
+                    <div class="sample test-5"></div>
+                    <div class="label">50%</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Individual Corners</h3>
+                    <div class="sample test-6"></div>
+                    <div class="label">Top-left only</div>
+                    <div class="sample test-7"></div>
+                    <div class="label">Top-right only</div>
+                    <div class="sample test-8"></div>
+                    <div class="label">Bottom-left only</div>
+                    <div class="sample test-9"></div>
+                    <div class="label">Bottom-right only</div>
+                    <div class="sample test-10"></div>
+                    <div class="label">Opposite corners</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Elliptical Radius</h3>
+                    <div class="sample test-11"></div>
+                    <div class="label">50px / 25px</div>
+                    <div class="sample test-12"></div>
+                    <div class="label">25px / 50px</div>
+                    <div class="sample test-13"></div>
+                    <div class="label">30px 60px / 60px 30px</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Edge Cases</h3>
+                    <div class="sample test-14"></div>
+                    <div class="label">100% (circle)</div>
+                    <div class="sample test-15"></div>
+                    <div class="label">200px (large)</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Comprehensive Border Radius</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Font Style - Comprehensive Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .test-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .sample {
+            width: 180px;
+            height: 120px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+            border: 2px solid #ddd;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+            display: inline-block;
+            width: 180px;
+            text-align: center;
+        }
+
+        .test-0 { font-style: normal; font-size: 18px; }
+        .test-1 { font-style: italic; font-size: 18px; }
+        .test-2 { font-style: oblique; font-size: 18px; }
+        .test-3 { font-family: serif; font-style: italic; font-size: 18px; }
+        .test-4 { font-family: sans-serif; font-style: italic; font-size: 18px; }
+        .test-5 { font-family: monospace; font-style: italic; font-size: 18px; }
+        .test-6 { font-style: italic; font-weight: bold; font-size: 18px; }
+        .test-7 { font-style: italic; text-decoration: underline; font-size: 18px; }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Font Style - Comprehensive Test</h1>
+        <p>Testing all font style values and edge cases</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="test-section">
+                    <h3>Style Values</h3>
+                    <div class="sample test-0"></div>
+                    <div class="label">normal</div>
+                    <div class="sample test-1"></div>
+                    <div class="label">italic</div>
+                    <div class="sample test-2"></div>
+                    <div class="label">oblique</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>With Different Fonts</h3>
+                    <div class="sample test-3"></div>
+                    <div class="label">serif italic</div>
+                    <div class="sample test-4"></div>
+                    <div class="label">sans-serif italic</div>
+                    <div class="sample test-5"></div>
+                    <div class="label">monospace italic</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Combined Styles</h3>
+                    <div class="sample test-6"></div>
+                    <div class="label">italic + bold</div>
+                    <div class="sample test-7"></div>
+                    <div class="label">italic + underline</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Comprehensive Font Style</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

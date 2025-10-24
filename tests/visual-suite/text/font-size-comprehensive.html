@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Font Size - Comprehensive Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .test-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .sample {
+            width: 180px;
+            height: 120px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+            border: 2px solid #ddd;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+            display: inline-block;
+            width: 180px;
+            text-align: center;
+        }
+
+        .test-0 { font-size: 8px; }
+        .test-1 { font-size: 12px; }
+        .test-2 { font-size: 16px; }
+        .test-3 { font-size: 24px; }
+        .test-4 { font-size: 32px; }
+        .test-5 { font-size: 48px; }
+        .test-6 { font-size: 0.5em; }
+        .test-7 { font-size: 1em; }
+        .test-8 { font-size: 1.5em; }
+        .test-9 { font-size: 2em; }
+        .test-10 { font-size: xx-small; }
+        .test-11 { font-size: small; }
+        .test-12 { font-size: medium; }
+        .test-13 { font-size: large; }
+        .test-14 { font-size: xx-large; }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Font Size - Comprehensive Test</h1>
+        <p>Testing all font size values and edge cases</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="test-section">
+                    <h3>Absolute Sizes</h3>
+                    <div class="sample test-0"></div>
+                    <div class="label">8px</div>
+                    <div class="sample test-1"></div>
+                    <div class="label">12px</div>
+                    <div class="sample test-2"></div>
+                    <div class="label">16px</div>
+                    <div class="sample test-3"></div>
+                    <div class="label">24px</div>
+                    <div class="sample test-4"></div>
+                    <div class="label">32px</div>
+                    <div class="sample test-5"></div>
+                    <div class="label">48px</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Relative Sizes</h3>
+                    <div class="sample test-6"></div>
+                    <div class="label">0.5em</div>
+                    <div class="sample test-7"></div>
+                    <div class="label">1em</div>
+                    <div class="sample test-8"></div>
+                    <div class="label">1.5em</div>
+                    <div class="sample test-9"></div>
+                    <div class="label">2em</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Keywords</h3>
+                    <div class="sample test-10"></div>
+                    <div class="label">xx-small</div>
+                    <div class="sample test-11"></div>
+                    <div class="label">small</div>
+                    <div class="sample test-12"></div>
+                    <div class="label">medium</div>
+                    <div class="sample test-13"></div>
+                    <div class="label">large</div>
+                    <div class="sample test-14"></div>
+                    <div class="label">xx-large</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Comprehensive Font Size</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

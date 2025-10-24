@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Border Colors - Comprehensive Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .test-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .sample {
+            width: 180px;
+            height: 120px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+            border: 2px solid #ddd;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+            display: inline-block;
+            width: 180px;
+            text-align: center;
+        }
+
+        .test-0 { border: 5px solid red; }
+        .test-1 { border: 5px solid #3498db; }
+        .test-2 { border: 5px solid rgb(46,204,113); }
+        .test-3 { border: 5px solid rgba(231,76,60,0.5); }
+        .test-4 { border: 5px solid hsl(280,70%,60%); }
+        .test-5 { border: 5px solid transparent; background: #ecf0f1; }
+        .test-6 { color: #e74c3c; border: 5px solid currentColor; }
+        .test-7 { border-top: 5px solid #3498db; border-right: 5px solid #e74c3c; border-bottom: 5px solid #2ecc71; border-left: 5px solid #f39c12; }
+        .test-8 { border-top: 5px solid #9b59b6; border-bottom: 5px solid #8e44ad; }
+        .test-9 { border-left: 5px solid #1abc9c; border-right: 5px solid #16a085; }
+        .test-10 { border: 5px solid #3498db; background-color: #ecf0f1; }
+        .test-11 { border: 5px solid #e74c3c; background-image: linear-gradient(135deg, #667eea, #764ba2); }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Border Colors - Comprehensive Test</h1>
+        <p>Testing all border colors values and edge cases</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="test-section">
+                    <h3>Single Color</h3>
+                    <div class="sample test-0"></div>
+                    <div class="label">red</div>
+                    <div class="sample test-1"></div>
+                    <div class="label">#3498db</div>
+                    <div class="sample test-2"></div>
+                    <div class="label">rgb(46,204,113)</div>
+                    <div class="sample test-3"></div>
+                    <div class="label">rgba(231,76,60,0.5)</div>
+                    <div class="sample test-4"></div>
+                    <div class="label">hsl(280,70%,60%)</div>
+                    <div class="sample test-5"></div>
+                    <div class="label">transparent</div>
+                    <div class="sample test-6"></div>
+                    <div class="label">currentColor</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Individual Sides</h3>
+                    <div class="sample test-7"></div>
+                    <div class="label">Different colors</div>
+                    <div class="sample test-8"></div>
+                    <div class="label">Top/bottom only</div>
+                    <div class="sample test-9"></div>
+                    <div class="label">Left/right only</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>With Background</h3>
+                    <div class="sample test-10"></div>
+                    <div class="label">Solid bg</div>
+                    <div class="sample test-11"></div>
+                    <div class="label">Gradient bg</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Comprehensive Border Colors</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

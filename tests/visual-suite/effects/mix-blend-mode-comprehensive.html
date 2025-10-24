@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mix Blend Mode - Comprehensive Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .test-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .sample {
+            width: 180px;
+            height: 120px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+            border: 2px solid #ddd;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+            display: inline-block;
+            width: 180px;
+            text-align: center;
+        }
+
+        .test-0 { position: relative; background: #3498db; mix-blend-mode: normal; }
+        .test-1 { position: relative; background: #e74c3c; mix-blend-mode: multiply; }
+        .test-2 { position: relative; background: #2ecc71; mix-blend-mode: screen; }
+        .test-3 { position: relative; background: #f39c12; mix-blend-mode: overlay; }
+        .test-4 { position: relative; background: #9b59b6; mix-blend-mode: darken; }
+        .test-5 { position: relative; background: #1abc9c; mix-blend-mode: lighten; }
+        .test-6 { position: relative; background: #e67e22; mix-blend-mode: color-dodge; }
+        .test-7 { position: relative; background: #c0392b; mix-blend-mode: color-burn; }
+        .test-8 { position: relative; background: #16a085; mix-blend-mode: hard-light; }
+        .test-9 { position: relative; background: #8e44ad; mix-blend-mode: soft-light; }
+        .test-10 { position: relative; background: #3498db; mix-blend-mode: difference; }
+        .test-11 { position: relative; background: #e74c3c; mix-blend-mode: exclusion; }
+        .test-12 { position: relative; background: #2ecc71; mix-blend-mode: hue; }
+        .test-13 { position: relative; background: #f39c12; mix-blend-mode: saturation; }
+        .test-14 { position: relative; background: #9b59b6; mix-blend-mode: color; }
+        .test-15 { position: relative; background: #1abc9c; mix-blend-mode: luminosity; }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mix Blend Mode - Comprehensive Test</h1>
+        <p>Testing all mix blend mode values and edge cases</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="test-section">
+                    <h3>Basic Blend Modes</h3>
+                    <div class="sample test-0"></div>
+                    <div class="label">normal</div>
+                    <div class="sample test-1"></div>
+                    <div class="label">multiply</div>
+                    <div class="sample test-2"></div>
+                    <div class="label">screen</div>
+                    <div class="sample test-3"></div>
+                    <div class="label">overlay</div>
+                    <div class="sample test-4"></div>
+                    <div class="label">darken</div>
+                    <div class="sample test-5"></div>
+                    <div class="label">lighten</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Color Blend Modes</h3>
+                    <div class="sample test-6"></div>
+                    <div class="label">color-dodge</div>
+                    <div class="sample test-7"></div>
+                    <div class="label">color-burn</div>
+                    <div class="sample test-8"></div>
+                    <div class="label">hard-light</div>
+                    <div class="sample test-9"></div>
+                    <div class="label">soft-light</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Difference Modes</h3>
+                    <div class="sample test-10"></div>
+                    <div class="label">difference</div>
+                    <div class="sample test-11"></div>
+                    <div class="label">exclusion</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>HSL Modes</h3>
+                    <div class="sample test-12"></div>
+                    <div class="label">hue</div>
+                    <div class="sample test-13"></div>
+                    <div class="label">saturation</div>
+                    <div class="sample test-14"></div>
+                    <div class="label">color</div>
+                    <div class="sample test-15"></div>
+                    <div class="label">luminosity</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Comprehensive Mix Blend Mode</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

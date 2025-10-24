@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transform - Comprehensive Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .test-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .sample {
+            width: 180px;
+            height: 120px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+            border: 2px solid #ddd;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+            display: inline-block;
+            width: 180px;
+            text-align: center;
+        }
+
+        .test-0 { transform: rotate(45deg); background: #3498db; padding: 20px; color: white; }
+        .test-1 { transform: scale(1.5); background: #e74c3c; padding: 20px; color: white; }
+        .test-2 { transform: translateX(20px); background: #2ecc71; padding: 20px; color: white; }
+        .test-3 { transform: translateY(20px); background: #f39c12; padding: 20px; color: white; }
+        .test-4 { transform: skewX(20deg); background: #9b59b6; padding: 20px; color: white; }
+        .test-5 { transform: skewY(20deg); background: #1abc9c; padding: 20px; color: white; }
+        .test-6 { transform: rotate(15deg) scale(1.2); background: #e67e22; padding: 20px; color: white; }
+        .test-7 { transform: translate(10px, 10px) rotate(30deg); background: #c0392b; padding: 20px; color: white; }
+        .test-8 { transform: rotate(20deg) scale(1.3) translateX(10px); background: #16a085; padding: 20px; color: white; }
+        .test-9 { transform: matrix(1,0,0,1,20,20); background: #8e44ad; padding: 20px; color: white; }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Transform - Comprehensive Test</h1>
+        <p>Testing all transform values and edge cases</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="test-section">
+                    <h3>Single Transforms</h3>
+                    <div class="sample test-0"></div>
+                    <div class="label">rotate(45deg)</div>
+                    <div class="sample test-1"></div>
+                    <div class="label">scale(1.5)</div>
+                    <div class="sample test-2"></div>
+                    <div class="label">translateX(20px)</div>
+                    <div class="sample test-3"></div>
+                    <div class="label">translateY(20px)</div>
+                    <div class="sample test-4"></div>
+                    <div class="label">skewX(20deg)</div>
+                    <div class="sample test-5"></div>
+                    <div class="label">skewY(20deg)</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Multiple Transforms</h3>
+                    <div class="sample test-6"></div>
+                    <div class="label">rotate + scale</div>
+                    <div class="sample test-7"></div>
+                    <div class="label">translate + rotate</div>
+                    <div class="sample test-8"></div>
+                    <div class="label">3 transforms</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Matrix</h3>
+                    <div class="sample test-9"></div>
+                    <div class="label">matrix(1,0,0,1,20,20)</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Comprehensive Transform</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

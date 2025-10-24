@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Border Widths - Comprehensive Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .test-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .sample {
+            width: 180px;
+            height: 120px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+            border: 2px solid #ddd;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+            display: inline-block;
+            width: 180px;
+            text-align: center;
+        }
+
+        .test-0 { border: 1px solid #3498db; }
+        .test-1 { border: 3px solid #e74c3c; }
+        .test-2 { border: 5px solid #2ecc71; }
+        .test-3 { border: 10px solid #f39c12; }
+        .test-4 { border: 20px solid #9b59b6; }
+        .test-5 { border: 0px solid #1abc9c; background: #ecf0f1; }
+        .test-6 { border: thin solid #e67e22; }
+        .test-7 { border: medium solid #c0392b; }
+        .test-8 { border: thick solid #16a085; }
+        .test-9 { border-style: solid; border-color: #8e44ad; border-top-width: 2px; border-right-width: 5px; border-bottom-width: 10px; border-left-width: 15px; }
+        .test-10 { border-top: 8px solid #3498db; border-bottom: 8px solid #2980b9; }
+        .test-11 { border-left: 10px solid #e74c3c; border-right: 10px solid #c0392b; }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Border Widths - Comprehensive Test</h1>
+        <p>Testing all border widths values and edge cases</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="test-section">
+                    <h3>Length Values</h3>
+                    <div class="sample test-0"></div>
+                    <div class="label">1px</div>
+                    <div class="sample test-1"></div>
+                    <div class="label">3px</div>
+                    <div class="sample test-2"></div>
+                    <div class="label">5px</div>
+                    <div class="sample test-3"></div>
+                    <div class="label">10px</div>
+                    <div class="sample test-4"></div>
+                    <div class="label">20px</div>
+                    <div class="sample test-5"></div>
+                    <div class="label">0px</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Keywords</h3>
+                    <div class="sample test-6"></div>
+                    <div class="label">thin</div>
+                    <div class="sample test-7"></div>
+                    <div class="label">medium</div>
+                    <div class="sample test-8"></div>
+                    <div class="label">thick</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Individual Sides</h3>
+                    <div class="sample test-9"></div>
+                    <div class="label">Different widths</div>
+                    <div class="sample test-10"></div>
+                    <div class="label">Top/bottom only</div>
+                    <div class="sample test-11"></div>
+                    <div class="label">Left/right only</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Comprehensive Border Widths</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

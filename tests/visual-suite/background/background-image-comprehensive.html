@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Image - Comprehensive Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .test-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .sample {
+            width: 180px;
+            height: 120px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+            border: 1px solid #ddd;
+        }
+
+        .label {
+            font-size: 10px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+            display: inline-block;
+            width: 180px;
+            text-align: center;
+        }
+
+        /* Linear Gradients - Directions */
+        .linear-to-right { background-image: linear-gradient(to right, #3498db, #2ecc71); }
+        .linear-to-left { background-image: linear-gradient(to left, #e74c3c, #f39c12); }
+        .linear-to-bottom { background-image: linear-gradient(to bottom, #9b59b6, #8e44ad); }
+        .linear-to-top { background-image: linear-gradient(to top, #1abc9c, #16a085); }
+        .linear-to-top-right { background-image: linear-gradient(to top right, #3498db, #e74c3c); }
+        .linear-to-bottom-left { background-image: linear-gradient(to bottom left, #2ecc71, #f39c12); }
+
+        /* Linear Gradients - Angles */
+        .linear-0deg { background-image: linear-gradient(0deg, #3498db, #2ecc71); }
+        .linear-45deg { background-image: linear-gradient(45deg, #e74c3c, #f39c12); }
+        .linear-90deg { background-image: linear-gradient(90deg, #9b59b6, #8e44ad); }
+        .linear-135deg { background-image: linear-gradient(135deg, #1abc9c, #16a085); }
+        .linear-180deg { background-image: linear-gradient(180deg, #f39c12, #e67e22); }
+        .linear-270deg { background-image: linear-gradient(270deg, #c0392b, #e74c3c); }
+
+        /* Linear Gradients - Multi-stop */
+        .linear-3stop { background-image: linear-gradient(45deg, #3498db 0%, #9b59b6 50%, #e74c3c 100%); }
+        .linear-5stop { background-image: linear-gradient(to right, #e74c3c 0%, #f39c12 25%, #2ecc71 50%, #3498db 75%, #9b59b6 100%); }
+        .linear-hard-stop { background-image: linear-gradient(to right, #3498db 0%, #3498db 50%, #e74c3c 50%, #e74c3c 100%); }
+
+        /* Linear Gradients - Transparency */
+        .linear-transparent-start { background-image: linear-gradient(to right, transparent, #3498db); }
+        .linear-transparent-end { background-image: linear-gradient(to right, #e74c3c, transparent); }
+        .linear-transparent-mid { background-image: linear-gradient(to right, #3498db, transparent, #e74c3c); }
+        .linear-rgba { background-image: linear-gradient(45deg, rgba(52, 152, 219, 0.2), rgba(46, 204, 113, 0.9)); }
+
+        /* Radial Gradients - Shapes */
+        .radial-circle { background-image: radial-gradient(circle, #3498db, #2980b9); }
+        .radial-ellipse { background-image: radial-gradient(ellipse, #e74c3c, #c0392b); }
+        .radial-circle-closest { background-image: radial-gradient(circle closest-side, #2ecc71, #27ae60); }
+        .radial-circle-farthest { background-image: radial-gradient(circle farthest-corner, #f39c12, #e67e22); }
+
+        /* Radial Gradients - Positions */
+        .radial-at-center { background-image: radial-gradient(circle at center, #3498db, #2c3e50); }
+        .radial-at-top-left { background-image: radial-gradient(circle at top left, #e74c3c, #c0392b); }
+        .radial-at-top-right { background-image: radial-gradient(circle at top right, #2ecc71, #27ae60); }
+        .radial-at-bottom-left { background-image: radial-gradient(circle at bottom left, #f39c12, #e67e22); }
+        .radial-at-bottom-right { background-image: radial-gradient(circle at bottom right, #9b59b6, #8e44ad); }
+        .radial-at-percent { background-image: radial-gradient(circle at 30% 70%, #1abc9c, #16a085); }
+
+        /* Radial Gradients - Multi-stop */
+        .radial-3stop { background-image: radial-gradient(circle, #3498db 0%, #9b59b6 50%, #e74c3c 100%); }
+        .radial-5stop { background-image: radial-gradient(circle, #e74c3c 0%, #f39c12 20%, #2ecc71 40%, #3498db 60%, #9b59b6 80%); }
+
+        /* Conic Gradients */
+        .conic-basic { background-image: conic-gradient(#3498db, #2ecc71, #f39c12, #3498db); }
+        .conic-rainbow { background-image: conic-gradient(red, yellow, lime, cyan, blue, magenta, red); }
+        .conic-from-45 { background-image: conic-gradient(from 45deg, #3498db, #e74c3c, #3498db); }
+        .conic-at-center { background-image: conic-gradient(at center, #3498db, #2ecc71, #f39c12, #3498db); }
+        .conic-at-corner { background-image: conic-gradient(at 75% 75%, #e74c3c, #f39c12, #e74c3c); }
+        .conic-hard-stops { background-image: conic-gradient(#3498db 0deg, #3498db 90deg, #2ecc71 90deg, #2ecc71 180deg, #f39c12 180deg, #f39c12 270deg, #e74c3c 270deg, #e74c3c 360deg); }
+
+        /* Repeating Linear Gradients */
+        .rep-linear-basic { background-image: repeating-linear-gradient(45deg, #3498db 0px, #3498db 10px, #2ecc71 10px, #2ecc71 20px); }
+        .rep-linear-stripes { background-image: repeating-linear-gradient(90deg, #3498db 0px, #3498db 5px, white 5px, white 10px); }
+        .rep-linear-diagonal { background-image: repeating-linear-gradient(45deg, #e74c3c, #e74c3c 10px, transparent 10px, transparent 20px); }
+        .rep-linear-thin { background-image: repeating-linear-gradient(0deg, #2ecc71, #2ecc71 1px, transparent 1px, transparent 2px); }
+
+        /* Repeating Radial Gradients */
+        .rep-radial-basic { background-image: repeating-radial-gradient(circle, #3498db 0px, #3498db 10px, #2980b9 10px, #2980b9 20px); }
+        .rep-radial-rings { background-image: repeating-radial-gradient(circle, #e74c3c 0px, #e74c3c 5px, white 5px, white 10px); }
+        .rep-radial-fade { background-image: repeating-radial-gradient(circle, rgba(46, 204, 113, 0.8) 0px, rgba(46, 204, 113, 0.3) 20px, transparent 30px); }
+
+        /* Multiple Backgrounds - Gradients */
+        .multi-linear {
+            background-image:
+                linear-gradient(45deg, rgba(52, 152, 219, 0.5), transparent),
+                linear-gradient(135deg, rgba(46, 204, 113, 0.5), transparent);
+        }
+        .multi-radial {
+            background-image:
+                radial-gradient(circle at 30% 30%, rgba(231, 76, 60, 0.6), transparent 40%),
+                radial-gradient(circle at 70% 70%, rgba(243, 156, 18, 0.6), transparent 40%);
+        }
+        .multi-mixed {
+            background-image:
+                linear-gradient(45deg, rgba(52, 152, 219, 0.3), rgba(52, 152, 219, 0.3)),
+                radial-gradient(circle, rgba(231, 76, 60, 0.3), transparent);
+        }
+        .multi-triple {
+            background-image:
+                linear-gradient(0deg, rgba(52, 152, 219, 0.3), transparent),
+                linear-gradient(90deg, rgba(46, 204, 113, 0.3), transparent),
+                linear-gradient(180deg, rgba(243, 156, 18, 0.3), transparent);
+        }
+
+        /* SVG Data URLs */
+        .svg-circle { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="40" fill="%233498db"/></svg>'); }
+        .svg-rect { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23e74c3c"/></svg>'); }
+        .svg-pattern { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"><rect width="50" height="50" fill="%23ecf0f1"/><circle cx="25" cy="25" r="20" fill="%232ecc71"/></svg>'); }
+        .svg-complex { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23f39c12"/><path d="M 10,50 L 90,50 M 50,10 L 50,90" stroke="%23fff" stroke-width="4"/></svg>'); }
+
+        /* Gradient with Background Color */
+        .grad-with-bgcolor {
+            background-color: #ecf0f1;
+            background-image: linear-gradient(45deg, rgba(52, 152, 219, 0.5), rgba(46, 204, 113, 0.5));
+        }
+
+        /* Gradients with Background Size */
+        .grad-sized {
+            background-image: repeating-linear-gradient(45deg, #3498db 0px, #3498db 10px, #2ecc71 10px, #2ecc71 20px);
+            background-size: 50% 50%;
+        }
+
+        /* Gradients with Border Radius */
+        .grad-rounded {
+            background-image: radial-gradient(circle, #3498db, #2980b9);
+            border-radius: 20px;
+        }
+
+        /* Gradients on Different Elements */
+        .grad-block {
+            display: block;
+            background-image: linear-gradient(to right, #3498db, #2ecc71);
+        }
+        .grad-flex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: radial-gradient(circle, #e74c3c, #c0392b);
+            color: white;
+        }
+        .grad-grid {
+            display: grid;
+            place-items: center;
+            background-image: linear-gradient(45deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        /* Extreme Gradients */
+        .grad-many-stops {
+            background-image: linear-gradient(to right,
+                #e74c3c 0%, #f39c12 10%, #f1c40f 20%, #2ecc71 30%,
+                #1abc9c 40%, #3498db 50%, #9b59b6 60%, #e91e63 70%,
+                #ff5722 80%, #795548 90%, #607d8b 100%);
+        }
+        .grad-micro {
+            background-image: repeating-linear-gradient(90deg, #3498db 0px, #3498db 1px, #2ecc71 1px, #2ecc71 2px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Background Image - Comprehensive Test</h1>
+        <p>Testing all background-image types: linear, radial, conic, repeating gradients, and combinations</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="test-section">
+                    <h3>Linear Gradients - Directions</h3>
+                    <div class="sample linear-to-right"></div>
+                    <div class="label">to right</div>
+                    <div class="sample linear-to-left"></div>
+                    <div class="label">to left</div>
+                    <div class="sample linear-to-bottom"></div>
+                    <div class="label">to bottom</div>
+                    <div class="sample linear-to-top"></div>
+                    <div class="label">to top</div>
+                    <div class="sample linear-to-top-right"></div>
+                    <div class="label">to top right</div>
+                    <div class="sample linear-to-bottom-left"></div>
+                    <div class="label">to bottom left</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Linear Gradients - Angles</h3>
+                    <div class="sample linear-0deg"></div>
+                    <div class="label">0deg</div>
+                    <div class="sample linear-45deg"></div>
+                    <div class="label">45deg</div>
+                    <div class="sample linear-90deg"></div>
+                    <div class="label">90deg</div>
+                    <div class="sample linear-135deg"></div>
+                    <div class="label">135deg</div>
+                    <div class="sample linear-180deg"></div>
+                    <div class="label">180deg</div>
+                    <div class="sample linear-270deg"></div>
+                    <div class="label">270deg</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Linear Gradients - Color Stops</h3>
+                    <div class="sample linear-3stop"></div>
+                    <div class="label">3 color stops</div>
+                    <div class="sample linear-5stop"></div>
+                    <div class="label">5 color stops</div>
+                    <div class="sample linear-hard-stop"></div>
+                    <div class="label">Hard color stop</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Linear Gradients - Transparency</h3>
+                    <div class="sample linear-transparent-start"></div>
+                    <div class="label">transparent → color</div>
+                    <div class="sample linear-transparent-end"></div>
+                    <div class="label">color → transparent</div>
+                    <div class="sample linear-transparent-mid"></div>
+                    <div class="label">color → transparent → color</div>
+                    <div class="sample linear-rgba"></div>
+                    <div class="label">rgba with alpha</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Radial Gradients - Shapes</h3>
+                    <div class="sample radial-circle"></div>
+                    <div class="label">circle</div>
+                    <div class="sample radial-ellipse"></div>
+                    <div class="label">ellipse</div>
+                    <div class="sample radial-circle-closest"></div>
+                    <div class="label">circle closest-side</div>
+                    <div class="sample radial-circle-farthest"></div>
+                    <div class="label">circle farthest-corner</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Radial Gradients - Positions</h3>
+                    <div class="sample radial-at-center"></div>
+                    <div class="label">at center</div>
+                    <div class="sample radial-at-top-left"></div>
+                    <div class="label">at top left</div>
+                    <div class="sample radial-at-top-right"></div>
+                    <div class="label">at top right</div>
+                    <div class="sample radial-at-bottom-left"></div>
+                    <div class="label">at bottom left</div>
+                    <div class="sample radial-at-bottom-right"></div>
+                    <div class="label">at bottom right</div>
+                    <div class="sample radial-at-percent"></div>
+                    <div class="label">at 30% 70%</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Radial Gradients - Color Stops</h3>
+                    <div class="sample radial-3stop"></div>
+                    <div class="label">3 color stops</div>
+                    <div class="sample radial-5stop"></div>
+                    <div class="label">5 color stops</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Conic Gradients</h3>
+                    <div class="sample conic-basic"></div>
+                    <div class="label">Basic conic</div>
+                    <div class="sample conic-rainbow"></div>
+                    <div class="label">Rainbow conic</div>
+                    <div class="sample conic-from-45"></div>
+                    <div class="label">from 45deg</div>
+                    <div class="sample conic-at-center"></div>
+                    <div class="label">at center</div>
+                    <div class="sample conic-at-corner"></div>
+                    <div class="label">at 75% 75%</div>
+                    <div class="sample conic-hard-stops"></div>
+                    <div class="label">Hard color stops</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Repeating Linear Gradients</h3>
+                    <div class="sample rep-linear-basic"></div>
+                    <div class="label">Basic repeating</div>
+                    <div class="sample rep-linear-stripes"></div>
+                    <div class="label">Vertical stripes</div>
+                    <div class="sample rep-linear-diagonal"></div>
+                    <div class="label">Diagonal pattern</div>
+                    <div class="sample rep-linear-thin"></div>
+                    <div class="label">Thin lines</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Repeating Radial Gradients</h3>
+                    <div class="sample rep-radial-basic"></div>
+                    <div class="label">Basic rings</div>
+                    <div class="sample rep-radial-rings"></div>
+                    <div class="label">Concentric rings</div>
+                    <div class="sample rep-radial-fade"></div>
+                    <div class="label">Fading rings</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Multiple Backgrounds</h3>
+                    <div class="sample multi-linear"></div>
+                    <div class="label">2 linear gradients</div>
+                    <div class="sample multi-radial"></div>
+                    <div class="label">2 radial gradients</div>
+                    <div class="sample multi-mixed"></div>
+                    <div class="label">Linear + Radial</div>
+                    <div class="sample multi-triple"></div>
+                    <div class="label">3 linear gradients</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>SVG Data URLs</h3>
+                    <div class="sample svg-circle"></div>
+                    <div class="label">SVG Circle</div>
+                    <div class="sample svg-rect"></div>
+                    <div class="label">SVG Rectangle</div>
+                    <div class="sample svg-pattern"></div>
+                    <div class="label">SVG Pattern</div>
+                    <div class="sample svg-complex"></div>
+                    <div class="label">SVG Complex</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Combinations</h3>
+                    <div class="sample grad-with-bgcolor"></div>
+                    <div class="label">Gradient + bgcolor</div>
+                    <div class="sample grad-sized"></div>
+                    <div class="label">Gradient + size</div>
+                    <div class="sample grad-rounded"></div>
+                    <div class="label">Gradient + border-radius</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Different Display Types</h3>
+                    <div class="sample grad-block"></div>
+                    <div class="label">display: block</div>
+                    <div class="sample grad-flex">Flex</div>
+                    <div class="label">display: flex</div>
+                    <div class="sample grad-grid">Grid</div>
+                    <div class="label">display: grid</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Extreme Cases</h3>
+                    <div class="sample grad-many-stops"></div>
+                    <div class="label">11 color stops</div>
+                    <div class="sample grad-micro"></div>
+                    <div class="label">Micro pattern (1px)</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Comprehensive Background Image</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

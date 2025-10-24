@@ -223,10 +223,10 @@ export class CanvasRenderer extends Renderer {
                 }
 
                 await this.renderNodeBackgroundAndBorders(paint);
-                this.captureDebugSnapshot(`After individual element background/borders`);
+                // this.captureDebugSnapshot(`After individual element background/borders`);
 
                 await this.renderNodeContent(paint);
-                this.captureDebugSnapshot(`After individual element content`);
+                // this.captureDebugSnapshot(`After individual element content`);
 
                 if (hasTransform && rotateValue !== null) {
                     this.ctx.restore();
@@ -813,7 +813,7 @@ export class CanvasRenderer extends Renderer {
         // 1. the background and borders of the element forming the stacking context.
         await this.renderNodeBackgroundAndBorders(stack.element);
         this.context.logger.debug('Stage 1: Background and borders painted');
-        this.captureDebugSnapshot('After parent background/borders');
+        // this.captureDebugSnapshot('After parent background/borders');
 
         // 2. the child stacking contexts with negative stack levels (most negative first).
         for (const child of stack.negativeZIndex) {
@@ -822,14 +822,14 @@ export class CanvasRenderer extends Renderer {
         // 3. For all its in-flow, non-positioned, block-level descendants in tree order:
         await this.renderNodeContent(stack.element);
         this.context.logger.debug('Stage 2: Node content (text/replaced elements) painted');
-        this.captureDebugSnapshot('After parent content');
+        // this.captureDebugSnapshot('After parent content');
 
         this.context.logger.debug(`Stage 3: Rendering ${stack.nonInlineLevel.length} child elements`);
         for (const child of stack.nonInlineLevel) {
             await this.renderNode(child);
         }
         this.context.logger.debug('Stage 3: All child elements painted');
-        this.captureDebugSnapshot('After child elements');
+        // this.captureDebugSnapshot('After child elements');
         // 4. All non-positioned floating descendants, in tree order. For each one of these,
         // treat the element as if it created a new stacking context, but any positioned descendants and descendants
         // which actually create a new stacking context should be considered part of the parent stacking context,

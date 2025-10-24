@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Color - Comprehensive Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .test-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .sample {
+            width: 140px;
+            height: 90px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+            display: inline-block;
+            width: 140px;
+            text-align: center;
+        }
+
+        /* Color Formats */
+        .hex-short { background-color: #f39; }
+        .hex-long { background-color: #3498db; }
+        .rgb { background-color: rgb(46, 204, 113); }
+        .rgba-semi { background-color: rgba(231, 76, 60, 0.5); }
+        .rgba-full { background-color: rgba(52, 152, 219, 1.0); }
+        .rgba-zero { background-color: rgba(0, 0, 0, 0); border: 2px dashed #999; }
+        .hsl { background-color: hsl(280, 70%, 60%); }
+        .hsla { background-color: hsla(48, 100%, 50%, 0.7); }
+
+        /* Named Colors - Extended */
+        .named-red { background-color: red; }
+        .named-coral { background-color: coral; }
+        .named-tomato { background-color: tomato; }
+        .named-dodgerblue { background-color: dodgerblue; }
+        .named-mediumseagreen { background-color: mediumseagreen; }
+        .named-gold { background-color: gold; }
+        .named-orchid { background-color: orchid; }
+        .named-teal { background-color: teal; }
+
+        /* Special Values */
+        .transparent { background-color: transparent; border: 2px dashed #999; }
+        .currentcolor { color: #e74c3c; background-color: currentColor; }
+        .inherit-parent { background-color: #9b59b6; }
+        .inherit-child { background-color: inherit; border: 2px solid white; width: 80px; height: 50px; margin: 20px auto; }
+
+        /* Extreme Values */
+        .black { background-color: #000; }
+        .white { background-color: #fff; border: 2px solid #ddd; }
+        .near-black { background-color: #010101; }
+        .near-white { background-color: #fefefe; border: 2px solid #ddd; }
+
+        /* Layering with Opacity */
+        .layer-container {
+            position: relative;
+            width: 140px;
+            height: 90px;
+            display: inline-block;
+            margin: 10px;
+            background-color: #3498db;
+        }
+
+        .layer-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 100px;
+            height: 50px;
+            background-color: rgba(231, 76, 60, 0.6);
+        }
+
+        /* Gradations */
+        .red-10 { background-color: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; }
+        .red-30 { background-color: rgba(231, 76, 60, 0.3); }
+        .red-50 { background-color: rgba(231, 76, 60, 0.5); }
+        .red-70 { background-color: rgba(231, 76, 60, 0.7); }
+        .red-90 { background-color: rgba(231, 76, 60, 0.9); }
+        .red-100 { background-color: rgba(231, 76, 60, 1.0); }
+
+        /* With Borders */
+        .bg-with-border {
+            background-color: #2ecc71;
+            border: 5px solid #27ae60;
+        }
+
+        .bg-with-transparent-border {
+            background-color: #f39c12;
+            border: 5px solid transparent;
+        }
+
+        /* With Padding */
+        .bg-with-padding {
+            background-color: #9b59b6;
+            padding: 15px;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Background Clip */
+        .bg-clip-border {
+            background-color: #1abc9c;
+            background-clip: border-box;
+            border: 10px dashed rgba(255, 255, 255, 0.5);
+            padding: 10px;
+        }
+
+        .bg-clip-padding {
+            background-color: #e67e22;
+            background-clip: padding-box;
+            border: 10px solid rgba(0, 0, 0, 0.2);
+            padding: 10px;
+        }
+
+        .bg-clip-content {
+            background-color: #c0392b;
+            background-clip: content-box;
+            border: 5px solid rgba(0, 0, 0, 0.2);
+            padding: 15px;
+        }
+
+        /* System Colors */
+        .system-canvas { background-color: Canvas; }
+        .system-canvastext { background-color: CanvasText; }
+
+        /* Color Mixing with Blend Modes */
+        .blend-container {
+            position: relative;
+            width: 140px;
+            height: 90px;
+            display: inline-block;
+            margin: 10px;
+            background-color: #3498db;
+        }
+
+        .blend-multiply {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(231, 76, 60, 0.7);
+            mix-blend-mode: multiply;
+        }
+
+        /* Different Display Types */
+        .bg-block { background-color: #3498db; display: block; width: 140px; height: 90px; margin: 10px; }
+        .bg-inline { background-color: #e74c3c; display: inline; padding: 10px; }
+        .bg-inline-block { background-color: #2ecc71; display: inline-block; width: 140px; height: 90px; margin: 10px; }
+        .bg-flex { background-color: #f39c12; display: flex; width: 140px; height: 90px; margin: 10px; align-items: center; justify-content: center; }
+        .bg-grid { background-color: #9b59b6; display: grid; width: 140px; height: 90px; margin: 10px; place-items: center; }
+
+        /* With Transforms */
+        .bg-rotated {
+            background-color: #1abc9c;
+            transform: rotate(15deg);
+        }
+
+        .bg-scaled {
+            background-color: #e67e22;
+            transform: scale(0.8);
+        }
+
+        /* With Rounded Corners */
+        .bg-rounded-sm { background-color: #3498db; border-radius: 5px; }
+        .bg-rounded-md { background-color: #e74c3c; border-radius: 15px; }
+        .bg-rounded-lg { background-color: #2ecc71; border-radius: 30px; }
+        .bg-circle { background-color: #f39c12; border-radius: 50%; }
+
+        /* Nested Backgrounds */
+        .nested-outer {
+            background-color: #34495e;
+            padding: 15px;
+            width: 140px;
+            height: 90px;
+            margin: 10px;
+            display: inline-block;
+        }
+
+        .nested-inner {
+            background-color: #ecf0f1;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Background Color - Comprehensive Test</h1>
+        <p>Testing all background-color formats, values, and edge cases</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="test-section">
+                    <h3>Color Formats</h3>
+
+                    <div class="sample hex-short"></div>
+                    <div class="label">#f39 (3-digit hex)</div>
+
+                    <div class="sample hex-long"></div>
+                    <div class="label">#3498db (6-digit hex)</div>
+
+                    <div class="sample rgb"></div>
+                    <div class="label">rgb(46, 204, 113)</div>
+
+                    <div class="sample rgba-semi"></div>
+                    <div class="label">rgba(..., 0.5)</div>
+
+                    <div class="sample rgba-full"></div>
+                    <div class="label">rgba(..., 1.0)</div>
+
+                    <div class="sample rgba-zero"></div>
+                    <div class="label">rgba(..., 0)</div>
+
+                    <div class="sample hsl"></div>
+                    <div class="label">hsl(280, 70%, 60%)</div>
+
+                    <div class="sample hsla"></div>
+                    <div class="label">hsla(48, 100%, 50%, 0.7)</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Named Colors</h3>
+
+                    <div class="sample named-red"></div>
+                    <div class="label">red</div>
+
+                    <div class="sample named-coral"></div>
+                    <div class="label">coral</div>
+
+                    <div class="sample named-tomato"></div>
+                    <div class="label">tomato</div>
+
+                    <div class="sample named-dodgerblue"></div>
+                    <div class="label">dodgerblue</div>
+
+                    <div class="sample named-mediumseagreen"></div>
+                    <div class="label">mediumseagreen</div>
+
+                    <div class="sample named-gold"></div>
+                    <div class="label">gold</div>
+
+                    <div class="sample named-orchid"></div>
+                    <div class="label">orchid</div>
+
+                    <div class="sample named-teal"></div>
+                    <div class="label">teal</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Special Values</h3>
+
+                    <div class="sample transparent"></div>
+                    <div class="label">transparent</div>
+
+                    <div class="sample currentcolor"></div>
+                    <div class="label">currentColor</div>
+
+                    <div class="sample inherit-parent">
+                        <div class="inherit-child"></div>
+                    </div>
+                    <div class="label">inherit</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Extreme Values</h3>
+
+                    <div class="sample black"></div>
+                    <div class="label">#000 (pure black)</div>
+
+                    <div class="sample white"></div>
+                    <div class="label">#fff (pure white)</div>
+
+                    <div class="sample near-black"></div>
+                    <div class="label">#010101 (near black)</div>
+
+                    <div class="sample near-white"></div>
+                    <div class="label">#fefefe (near white)</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Opacity Layering</h3>
+
+                    <div class="layer-container">
+                        <div class="layer-overlay"></div>
+                    </div>
+                    <div class="label">Blue + Red (0.6 alpha)</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Opacity Gradations</h3>
+
+                    <div class="sample red-10"></div>
+                    <div class="label">10% opacity</div>
+
+                    <div class="sample red-30"></div>
+                    <div class="label">30% opacity</div>
+
+                    <div class="sample red-50"></div>
+                    <div class="label">50% opacity</div>
+
+                    <div class="sample red-70"></div>
+                    <div class="label">70% opacity</div>
+
+                    <div class="sample red-90"></div>
+                    <div class="label">90% opacity</div>
+
+                    <div class="sample red-100"></div>
+                    <div class="label">100% opacity</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>With Borders</h3>
+
+                    <div class="sample bg-with-border"></div>
+                    <div class="label">Solid border</div>
+
+                    <div class="sample bg-with-transparent-border"></div>
+                    <div class="label">Transparent border</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>With Padding</h3>
+
+                    <div class="sample bg-with-padding">
+                        Padding content
+                    </div>
+                    <div class="label">Background with padding</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Background Clip</h3>
+
+                    <div class="sample bg-clip-border"></div>
+                    <div class="label">background-clip: border-box</div>
+
+                    <div class="sample bg-clip-padding"></div>
+                    <div class="label">background-clip: padding-box</div>
+
+                    <div class="sample bg-clip-content"></div>
+                    <div class="label">background-clip: content-box</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Different Display Types</h3>
+
+                    <div class="bg-block"></div>
+                    <div class="label">display: block</div>
+
+                    <div class="bg-inline">Inline Element</div>
+                    <div class="label">display: inline</div>
+
+                    <div class="bg-inline-block"></div>
+                    <div class="label">display: inline-block</div>
+
+                    <div class="bg-flex">Flex</div>
+                    <div class="label">display: flex</div>
+
+                    <div class="bg-grid">Grid</div>
+                    <div class="label">display: grid</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>With Transforms</h3>
+
+                    <div class="sample bg-rotated"></div>
+                    <div class="label">rotate(15deg)</div>
+
+                    <div class="sample bg-scaled"></div>
+                    <div class="label">scale(0.8)</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>With Border Radius</h3>
+
+                    <div class="sample bg-rounded-sm"></div>
+                    <div class="label">border-radius: 5px</div>
+
+                    <div class="sample bg-rounded-md"></div>
+                    <div class="label">border-radius: 15px</div>
+
+                    <div class="sample bg-rounded-lg"></div>
+                    <div class="label">border-radius: 30px</div>
+
+                    <div class="sample bg-circle"></div>
+                    <div class="label">border-radius: 50%</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Nested Backgrounds</h3>
+
+                    <div class="nested-outer">
+                        <div class="nested-inner"></div>
+                    </div>
+                    <div class="label">Nested containers</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Blend Modes</h3>
+
+                    <div class="blend-container">
+                        <div class="blend-multiply"></div>
+                    </div>
+                    <div class="label">mix-blend-mode: multiply</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Comprehensive Background Color</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>
