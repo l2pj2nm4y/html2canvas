@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Accent Color Parsing Debug</title>
+    <style>
+        input { width: 30px; height: 30px; margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Accent Color Debug</h1>
+
+    <div>
+        <input type="checkbox" id="test1" checked style="accent-color: auto;">
+        <label>accent-color: auto</label>
+    </div>
+
+    <div>
+        <input type="checkbox" id="test2" checked style="accent-color: #ff0000;">
+        <label>accent-color: #ff0000 (red)</label>
+    </div>
+
+    <script>
+        // Check what the browser computed styles show
+        const test1 = document.getElementById('test1');
+        const test2 = document.getElementById('test2');
+
+        const computed1 = window.getComputedStyle(test1);
+        const computed2 = window.getComputedStyle(test2);
+
+        console.log('Test 1 (auto):');
+        console.log('  accent-color:', computed1.accentColor);
+        console.log('  color:', computed1.color);
+        console.log('  backgroundColor:', computed1.backgroundColor);
+
+        console.log('Test 2 (red):');
+        console.log('  accent-color:', computed2.accentColor);
+        console.log('  color:', computed2.color);
+        console.log('  backgroundColor:', computed2.backgroundColor);
+    </script>
+</body>
+</html>

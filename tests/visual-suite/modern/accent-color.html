@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accent Color Test</title>
     <link rel="stylesheet" href="../shared/test-template.css">
-    <script src="../../../dist/html2canvas.js"></script>
+    <script src="../../../dist/html2canvas.js?v=20251024-1620"></script>
     <style>
         .sample {
             width: 250px;
@@ -34,14 +34,20 @@
             gap: 10px;
         }
 
+        .form-group label {
+            font-size: 14px;
+            color: #333;
+        }
+
         input[type="checkbox"],
         input[type="radio"] {
             width: 20px;
             height: 20px;
+            flex-shrink: 0;
         }
 
         input[type="range"] {
-            width: 150px;
+            width: 180px;
         }
 
         .test-0 { accent-color: auto; }
@@ -58,6 +64,7 @@
         <div style="background: #fff3cd; padding: 10px; margin: 10px 0; border: 1px solid #856404; border-radius: 4px;">
             <strong>What this tests:</strong> The CSS accent-color property applies custom colors to form controls (checkboxes, radio buttons, range inputs).
             <br><strong>Values tested:</strong> auto (browser default), blue, red, green, orange
+            <br><strong>Note:</strong> Range input sliders are not yet implemented in html2canvas (checkbox and radio buttons only).
         </div>
     </header>
 
@@ -77,13 +84,23 @@
                 <div class="sample test-0">
                     <h3 style="margin: 0 0 10px 0; font-size: 14px;">auto</h3>
                     <div class="form-group">
-                        <input type="checkbox" checked> Checkbox
+                        <input type="checkbox" id="cb0-checked" checked>
+                        <label for="cb0-checked">Checkbox (checked)</label>
                     </div>
                     <div class="form-group">
-                        <input type="radio" checked> Radio
+                        <input type="checkbox" id="cb0-unchecked">
+                        <label for="cb0-unchecked">Checkbox (unchecked)</label>
                     </div>
                     <div class="form-group">
-                        <input type="range" value="50">
+                        <input type="radio" id="rd0-checked" name="radio0" checked>
+                        <label for="rd0-checked">Radio (checked)</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" id="rd0-unchecked" name="radio0-2">
+                        <label for="rd0-unchecked">Radio (unchecked)</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="range" id="rg0" value="50" min="0" max="100">
                     </div>
                 </div>
                 <div class="label">accent-color: auto</div>
@@ -91,13 +108,23 @@
                 <div class="sample test-1">
                     <h3 style="margin: 0 0 10px 0; font-size: 14px;">Blue</h3>
                     <div class="form-group">
-                        <input type="checkbox" checked> Checkbox
+                        <input type="checkbox" id="cb1-checked" checked>
+                        <label for="cb1-checked">Checkbox (checked)</label>
                     </div>
                     <div class="form-group">
-                        <input type="radio" checked> Radio
+                        <input type="checkbox" id="cb1-unchecked">
+                        <label for="cb1-unchecked">Checkbox (unchecked)</label>
                     </div>
                     <div class="form-group">
-                        <input type="range" value="50">
+                        <input type="radio" id="rd1-checked" name="radio1" checked>
+                        <label for="rd1-checked">Radio (checked)</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" id="rd1-unchecked" name="radio1-2">
+                        <label for="rd1-unchecked">Radio (unchecked)</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="range" id="rg1" value="50" min="0" max="100">
                     </div>
                 </div>
                 <div class="label">accent-color: #3498db</div>
@@ -105,13 +132,23 @@
                 <div class="sample test-2">
                     <h3 style="margin: 0 0 10px 0; font-size: 14px;">Red</h3>
                     <div class="form-group">
-                        <input type="checkbox" checked> Checkbox
+                        <input type="checkbox" id="cb2-checked" checked>
+                        <label for="cb2-checked">Checkbox (checked)</label>
                     </div>
                     <div class="form-group">
-                        <input type="radio" checked> Radio
+                        <input type="checkbox" id="cb2-unchecked">
+                        <label for="cb2-unchecked">Checkbox (unchecked)</label>
                     </div>
                     <div class="form-group">
-                        <input type="range" value="50">
+                        <input type="radio" id="rd2-checked" name="radio2" checked>
+                        <label for="rd2-checked">Radio (checked)</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" id="rd2-unchecked" name="radio2-2">
+                        <label for="rd2-unchecked">Radio (unchecked)</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="range" id="rg2" value="50" min="0" max="100">
                     </div>
                 </div>
                 <div class="label">accent-color: #e74c3c</div>
@@ -119,13 +156,23 @@
                 <div class="sample test-3">
                     <h3 style="margin: 0 0 10px 0; font-size: 14px;">Green</h3>
                     <div class="form-group">
-                        <input type="checkbox" checked> Checkbox
+                        <input type="checkbox" id="cb3-checked" checked>
+                        <label for="cb3-checked">Checkbox (checked)</label>
                     </div>
                     <div class="form-group">
-                        <input type="radio" checked> Radio
+                        <input type="checkbox" id="cb3-unchecked">
+                        <label for="cb3-unchecked">Checkbox (unchecked)</label>
                     </div>
                     <div class="form-group">
-                        <input type="range" value="50">
+                        <input type="radio" id="rd3-checked" name="radio3" checked>
+                        <label for="rd3-checked">Radio (checked)</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" id="rd3-unchecked" name="radio3-2">
+                        <label for="rd3-unchecked">Radio (unchecked)</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="range" id="rg3" value="50" min="0" max="100">
                     </div>
                 </div>
                 <div class="label">accent-color: #2ecc71</div>
@@ -133,13 +180,23 @@
                 <div class="sample test-4">
                     <h3 style="margin: 0 0 10px 0; font-size: 14px;">Orange</h3>
                     <div class="form-group">
-                        <input type="checkbox" checked> Checkbox
+                        <input type="checkbox" id="cb4-checked" checked>
+                        <label for="cb4-checked">Checkbox (checked)</label>
                     </div>
                     <div class="form-group">
-                        <input type="radio" checked> Radio
+                        <input type="checkbox" id="cb4-unchecked">
+                        <label for="cb4-unchecked">Checkbox (unchecked)</label>
                     </div>
                     <div class="form-group">
-                        <input type="range" value="50">
+                        <input type="radio" id="rd4-checked" name="radio4" checked>
+                        <label for="rd4-checked">Radio (checked)</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" id="rd4-unchecked" name="radio4-2">
+                        <label for="rd4-unchecked">Radio (unchecked)</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="range" id="rg4" value="50" min="0" max="100">
                     </div>
                 </div>
                 <div class="label">accent-color: #f39c12</div>

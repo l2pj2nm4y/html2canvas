@@ -682,8 +682,27 @@ export class CanvasRenderer extends Renderer {
                 if (container.checked) {
                     this.ctx.save();
 
-                    // Draw white checkmark
-                    // Background is already rendered via renderNodeBackgroundAndBorders
+                    // Calculate relative luminance of background to determine checkmark color
+                    // Browsers use WCAG contrast algorithm to pick white or black checkmark
+                    const bgColor = container.styles.backgroundColor;
+                    const r = ((bgColor >> 24) & 0xff) / 255;
+                    const g = ((bgColor >> 16) & 0xff) / 255;
+                    const b = ((bgColor >> 8) & 0xff) / 255;
+
+                    // Apply gamma correction
+                    const rLinear = r <= 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
+                    const gLinear = g <= 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
+                    const bLinear = b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
+
+                    // Calculate relative luminance (WCAG formula)
+                    const luminance = 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
+
+                    // Use white checkmark for dark backgrounds, black for light backgrounds
+                    // Threshold at 0.40 luminance (matches browser behavior for orange #f39c12 and green #2ecc71)
+                    const checkmarkColor = luminance > 0.40 ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)';
+
+                    // Draw checkmark with appropriate contrast color
+                    this.ctx.fillStyle = checkmarkColor;
                     this.path([
                         new Vector(container.bounds.left + size * 0.39363, container.bounds.top + size * 0.79),
                         new Vector(container.bounds.left + size * 0.16, container.bounds.top + size * 0.5549),
@@ -693,7 +712,6 @@ export class CanvasRenderer extends Renderer {
                         new Vector(container.bounds.left + size * 0.84, container.bounds.top + size * 0.34085),
                         new Vector(container.bounds.left + size * 0.39363, container.bounds.top + size * 0.79)
                     ]);
-                    this.ctx.fillStyle = '#ffffff';
                     this.ctx.fill();
                     this.ctx.restore();
                 }
@@ -701,23 +719,46 @@ export class CanvasRenderer extends Renderer {
                 if (container.checked) {
                     this.ctx.save();
 
-                    // Draw accent-colored dot in center
-                    // Background (white) and border (accent color) already rendered via renderNodeBackgroundAndBorders
-                    const accentColorValue = container.styles.accentColor !== null
-                        ? container.styles.accentColor
-                        : 0x2a2a2aff;
+                    // Radio button structure (from outside to inside):
+                    // 1. Outer ring: accent color (already rendered via border)
+                    // 2. Inner ring: white or black for contrast (render this as filled circle)
+                    // 3. Inner dot: accent color (render on top)
 
+                    const defaultAccentColor = 0x0078d4ff; // Microsoft blue
+                    // Handle both null and 0 (transparent/invalid) as 'auto'
+                    const accentColorValue = (container.styles.accentColor !== null && container.styles.accentColor !== 0)
+                        ? container.styles.accentColor
+                        : defaultAccentColor;
+
+                    // Calculate luminance of accent color to determine inner ring contrast color
+                    const r = ((accentColorValue >> 24) & 0xff) / 255;
+                    const g = ((accentColorValue >> 16) & 0xff) / 255;
+                    const b = ((accentColorValue >> 8) & 0xff) / 255;
+
+                    const rLinear = r <= 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
+                    const gLinear = g <= 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
+                    const bLinear = b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
+                    const luminance = 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
+
+                    // Inner ring: use black for light accent colors, white for dark accent colors
+                    const innerRingColor = luminance > 0.40 ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)';
+
+                    const centerX = container.bounds.left + size / 2;
+                    const centerY = container.bounds.top + size / 2;
+
+                    // Draw inner ring (fills the area between outer border and inner dot)
+                    // This provides contrast between the accent-colored border and accent-colored dot
                     this.ctx.beginPath();
-                    this.ctx.arc(
-                        container.bounds.left + size / 2,
-                        container.bounds.top + size / 2,
-                        size / 4,
-                        0,
-                        Math.PI * 2,
-                        true
-                    );
+                    this.ctx.arc(centerX, centerY, size / 2.5, 0, Math.PI * 2, true);
+                    this.ctx.fillStyle = innerRingColor;
+                    this.ctx.fill();
+
+                    // Draw inner dot (accent color)
+                    this.ctx.beginPath();
+                    this.ctx.arc(centerX, centerY, size / 4, 0, Math.PI * 2, true);
                     this.ctx.fillStyle = asString(accentColorValue);
                     this.ctx.fill();
+
                     this.ctx.restore();
                 }
             }

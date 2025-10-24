@@ -56,13 +56,20 @@ export class InputElementContainer extends ElementContainer {
         this.value = getInputValue(input);
 
         if (this.type === CHECKBOX || this.type === RADIO) {
-            // If accent-color is set and the input is checked, style accordingly
-            // Checkbox: solid background, no border
-            // Radio: white background with accent-color border
-            if (this.checked && this.styles.accentColor !== null) {
+            // Default browser accent color (used for 'auto' or when no accent-color is set)
+            const defaultAccentColor = 0x0078d4ff; // Microsoft blue, similar to Chrome's default
+
+            // accent-color can be null (not set) or 0 (transparent/invalid from 'auto' parsing)
+            // In both cases, use the default browser accent color
+            const accentColor = (this.styles.accentColor !== null && this.styles.accentColor !== 0)
+                ? this.styles.accentColor
+                : defaultAccentColor;
+
+            if (this.checked) {
+                // Checked state styling
                 if (this.type === CHECKBOX) {
                     // Checkbox: solid accent color background, no border
-                    this.styles.backgroundColor = this.styles.accentColor;
+                    this.styles.backgroundColor = accentColor;
                     this.styles.borderTopWidth =
                         this.styles.borderRightWidth =
                         this.styles.borderBottomWidth =
@@ -74,18 +81,19 @@ export class InputElementContainer extends ElementContainer {
                         this.styles.borderLeftStyle =
                             BORDER_STYLE.NONE;
                 } else {
-                    // Radio: white background with thin accent color border
-                    this.styles.backgroundColor = 0xffffffff; // white
+                    // Radio: white/black inner ring with accent color outer border
+                    // The background will be white or black for contrast (determined in renderer)
+                    this.styles.backgroundColor = 0xffffffff; // white by default
                     this.styles.borderTopColor =
                         this.styles.borderRightColor =
                         this.styles.borderBottomColor =
                         this.styles.borderLeftColor =
-                            this.styles.accentColor;
+                            accentColor; // accent color border (outer ring)
                     this.styles.borderTopWidth =
                         this.styles.borderRightWidth =
                         this.styles.borderBottomWidth =
                         this.styles.borderLeftWidth =
-                            2; // thin border
+                            2; // border width
                     this.styles.borderTopStyle =
                         this.styles.borderRightStyle =
                         this.styles.borderBottomStyle =
@@ -93,8 +101,8 @@ export class InputElementContainer extends ElementContainer {
                             BORDER_STYLE.SOLID;
                 }
             } else {
-                // Default unchecked or no accent-color styling
-                this.styles.backgroundColor = 0xdededeff;
+                // Unchecked state styling - white background with gray border
+                this.styles.backgroundColor = 0xffffffff; // white, not gray
                 this.styles.borderTopColor =
                     this.styles.borderRightColor =
                     this.styles.borderBottomColor =
@@ -111,6 +119,9 @@ export class InputElementContainer extends ElementContainer {
                     this.styles.borderLeftStyle =
                         BORDER_STYLE.SOLID;
             }
+
+            // Force clear any background images that might interfere
+            this.styles.backgroundImage = [];
             this.styles.backgroundClip = [BACKGROUND_CLIP.BORDER_BOX];
             this.styles.backgroundOrigin = [BACKGROUND_ORIGIN.BORDER_BOX];
             this.bounds = reformatInputBounds(this.bounds);

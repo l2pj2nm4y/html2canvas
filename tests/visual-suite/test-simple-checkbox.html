@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Checkbox Test</title>
+    <script src="../../dist/html2canvas.js?v=20251024-1600"></script>
+    <style>
+        body { margin: 40px; font-family: Arial; }
+        #test {
+            border: 2px solid #000;
+            padding: 20px;
+            background: white;
+            width: 200px;
+        }
+        input[type="checkbox"] {
+            width: 30px;
+            height: 30px;
+            accent-color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Checkbox Test</h1>
+    <p>Testing if white checkmark renders correctly</p>
+
+    <div id="test">
+        <div style="margin: 10px 0;">
+            <input type="checkbox" id="cb1" checked style="accent-color: auto;">
+            <label for="cb1">Auto checkbox (should be blue with white checkmark)</label>
+        </div>
+        <div style="margin: 10px 0;">
+            <input type="checkbox" id="cb2" checked style="accent-color: #e74c3c;">
+            <label for="cb2">Red checkbox (should be red with white checkmark)</label>
+        </div>
+        <div style="margin: 10px 0;">
+            <input type="checkbox" id="cb3" checked style="accent-color: #2ecc71;">
+            <label for="cb3">Green checkbox (should be green with white checkmark)</label>
+        </div>
+    </div>
+
+    <h2>Expected:</h2>
+    <p><strong>Auto:</strong> Blue square (#0078d4) with WHITE checkmark</p>
+    <p><strong>Red:</strong> Red square (#e74c3c) with WHITE checkmark</p>
+    <p><strong>Green:</strong> Green square (#2ecc71) with WHITE checkmark</p>
+
+    <h2>Canvas Output:</h2>
+    <div id="output"></div>
+
+    <script>
+        window.addEventListener('load', async () => {
+            const test = document.getElementById('test');
+            const output = document.getElementById('output');
+
+            console.log('Capturing...');
+
+            try {
+                const canvas = await html2canvas(test, {
+                    logging: true,
+                    backgroundColor: '#ffffff',
+                    scale: 2
+                });
+
+                output.appendChild(canvas);
+                console.log('Done!');
+
+                // Check pixel color at checkmark location
+                const ctx = canvas.getContext('2d');
+                const centerX = Math.floor(canvas.width / 2);
+                const centerY = Math.floor(canvas.height / 2);
+                const pixel = ctx.getImageData(centerX, centerY, 1, 1).data;
+                console.log('Pixel color at center:', `rgba(${pixel[0]}, ${pixel[1]}, ${pixel[2]}, ${pixel[3]})`);
+                console.log('Should be white: rgba(255, 255, 255, 255)');
+
+            } catch (error) {
+                console.error('Error:', error);
+                output.innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Input Debug Test</title>
+    <script src="../../dist/html2canvas.js?v=20251024-1615"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #test-area {
+            border: 2px solid #000;
+            padding: 20px;
+            background: #fff;
+            width: 300px;
+        }
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: 20px;
+            height: 20px;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        .control-group {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Input Element Debug Test</h1>
+
+    <div id="test-area">
+        <h3>Checked Controls</h3>
+        <div class="control-group">
+            <input type="checkbox" id="cb1" checked style="accent-color: auto;">
+            <label for="cb1">Checkbox CHECKED (auto)</label>
+        </div>
+
+        <div class="control-group">
+            <input type="radio" id="rd1" name="test" checked style="accent-color: auto;">
+            <label for="rd1">Radio CHECKED (auto)</label>
+        </div>
+
+        <div class="control-group">
+            <input type="checkbox" id="cb2" checked style="accent-color: #e74c3c;">
+            <label for="cb2">Checkbox CHECKED (red)</label>
+        </div>
+
+        <div class="control-group">
+            <input type="radio" id="rd2" name="test2" checked style="accent-color: #2ecc71;">
+            <label for="rd2">Radio CHECKED (green)</label>
+        </div>
+
+        <h3>Unchecked Controls</h3>
+        <div class="control-group">
+            <input type="checkbox" id="cb3" style="accent-color: auto;">
+            <label for="cb3">Checkbox UNCHECKED (auto)</label>
+        </div>
+
+        <div class="control-group">
+            <input type="radio" id="rd3" name="test3" style="accent-color: auto;">
+            <label for="rd3">Radio UNCHECKED (auto)</label>
+        </div>
+
+        <div class="control-group">
+            <input type="checkbox" id="cb4" style="accent-color: #3498db;">
+            <label for="cb4">Checkbox UNCHECKED (blue)</label>
+        </div>
+
+        <div class="control-group">
+            <input type="radio" id="rd4" name="test4" style="accent-color: #f39c12;">
+            <label for="rd4">Radio UNCHECKED (orange)</label>
+        </div>
+    </div>
+
+    <button onclick="captureTest()" style="padding: 10px 20px; margin-top: 20px;">Capture with html2canvas</button>
+
+    <div id="result"></div>
+
+    <script>
+        async function captureTest() {
+            console.log('Starting capture...');
+            const testArea = document.getElementById('test-area');
+            const resultDiv = document.getElementById('result');
+
+            try {
+                const canvas = await html2canvas(testArea, {
+                    logging: true,
+                    backgroundColor: '#ffffff',
+                    scale: 1
+                });
+
+                console.log('Capture complete!');
+                resultDiv.innerHTML = '<h2>Canvas Output:</h2>';
+                resultDiv.appendChild(canvas);
+            } catch (error) {
+                console.error('Capture failed:', error);
+                resultDiv.innerHTML = '<h2 style="color: red;">Error: ' + error.message + '</h2>';
+            }
+        }
+
+        // Auto-capture on load
+        window.addEventListener('load', () => {
+            setTimeout(captureTest, 500);
+        });
+    </script>
+</body>
+</html>
