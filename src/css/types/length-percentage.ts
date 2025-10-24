@@ -23,7 +23,7 @@ export const isLengthPercentage = (token: CSSValue | CalcValue): token is Length
     isCalcValue(token as LengthPercentage) || token.type === TokenType.PERCENTAGE_TOKEN || isLength(token as CSSValue);
 
 export const parseLengthPercentageTuple = (tokens: LengthPercentage[]): LengthPercentageTuple =>
-    tokens.length > 1 ? [tokens[0], tokens[1]] : [tokens[0]];
+    tokens.length === 0 ? [ZERO_LENGTH] : tokens.length > 1 ? [tokens[0], tokens[1]] : [tokens[0]];
 export const ZERO_LENGTH: NumberValueToken = {
     type: TokenType.NUMBER_TOKEN,
     number: 0,
