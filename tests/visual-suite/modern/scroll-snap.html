@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Snap Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .sample {
+            width: 300px;
+            height: 200px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+            border: 2px solid #ddd;
+            overflow: auto;
+            background: #f0f0f0;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+            display: inline-block;
+            width: 300px;
+            text-align: center;
+        }
+
+        .scroll-container {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .scroll-item {
+            min-width: 250px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            border-radius: 8px;
+        }
+
+        .item-1 { background: #3498db; }
+        .item-2 { background: #e74c3c; }
+        .item-3 { background: #2ecc71; }
+        .item-4 { background: #f39c12; }
+
+        .test-0 {
+            scroll-snap-type: none;
+        }
+
+        .test-1 {
+            scroll-snap-type: x mandatory;
+        }
+        .test-1 .scroll-item {
+            scroll-snap-align: start;
+        }
+
+        .test-2 {
+            scroll-snap-type: x mandatory;
+        }
+        .test-2 .scroll-item {
+            scroll-snap-align: center;
+        }
+
+        .test-3 {
+            scroll-snap-type: x proximity;
+        }
+        .test-3 .scroll-item {
+            scroll-snap-align: end;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Scroll Snap Test</h1>
+        <p>Testing scroll-snap-type and scroll-snap-align properties</p>
+        <div style="background: #fff3cd; padding: 10px; margin: 10px 0; border: 1px solid #856404; border-radius: 4px;">
+            <strong>What this tests:</strong> The CSS scroll snap properties control how scrollable containers snap to specific positions.
+            <br><strong>Values tested:</strong> none, x mandatory + start, x mandatory + center, x proximity + end
+            <br><strong>Note:</strong> Scroll the containers to see snap behavior (visual test captures the initial state)
+        </div>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="sample test-0">
+                    <div class="scroll-container">
+                        <div class="scroll-item item-1">1</div>
+                        <div class="scroll-item item-2">2</div>
+                        <div class="scroll-item item-3">3</div>
+                        <div class="scroll-item item-4">4</div>
+                    </div>
+                </div>
+                <div class="label">scroll-snap-type: none</div>
+
+                <div class="sample test-1">
+                    <div class="scroll-container">
+                        <div class="scroll-item item-1">1</div>
+                        <div class="scroll-item item-2">2</div>
+                        <div class="scroll-item item-3">3</div>
+                        <div class="scroll-item item-4">4</div>
+                    </div>
+                </div>
+                <div class="label">x mandatory + snap-align: start</div>
+
+                <div class="sample test-2">
+                    <div class="scroll-container">
+                        <div class="scroll-item item-1">1</div>
+                        <div class="scroll-item item-2">2</div>
+                        <div class="scroll-item item-3">3</div>
+                        <div class="scroll-item item-4">4</div>
+                    </div>
+                </div>
+                <div class="label">x mandatory + snap-align: center</div>
+
+                <div class="sample test-3">
+                    <div class="scroll-container">
+                        <div class="scroll-item item-1">1</div>
+                        <div class="scroll-item item-2">2</div>
+                        <div class="scroll-item item-3">3</div>
+                        <div class="scroll-item item-4">4</div>
+                    </div>
+                </div>
+                <div class="label">x proximity + snap-align: end</div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Scroll Snap</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

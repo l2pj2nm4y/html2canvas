@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Position Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .sample {
+            width: 200px;
+            height: 150px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+            border: 2px solid #ddd;
+            background: #f0f0f0;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+            display: inline-block;
+            width: 200px;
+            text-align: center;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: none;
+            border: 2px solid #3498db;
+        }
+
+        .test-0 img { object-position: center; }
+        .test-1 img { object-position: top left; }
+        .test-2 img { object-position: top right; }
+        .test-3 img { object-position: bottom left; }
+        .test-4 img { object-position: bottom right; }
+        .test-5 img { object-position: 25% 75%; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Object Position Test</h1>
+        <p>Testing object-position property with different values</p>
+        <div style="background: #fff3cd; padding: 10px; margin: 10px 0; border: 1px solid #856404; border-radius: 4px;">
+            <strong>What this tests:</strong> The CSS object-position property positions replaced elements within their containers (used with object-fit).
+            <br><strong>Values tested:</strong> center, top left, top right, bottom left, bottom right, percentage values
+        </div>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="sample test-0">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%233498db' width='400' height='400'/%3E%3Ccircle cx='200' cy='200' r='50' fill='white'/%3E%3Ctext x='200' y='210' text-anchor='middle' fill='%233498db' font-size='20' font-family='Arial'%3ECENTER%3C/text%3E%3C/svg%3E" alt="Large image">
+                </div>
+                <div class="label">object-position: center</div>
+
+                <div class="sample test-1">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%2327ae60' width='400' height='400'/%3E%3Ccircle cx='100' cy='100' r='50' fill='white'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%2327ae60' font-size='16' font-family='Arial'%3ETOP LEFT%3C/text%3E%3C/svg%3E" alt="Large image">
+                </div>
+                <div class="label">object-position: top left</div>
+
+                <div class="sample test-2">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e74c3c' width='400' height='400'/%3E%3Ccircle cx='300' cy='100' r='50' fill='white'/%3E%3Ctext x='300' y='110' text-anchor='middle' fill='%23e74c3c' font-size='16' font-family='Arial'%3ETOP RIGHT%3C/text%3E%3C/svg%3E" alt="Large image">
+                </div>
+                <div class="label">object-position: top right</div>
+
+                <div class="sample test-3">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23f39c12' width='400' height='400'/%3E%3Ccircle cx='100' cy='300' r='50' fill='white'/%3E%3Ctext x='100' y='310' text-anchor='middle' fill='%23f39c12' font-size='14' font-family='Arial'%3EBOTTOM LEFT%3C/text%3E%3C/svg%3E" alt="Large image">
+                </div>
+                <div class="label">object-position: bottom left</div>
+
+                <div class="sample test-4">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%239b59b6' width='400' height='400'/%3E%3Ccircle cx='300' cy='300' r='50' fill='white'/%3E%3Ctext x='300' y='310' text-anchor='middle' fill='%239b59b6' font-size='13' font-family='Arial'%3EBOTTOM RIGHT%3C/text%3E%3C/svg%3E" alt="Large image">
+                </div>
+                <div class="label">object-position: bottom right</div>
+
+                <div class="sample test-5">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%231abc9c' width='400' height='400'/%3E%3Ccircle cx='100' cy='300' r='50' fill='white'/%3E%3Ctext x='100' y='310' text-anchor='middle' fill='%231abc9c' font-size='16' font-family='Arial'%3E25%25 75%25%3C/text%3E%3C/svg%3E" alt="Large image">
+                </div>
+                <div class="label">object-position: 25% 75%</div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Object Position</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>
