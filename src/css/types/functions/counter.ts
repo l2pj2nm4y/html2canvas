@@ -338,7 +338,7 @@ export const createCounterText = (value: number, type: LIST_STYLE_TYPE, appendSu
         case LIST_STYLE_TYPE.CIRCLE:
             return '◦' + spaceSuffix;
         case LIST_STYLE_TYPE.SQUARE:
-            return '◾' + spaceSuffix;
+            return '▪' + spaceSuffix;
         case LIST_STYLE_TYPE.DECIMAL_LEADING_ZERO:
             const string = createCounterStyleFromRange(value, 48, 57, true, defaultSuffix);
             return string.length < 4 ? `0${string}` : string;

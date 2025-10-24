@@ -795,17 +795,35 @@ export class CanvasRenderer extends Renderer {
                     }
                 }
             } else if (paint.listValue && container.styles.listStyleType !== LIST_STYLE_TYPE.NONE) {
-                // Get the font style for list markers - use the same font as the list item
-                const [font] = this.createFontStyle(styles);
+                // Get the font style for list markers
                 const baseFontSize = (styles.fontSize as {number: number}).number;
+
+                // Disc, circle, and square markers are rendered larger by browsers
+                const isSymbolMarker = container.styles.listStyleType === LIST_STYLE_TYPE.DISC ||
+                                      container.styles.listStyleType === LIST_STYLE_TYPE.CIRCLE ||
+                                      container.styles.listStyleType === LIST_STYLE_TYPE.SQUARE;
+
+                const markerFontSize = isSymbolMarker ? Math.round(baseFontSize * 1.5) : baseFontSize;
+
+                // Create font with adjusted size for symbol markers
+                const fontVariant = styles.fontVariant
+                    .filter((variant) => variant === 'normal' || variant === 'small-caps')
+                    .join('');
+                const fontFamily = fixIOSSystemFonts(styles.fontFamily).join(', ');
+                const fontSize = isDimensionToken(styles.fontSize as CSSValue)
+                    ? `${markerFontSize}${(styles.fontSize as {number: number; unit: string}).unit}`
+                    : `${markerFontSize}px`;
+                const font = [styles.fontStyle, fontVariant, styles.fontWeight, fontSize, fontFamily].join(' ');
 
                 this.ctx.font = font;
                 this.ctx.fillStyle = asString(styles.color);
 
                 // Position marker based on list-style-position
+                // Square marker needs a small adjustment due to character spacing when enlarged
+                const squareAdjustment = container.styles.listStyleType === LIST_STYLE_TYPE.SQUARE && !isInsidePosition ? 3 : 0;
                 const markerX = isInsidePosition
                     ? container.bounds.left + getAbsoluteValue(container.styles.paddingLeft, container.bounds.width)
-                    : container.bounds.left - 4;
+                    : container.bounds.left + squareAdjustment;
 
                 this.ctx.textBaseline = 'middle';
                 this.ctx.textAlign = isInsidePosition ? 'left' : 'right';
