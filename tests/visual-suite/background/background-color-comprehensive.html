@@ -201,6 +201,95 @@
             width: 100%;
             height: 100%;
         }
+
+        /* Padding Calculation Tests - Bug Fix Verification */
+        .padding-test-base {
+            background-color: #e74c3c;
+            background-clip: content-box;
+            border: 5px solid #2c3e50;
+            width: 140px;
+            height: 90px;
+            margin: 10px;
+            display: inline-block;
+        }
+
+        /* Symmetric padding */
+        .padding-sym-10 {
+            padding: 10px;
+        }
+
+        .padding-sym-20 {
+            padding: 20px;
+        }
+
+        /* Asymmetric padding - different vertical vs horizontal */
+        .padding-asym-v {
+            padding-top: 25px;
+            padding-bottom: 15px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .padding-asym-h {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 25px;
+            padding-right: 15px;
+        }
+
+        /* All different padding values */
+        .padding-all-diff {
+            padding-top: 20px;
+            padding-right: 15px;
+            padding-bottom: 10px;
+            padding-left: 5px;
+        }
+
+        /* Percentage-based padding (vertical should use height) */
+        .padding-pct-5 {
+            padding: 5%;
+        }
+
+        .padding-pct-10 {
+            padding: 10%;
+        }
+
+        .padding-pct-mixed {
+            padding-top: 15%;
+            padding-bottom: 10%;
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+
+        /* Tall narrow box - vertical padding matters more */
+        .padding-tall {
+            width: 80px;
+            height: 140px;
+            padding: 20px;
+        }
+
+        /* Wide short box - horizontal padding matters more */
+        .padding-wide {
+            width: 180px;
+            height: 60px;
+            padding: 15px;
+        }
+
+        /* With padding-box for comparison */
+        .padding-box-test {
+            background-color: #3498db;
+            background-clip: padding-box;
+            border: 5px solid #2c3e50;
+            padding: 20px;
+        }
+
+        /* Border-box with padding for comparison */
+        .border-box-test {
+            background-color: #2ecc71;
+            background-clip: border-box;
+            border: 5px solid rgba(0, 0, 0, 0.3);
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
@@ -370,6 +459,47 @@
 
                     <div class="sample bg-clip-content"></div>
                     <div class="label">background-clip: content-box</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Padding Calculation Tests (Bug Fix Verification)</h3>
+                    <p style="font-size: 12px; color: #666; margin: 10px 0;">Testing that vertical padding (top/bottom) uses height, not width. Background should not bleed through borders.</p>
+
+                    <div class="sample padding-test-base padding-sym-10"></div>
+                    <div class="label">padding: 10px (symmetric)</div>
+
+                    <div class="sample padding-test-base padding-sym-20"></div>
+                    <div class="label">padding: 20px (symmetric)</div>
+
+                    <div class="sample padding-test-base padding-asym-v"></div>
+                    <div class="label">padding: 25px 10px 15px 10px<br>(vertical asymmetric)</div>
+
+                    <div class="sample padding-test-base padding-asym-h"></div>
+                    <div class="label">padding: 10px 15px 10px 25px<br>(horizontal asymmetric)</div>
+
+                    <div class="sample padding-test-base padding-all-diff"></div>
+                    <div class="label">padding: 20px 15px 10px 5px<br>(all different)</div>
+
+                    <div class="sample padding-test-base padding-pct-5"></div>
+                    <div class="label">padding: 5% (percentage)</div>
+
+                    <div class="sample padding-test-base padding-pct-10"></div>
+                    <div class="label">padding: 10% (percentage)</div>
+
+                    <div class="sample padding-test-base padding-pct-mixed"></div>
+                    <div class="label">padding: 15% 5% 10% 5%<br>(mixed percentage)</div>
+
+                    <div class="sample padding-test-base padding-tall"></div>
+                    <div class="label">80×140px + padding: 20px<br>(tall box)</div>
+
+                    <div class="sample padding-test-base padding-wide"></div>
+                    <div class="label">180×60px + padding: 15px<br>(wide box)</div>
+
+                    <div class="sample padding-test-base padding-box-test"></div>
+                    <div class="label">background-clip: padding-box<br>padding: 20px</div>
+
+                    <div class="sample padding-test-base border-box-test"></div>
+                    <div class="label">background-clip: border-box<br>padding: 20px</div>
                 </div>
 
                 <div class="test-section">
