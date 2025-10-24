@@ -36,6 +36,7 @@ import {FontMetrics} from '../font-metrics';
 import {DISPLAY} from '../../css/property-descriptors/display';
 import {Bounds} from '../../css/layout/bounds';
 import {LIST_STYLE_TYPE} from '../../css/property-descriptors/list-style-type';
+import {LIST_STYLE_POSITION} from '../../css/property-descriptors/list-style-position';
 import {computeLineHeight} from '../../css/property-descriptors/line-height';
 import {CHECKBOX, InputElementContainer, RADIO} from '../../dom/replaced-elements/input-element-container';
 import {TEXT_ALIGN} from '../../css/property-descriptors/text-align';
@@ -767,6 +768,8 @@ export class CanvasRenderer extends Renderer {
         }
 
         if (contains(container.styles.display, DISPLAY.LIST_ITEM)) {
+            const isInsidePosition = container.styles.listStylePosition === LIST_STYLE_POSITION.INSIDE;
+
             if (container.styles.listStyleImage !== null) {
                 const img = container.styles.listStyleImage;
                 if (img.type === CSSImageType.URL) {
@@ -780,9 +783,10 @@ export class CanvasRenderer extends Renderer {
                         const lineHeight = computeLineHeight(styles.lineHeight, (styles.fontSize as {number: number}).number);
                         const verticalCenter = container.bounds.top + paddingTop + lineHeight / 2;
 
-                        // Horizontal position: position marker to the left of the container
-                        // Use a small offset (4px) between marker and content
-                        const x = container.bounds.left - image.width - 4;
+                        // Horizontal position depends on list-style-position
+                        const x = isInsidePosition
+                            ? container.bounds.left + getAbsoluteValue(container.styles.paddingLeft, container.bounds.width)
+                            : container.bounds.left - image.width - 4;
                         const y = verticalCenter - image.height / 2; // Center vertically with first line
 
                         this.ctx.drawImage(image, x, y);
@@ -798,12 +802,13 @@ export class CanvasRenderer extends Renderer {
                 this.ctx.font = font;
                 this.ctx.fillStyle = asString(styles.color);
 
-                // Position marker to the left of the container, similar to image markers
-                // Use right alignment so the marker text ends 4px before the container edge
-                const markerX = container.bounds.left - 4;
+                // Position marker based on list-style-position
+                const markerX = isInsidePosition
+                    ? container.bounds.left + getAbsoluteValue(container.styles.paddingLeft, container.bounds.width)
+                    : container.bounds.left - 4;
 
                 this.ctx.textBaseline = 'middle';
-                this.ctx.textAlign = 'right';
+                this.ctx.textAlign = isInsidePosition ? 'left' : 'right';
                 const bounds = new Bounds(
                     markerX,
                     container.bounds.top + getAbsoluteValue(container.styles.paddingTop, container.bounds.width),
