@@ -49,12 +49,23 @@
         .test-7 { display: flex; gap: 0px; background: #ecf0f1; padding: 10px; }
         .test-8 { display: flex; gap: 30px; background: #ecf0f1; padding: 10px; }
 
+        .box {
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            border-radius: 4px;
+        }
+
     </style>
 </head>
 <body>
     <header>
         <h1>Gap - Comprehensive Test</h1>
-        <p>Testing all gap values and edge cases</p>
+        <p>Testing gap, row-gap, and column-gap properties for flexbox and grid layouts</p>
+        <div style="background: #fff3cd; padding: 10px; margin: 10px 0; border: 1px solid #856404; border-radius: 4px;">
+            <strong>What this tests:</strong> The CSS gap properties control spacing between flex/grid items.
+            You should see blue boxes with varying amounts of space between them.
+        </div>
     </header>
 
     <div class="controls">
@@ -72,32 +83,72 @@
 
                 <div class="test-section">
                     <h3>Flex Gap</h3>
-                    <div class="sample test-0"></div>
+                    <div class="sample test-0">
+                        <div class="box"></div>
+                        <div class="box"></div>
+                        <div class="box"></div>
+                    </div>
                     <div class="label">gap: 10px</div>
-                    <div class="sample test-1"></div>
+                    <div class="sample test-1">
+                        <div class="box"></div>
+                        <div class="box"></div>
+                        <div class="box"></div>
+                    </div>
                     <div class="label">gap: 20px</div>
-                    <div class="sample test-2"></div>
+                    <div class="sample test-2">
+                        <div class="box"></div>
+                        <div class="box"></div>
+                        <div class="box"></div>
+                        <div class="box"></div>
+                    </div>
                     <div class="label">row-gap: 5px</div>
-                    <div class="sample test-3"></div>
+                    <div class="sample test-3">
+                        <div class="box"></div>
+                        <div class="box"></div>
+                        <div class="box"></div>
+                    </div>
                     <div class="label">column-gap: 15px</div>
                 </div>
 
                 <div class="test-section">
                     <h3>Grid Gap</h3>
-                    <div class="sample test-4"></div>
+                    <div class="sample test-4">
+                        <div class="box"></div>
+                        <div class="box"></div>
+                        <div class="box"></div>
+                        <div class="box"></div>
+                    </div>
                     <div class="label">gap: 10px</div>
-                    <div class="sample test-5"></div>
+                    <div class="sample test-5">
+                        <div class="box"></div>
+                        <div class="box"></div>
+                        <div class="box"></div>
+                        <div class="box"></div>
+                    </div>
                     <div class="label">gap: 20px</div>
-                    <div class="sample test-6"></div>
+                    <div class="sample test-6">
+                        <div class="box"></div>
+                        <div class="box"></div>
+                        <div class="box"></div>
+                        <div class="box"></div>
+                    </div>
                     <div class="label">gap: 5px 15px</div>
                 </div>
 
                 <div class="test-section">
                     <h3>Different Values</h3>
-                    <div class="sample test-7"></div>
-                    <div class="label">0px</div>
-                    <div class="sample test-8"></div>
-                    <div class="label">30px</div>
+                    <div class="sample test-7">
+                        <div class="box"></div>
+                        <div class="box"></div>
+                        <div class="box"></div>
+                    </div>
+                    <div class="label">0px (no gap)</div>
+                    <div class="sample test-8">
+                        <div class="box"></div>
+                        <div class="box"></div>
+                        <div class="box"></div>
+                    </div>
+                    <div class="label">30px (large gap)</div>
                 </div>
 
             </div>
