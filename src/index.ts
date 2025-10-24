@@ -136,6 +136,12 @@ const renderElement = async (element: HTMLElement, opts: Partial<Options>): Prom
 
         const renderer = new CanvasRenderer(context, renderOptions);
         canvas = await renderer.render(root);
+
+        // Expose debug snapshots to window for debugging
+        if (typeof window !== 'undefined' && renderer.debugSnapshots.length > 0) {
+            (window as any).debugSnapshots = renderer.debugSnapshots;
+            context.logger.debug(`Exposed ${renderer.debugSnapshots.length} debug snapshots to window.debugSnapshots`);
+        }
     }
 
     if (opts.removeContainer ?? true) {

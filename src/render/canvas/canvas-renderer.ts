@@ -78,6 +78,7 @@ export class CanvasRenderer extends Renderer {
     ctx: CanvasRenderingContext2D;
     private readonly _activeEffects: IElementEffect[] = [];
     private readonly fontMetrics: FontMetrics;
+    debugSnapshots: Array<{label: string; imageData: ImageData}> = [];
 
     constructor(context: Context, options: RenderConfigurations) {
         super(context, options);
@@ -222,7 +223,10 @@ export class CanvasRenderer extends Renderer {
                 }
 
                 await this.renderNodeBackgroundAndBorders(paint);
+                this.captureDebugSnapshot(`After individual element background/borders`);
+
                 await this.renderNodeContent(paint);
+                this.captureDebugSnapshot(`After individual element content`);
 
                 if (hasTransform && rotateValue !== null) {
                     this.ctx.restore();
@@ -612,7 +616,9 @@ export class CanvasRenderer extends Renderer {
     }
 
     async renderNodeContent(paint: ElementPaint): Promise<void> {
-        this.applyEffects(paint.getEffects(EffectTarget.CONTENT));
+        const contentEffects = paint.getEffects(EffectTarget.CONTENT);
+        this.context.logger.debug(`Applying ${contentEffects.length} effects for CONTENT`);
+        this.applyEffects(contentEffects);
         const container = paint.container;
         const curves = paint.curves;
         const styles = container.styles;
@@ -806,16 +812,24 @@ export class CanvasRenderer extends Renderer {
         // https://www.w3.org/TR/css-position-3/#painting-order
         // 1. the background and borders of the element forming the stacking context.
         await this.renderNodeBackgroundAndBorders(stack.element);
+        this.context.logger.debug('Stage 1: Background and borders painted');
+        this.captureDebugSnapshot('After parent background/borders');
+
         // 2. the child stacking contexts with negative stack levels (most negative first).
         for (const child of stack.negativeZIndex) {
             await this.renderStack(child);
         }
         // 3. For all its in-flow, non-positioned, block-level descendants in tree order:
         await this.renderNodeContent(stack.element);
+        this.context.logger.debug('Stage 2: Node content (text/replaced elements) painted');
+        this.captureDebugSnapshot('After parent content');
 
+        this.context.logger.debug(`Stage 3: Rendering ${stack.nonInlineLevel.length} child elements`);
         for (const child of stack.nonInlineLevel) {
             await this.renderNode(child);
         }
+        this.context.logger.debug('Stage 3: All child elements painted');
+        this.captureDebugSnapshot('After child elements');
         // 4. All non-positioned floating descendants, in tree order. For each one of these,
         // treat the element as if it created a new stacking context, but any positioned descendants and descendants
         // which actually create a new stacking context should be considered part of the parent stacking context,
@@ -1136,7 +1150,9 @@ export class CanvasRenderer extends Renderer {
     }
 
     async renderNodeBackgroundAndBorders(paint: ElementPaint): Promise<void> {
-        this.applyEffects(paint.getEffects(EffectTarget.BACKGROUND_BORDERS));
+        const bgEffects = paint.getEffects(EffectTarget.BACKGROUND_BORDERS);
+        this.context.logger.debug(`Applying ${bgEffects.length} effects for BACKGROUND_BORDERS`);
+        this.applyEffects(bgEffects);
         const styles = paint.container.styles;
         const hasBackground = !isTransparent(styles.backgroundColor) || styles.backgroundImage.length;
 
@@ -1158,8 +1174,11 @@ export class CanvasRenderer extends Renderer {
             this.ctx.clip();
 
             if (!isTransparent(styles.backgroundColor)) {
+                this.context.logger.debug(`Filling background with color ${asString(styles.backgroundColor)}`);
+                this.path(backgroundPaintingArea);
                 this.ctx.fillStyle = asString(styles.backgroundColor);
                 this.ctx.fill();
+                this.context.logger.debug('Background filled');
             }
 
             await this.renderBackgroundImage(paint.container);
@@ -1359,6 +1378,13 @@ export class CanvasRenderer extends Renderer {
         await this.renderStack(stack);
         this.applyEffects([]);
         return this.canvas;
+    }
+
+    captureDebugSnapshot(label: string): void {
+        // Capture the current state of the canvas
+        const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+        this.debugSnapshots.push({label, imageData});
+        this.context.logger.debug(`Captured debug snapshot: ${label}`);
     }
 }
 

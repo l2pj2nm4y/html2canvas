@@ -119,10 +119,13 @@ export class ElementPaint {
             const borderBox = calculateBorderBoxPath(this.curves);
             const paddingBox = calculatePaddingBoxPath(this.curves);
 
+            // Overflow only clips child content, never the element's own background
+            // So we only create ClipEffect with CONTENT target
             if (equalPath(borderBox, paddingBox)) {
-                this.effects.push(new ClipEffect(borderBox, EffectTarget.BACKGROUND_BORDERS | EffectTarget.CONTENT));
+                this.effects.push(new ClipEffect(borderBox, EffectTarget.CONTENT));
             } else {
-                this.effects.push(new ClipEffect(borderBox, EffectTarget.BACKGROUND_BORDERS));
+                // Border box and padding box differ (element has padding)
+                // Clip content to padding box
                 this.effects.push(new ClipEffect(paddingBox, EffectTarget.CONTENT));
             }
         }
@@ -226,7 +229,10 @@ const parseStackTree = (
                 listOwnerItems
             );
         } else {
-            if (child.styles.isInlineLevel()) {
+            // inline-block, inline-flex, inline-grid create block formatting contexts
+            // and must paint in block phase (parent before children) not inline phase
+            // Only pure inline elements (like <span>) paint in inline phase
+            if (child.styles.isPaintedAsInline()) {
                 stackingContext.inlineLevel.push(paintContainer);
             } else {
                 stackingContext.nonInlineLevel.push(paintContainer);

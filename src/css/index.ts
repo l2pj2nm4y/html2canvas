@@ -334,6 +334,13 @@ export class CSSParsedDeclaration {
             contains(this.display, DISPLAY.INLINE_TABLE)
         );
     }
+
+    // Check if element should be painted in inline rendering phase
+    // inline-block/inline-flex/inline-grid create block formatting contexts
+    // and should paint in block phase (parents before children)
+    isPaintedAsInline(): boolean {
+        return contains(this.display, DISPLAY.INLINE);
+    }
 }
 
 export class CSSParsedPseudoDeclaration {

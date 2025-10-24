@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overflow - Comprehensive Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js"></script>
+    <style>
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .test-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        /* Different display types with overflow */
+        .block-container {
+            display: block;
+            width: 200px;
+            height: 100px;
+            margin: 10px;
+            overflow: hidden;
+            border: 2px solid #e74c3c;
+            background: #fee;
+        }
+
+        .flex-container {
+            display: flex;
+            width: 200px;
+            height: 100px;
+            margin: 10px;
+            overflow: hidden;
+            border: 2px solid #3498db;
+            background: #e3f2fd;
+        }
+
+        .grid-container {
+            display: grid;
+            width: 200px;
+            height: 100px;
+            margin: 10px;
+            overflow: hidden;
+            border: 2px solid #9b59b6;
+            background: #f3e5f5;
+        }
+
+        .inline-block-container {
+            display: inline-block;
+            width: 200px;
+            height: 100px;
+            margin: 10px;
+            overflow: hidden;
+            border: 2px solid #27ae60;
+            background: #e8f5e9;
+            vertical-align: top;
+        }
+
+        .overflow-content {
+            width: 300px;
+            height: 150px;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        /* Nested overflow scenarios */
+        .outer-overflow {
+            width: 250px;
+            height: 120px;
+            overflow: hidden;
+            border: 3px solid #e67e22;
+            background: #fef5e7;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        .inner-overflow {
+            width: 200px;
+            height: 100px;
+            overflow: hidden;
+            border: 2px solid #d35400;
+            background: #fdebd0;
+            padding: 5px;
+        }
+
+        .nested-content {
+            width: 300px;
+            height: 150px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px;
+            font-size: 12px;
+        }
+
+        /* Positioned elements with overflow */
+        .relative-container {
+            position: relative;
+            width: 200px;
+            height: 100px;
+            overflow: hidden;
+            border: 2px solid #16a085;
+            background: #e8f8f5;
+            margin: 10px;
+        }
+
+        .absolute-child {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            width: 200px;
+            height: 100px;
+            background: #1abc9c;
+            color: white;
+            padding: 10px;
+        }
+
+        /* Overflow with transforms */
+        .transform-container {
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            border: 2px solid #34495e;
+            background: #ecf0f1;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .rotated-content {
+            width: 200px;
+            height: 200px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            transform: rotate(45deg);
+            transform-origin: center;
+        }
+
+        .scaled-content {
+            width: 100px;
+            height: 100px;
+            background: #2980b9;
+            color: white;
+            padding: 10px;
+            transform: scale(2);
+            transform-origin: top left;
+        }
+
+        /* Overflow with borders and padding */
+        .border-padding-box {
+            width: 180px;
+            height: 80px;
+            overflow: hidden;
+            border: 10px solid #c0392b;
+            padding: 15px;
+            background: #fadbd8;
+            margin: 10px;
+        }
+
+        .border-content {
+            width: 250px;
+            height: 120px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px;
+        }
+
+        /* Overflow with border-radius */
+        .rounded-container {
+            width: 200px;
+            height: 100px;
+            overflow: hidden;
+            border: 2px solid #f39c12;
+            border-radius: 20px;
+            background: #fef5e7;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .rounded-content {
+            width: 300px;
+            height: 150px;
+            background: #f9e79f;
+            padding: 10px;
+        }
+
+        /* Overflow with gradients and images */
+        .gradient-container {
+            width: 200px;
+            height: 100px;
+            overflow: hidden;
+            border: 2px solid #8e44ad;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .gradient-content {
+            width: 300px;
+            height: 150px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 10px;
+            color: white;
+        }
+
+        /* Multiple children with overflow */
+        .multi-child-container {
+            width: 220px;
+            height: 120px;
+            overflow: hidden;
+            border: 2px solid #2ecc71;
+            background: white;
+            margin: 10px;
+            padding: 10px;
+        }
+
+        .child-item {
+            width: 180px;
+            height: 40px;
+            margin: 5px 0;
+            padding: 8px;
+            font-size: 12px;
+        }
+
+        .child-1 { background: #3498db; color: white; }
+        .child-2 { background: #e74c3c; color: white; }
+        .child-3 { background: #f39c12; color: white; }
+        .child-4 { background: #9b59b6; color: white; }
+
+        /* Text overflow scenarios */
+        .text-clip {
+            width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: clip;
+            border: 2px solid #95a5a6;
+            padding: 10px;
+            margin: 10px;
+            background: white;
+        }
+
+        .text-ellipsis {
+            width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            border: 2px solid #7f8c8d;
+            padding: 10px;
+            margin: 10px;
+            background: white;
+        }
+
+        /* Overflow-x and overflow-y combinations */
+        .overflow-combo {
+            width: 180px;
+            height: 100px;
+            margin: 10px;
+            border: 2px solid #1abc9c;
+            background: #e8f8f5;
+            padding: 10px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .wide-tall-content {
+            width: 280px;
+            height: 180px;
+            background: linear-gradient(to right, #11998e, #38ef7d);
+            padding: 10px;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Transparent backgrounds */
+        .transparent-container {
+            width: 200px;
+            height: 100px;
+            overflow: hidden;
+            border: 3px dashed #e67e22;
+            background: transparent;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .transparent-content {
+            width: 300px;
+            height: 150px;
+            background: rgba(52, 152, 219, 0.8);
+            color: white;
+            padding: 10px;
+        }
+
+        /* Z-index with overflow */
+        .z-index-container {
+            position: relative;
+            width: 200px;
+            height: 100px;
+            overflow: hidden;
+            border: 2px solid #c0392b;
+            background: #fadbd8;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .z-back {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 150px;
+            height: 80px;
+            background: #3498db;
+            color: white;
+            padding: 10px;
+            z-index: 1;
+        }
+
+        .z-front {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            width: 180px;
+            height: 100px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px;
+            z-index: 2;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Overflow - Comprehensive Test</h1>
+        <p>Testing overflow with various display types, positioning, transforms, nesting, and edge cases</p>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="test-section">
+                    <h3>Different Display Types</h3>
+
+                    <div class="block-container">
+                        <div class="overflow-content" style="background: #c0392b; color: white;">
+                            Block display with overflow hidden - content should be clipped
+                        </div>
+                    </div>
+                    <div class="label">display: block + overflow: hidden</div>
+
+                    <div class="flex-container">
+                        <div class="overflow-content" style="background: #2980b9; color: white;">
+                            Flex display with overflow hidden - content should be clipped
+                        </div>
+                    </div>
+                    <div class="label">display: flex + overflow: hidden</div>
+
+                    <div class="grid-container">
+                        <div class="overflow-content" style="background: #8e44ad; color: white;">
+                            Grid display with overflow hidden - content should be clipped
+                        </div>
+                    </div>
+                    <div class="label">display: grid + overflow: hidden</div>
+
+                    <div class="inline-block-container">
+                        <div class="overflow-content" style="background: #27ae60; color: white;">
+                            Inline-block with overflow hidden - content should be clipped
+                        </div>
+                    </div>
+                    <div class="label">display: inline-block + overflow: hidden</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Nested Overflow</h3>
+
+                    <div class="outer-overflow">
+                        <div class="inner-overflow">
+                            <div class="nested-content">
+                                Nested overflow containers - both should clip independently
+                            </div>
+                        </div>
+                    </div>
+                    <div class="label">Nested overflow: hidden containers</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Positioned Elements</h3>
+
+                    <div class="relative-container">
+                        <div class="absolute-child">
+                            Absolute positioned child extending beyond overflow hidden parent
+                        </div>
+                    </div>
+                    <div class="label">position: relative + absolute child + overflow: hidden</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Transforms with Overflow</h3>
+
+                    <div class="transform-container">
+                        <div class="rotated-content">
+                            Rotated 45° - overflow should clip rotated element
+                        </div>
+                    </div>
+                    <div class="label">transform: rotate(45deg) + overflow: hidden</div>
+
+                    <div class="transform-container">
+                        <div class="scaled-content">
+                            Scaled 2x from top-left - overflow should clip
+                        </div>
+                    </div>
+                    <div class="label">transform: scale(2) + overflow: hidden</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Borders and Padding</h3>
+
+                    <div class="border-padding-box">
+                        <div class="border-content">
+                            Thick border + padding - content clips to padding box
+                        </div>
+                    </div>
+                    <div class="label">10px border + 15px padding + overflow: hidden</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Border Radius Clipping</h3>
+
+                    <div class="rounded-container">
+                        <div class="rounded-content">
+                            Rounded corners - overflow should clip to border-radius curve
+                        </div>
+                    </div>
+                    <div class="label">border-radius: 20px + overflow: hidden</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Gradients</h3>
+
+                    <div class="gradient-container">
+                        <div class="gradient-content">
+                            Container with gradient background, content also has gradient
+                        </div>
+                    </div>
+                    <div class="label">Gradient background + overflow: hidden</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Multiple Children</h3>
+
+                    <div class="multi-child-container">
+                        <div class="child-item child-1">Child 1 - visible</div>
+                        <div class="child-item child-2">Child 2 - visible</div>
+                        <div class="child-item child-3">Child 3 - clipped</div>
+                        <div class="child-item child-4">Child 4 - clipped</div>
+                    </div>
+                    <div class="label">Multiple children - some visible, some clipped</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Text Overflow</h3>
+
+                    <div class="text-clip">
+                        This is a very long text that will be clipped without ellipsis at the end
+                    </div>
+                    <div class="label">text-overflow: clip</div>
+
+                    <div class="text-ellipsis">
+                        This is a very long text that will show ellipsis at the end when truncated
+                    </div>
+                    <div class="label">text-overflow: ellipsis</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Directional Overflow</h3>
+
+                    <div class="overflow-combo" style="overflow-x: hidden; overflow-y: visible;">
+                        <div class="wide-tall-content">
+                            overflow-x: hidden, overflow-y: visible - clips horizontally only
+                        </div>
+                    </div>
+                    <div class="label">overflow-x: hidden, overflow-y: visible</div>
+
+                    <div class="overflow-combo" style="overflow-x: visible; overflow-y: hidden;">
+                        <div class="wide-tall-content">
+                            overflow-x: visible, overflow-y: hidden - clips vertically only
+                        </div>
+                    </div>
+                    <div class="label">overflow-x: visible, overflow-y: hidden</div>
+
+                    <div class="overflow-combo" style="overflow-x: hidden; overflow-y: hidden;">
+                        <div class="wide-tall-content">
+                            overflow: hidden (both) - clips in both directions
+                        </div>
+                    </div>
+                    <div class="label">overflow-x: hidden, overflow-y: hidden</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Transparent Backgrounds</h3>
+
+                    <div class="transparent-container">
+                        <div class="transparent-content">
+                            Transparent container with dashed border - content still clips
+                        </div>
+                    </div>
+                    <div class="label">background: transparent + overflow: hidden</div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Z-Index Layering</h3>
+
+                    <div class="z-index-container">
+                        <div class="z-back">
+                            Behind (z-index: 1)
+                        </div>
+                        <div class="z-front">
+                            Front (z-index: 2) - extends beyond container but should be clipped
+                        </div>
+                    </div>
+                    <div class="label">Overlapping z-index elements + overflow: hidden</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Comprehensive Overflow Tests</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

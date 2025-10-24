@@ -5,6 +5,7 @@
 image.jpg
 /.project
 /.settings/
+/.playwright-mcp/
 node_modules/
 .envrc
 *.sublime-workspace
