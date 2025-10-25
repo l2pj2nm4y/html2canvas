@@ -7,7 +7,10 @@ import {equalPath} from './path';
 import {DISPLAY} from '../css/property-descriptors/display';
 import {OLElementContainer} from '../dom/elements/ol-element-container';
 import {LIElementContainer} from '../dom/elements/li-element-container';
+import {DetailsElementContainer} from '../dom/elements/details-element-container';
+import {SummaryElementContainer} from '../dom/elements/summary-element-container';
 import {createCounterText} from '../css/types/functions/counter';
+import {LIST_STYLE_TYPE} from '../css/property-descriptors/list-style-type';
 import {POSITION} from '../css/property-descriptors/position';
 import {Matrix} from '../css/property-descriptors/transform';
 import {getAbsoluteValue} from '../css/types/length-percentage';
@@ -248,6 +251,25 @@ const parseStackTree = (
 };
 
 const processListItems = (owner: ElementContainer, elements: ElementPaint[]) => {
+    // For details elements, summary children just need their disclosure marker, not a number
+    if (owner instanceof DetailsElementContainer) {
+        for (let i = 0; i < elements.length; i++) {
+            const item = elements[i];
+            if (item.container instanceof SummaryElementContainer) {
+                // Use the parent details element's open state to determine the marker
+                // Override the listStyleType based on the details open state
+                const listStyleType = owner.open ? LIST_STYLE_TYPE.DISCLOSURE_OPEN : LIST_STYLE_TYPE.DISCLOSURE_CLOSED;
+                item.container.styles.listStyleType = listStyleType;
+
+                // Pass 0 for numbering since summary elements don't use numbers
+                // The createCounterText function will just return the marker character
+                item.listValue = createCounterText(0, listStyleType, true);
+            }
+        }
+        return;
+    }
+
+    // Standard list processing for OL, UL, MENU
     let numbering = owner instanceof OLElementContainer ? owner.start : 1;
     const reversed = owner instanceof OLElementContainer ? owner.reversed : false;
     for (let i = 0; i < elements.length; i++) {

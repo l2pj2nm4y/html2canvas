@@ -10,9 +10,11 @@ import {InputElementContainer} from './replaced-elements/input-element-container
 import {SelectElementContainer} from './elements/select-element-container';
 import {TextareaElementContainer} from './elements/textarea-element-container';
 import {IFrameElementContainer} from './replaced-elements/iframe-element-container';
+import {DetailsElementContainer} from './elements/details-element-container';
+import {SummaryElementContainer} from './elements/summary-element-container';
 import {Context} from '../core/context';
 
-const LIST_OWNERS = ['OL', 'UL', 'MENU'];
+const LIST_OWNERS = ['OL', 'UL', 'MENU', 'DETAILS'];
 
 const parseNodeTree = (context: Context, node: Node, parent: ElementContainer, root: ElementContainer) => {
     for (let childNode = node.firstChild, nextNode; childNode; childNode = nextNode) {
@@ -45,7 +47,24 @@ const parseNodeTree = (context: Context, node: Node, parent: ElementContainer, r
                         !isSVGElement(childNode) &&
                         !isSelectElement(childNode)
                     ) {
-                        parseNodeTree(context, childNode, container, root);
+                        // Special handling for details element: when closed, only render summary
+                        if (isDetailsElement(childNode) && container instanceof DetailsElementContainer && !container.open) {
+                            // Only parse the summary element when details is closed
+                            // We manually create and add the summary container instead of using parseNodeTree
+                            // because parseNodeTree would try to add it to the wrong parent
+                            for (let detailChild = childNode.firstChild; detailChild; detailChild = detailChild.nextSibling) {
+                                if (isElementNode(detailChild) && isSummaryElement(detailChild)) {
+                                    const summaryContainer = createContainer(context, detailChild);
+                                    if (summaryContainer.styles.isVisible()) {
+                                        container.elements.push(summaryContainer);
+                                        parseNodeTree(context, detailChild, summaryContainer, root);
+                                    }
+                                    break; // Only render the first summary element
+                                }
+                            }
+                        } else {
+                            parseNodeTree(context, childNode, container, root);
+                        }
                     }
                 }
             }
@@ -90,6 +109,14 @@ const createContainer = (context: Context, element: Element): ElementContainer =
         return new IFrameElementContainer(context, element);
     }
 
+    if (isDetailsElement(element)) {
+        return new DetailsElementContainer(context, element);
+    }
+
+    if (isSummaryElement(element)) {
+        return new SummaryElementContainer(context, element);
+    }
+
     return new ElementContainer(context, element);
 };
 
@@ -132,5 +159,7 @@ export const isScriptElement = (node: Element): node is HTMLScriptElement => nod
 export const isTextareaElement = (node: Element): node is HTMLTextAreaElement => node.tagName === 'TEXTAREA';
 export const isSelectElement = (node: Element): node is HTMLSelectElement => node.tagName === 'SELECT';
 export const isSlotElement = (node: Element): node is HTMLSlotElement => node.tagName === 'SLOT';
+export const isDetailsElement = (node: Element): node is HTMLDetailsElement => node.tagName === 'DETAILS';
+export const isSummaryElement = (node: Element): node is HTMLElement => node.tagName === 'SUMMARY';
 // https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name
 export const isCustomElement = (node: Element): node is HTMLElement => node.tagName.indexOf('-') > 0;

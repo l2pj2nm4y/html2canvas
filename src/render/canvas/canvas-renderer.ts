@@ -877,7 +877,7 @@ export class CanvasRenderer extends Renderer {
 
         if (isTextInputElement(container) && container.value.length) {
             const [fontFamily, fontSize] = this.createFontStyle(styles);
-            const {baseline} = this.fontMetrics.getMetrics(fontFamily, fontSize);
+            const {baseline, middle} = this.fontMetrics.getMetrics(fontFamily, fontSize);
 
             this.ctx.font = fontFamily;
             this.ctx.fillStyle = asString(styles.color);
@@ -898,7 +898,11 @@ export class CanvasRenderer extends Renderer {
                     break;
             }
 
-            const textBounds = bounds.add(x, 0, 0, -bounds.height / 2 + 1);
+            // Use middle metric for proper vertical centering to match browser behavior
+            // The middle metric represents the vertical center of the font, which browsers use
+            // for centering text in form controls like input[type=button/submit/reset]
+            const verticalCenter = bounds.height / 2;
+            const textBounds = bounds.add(x, 0, 0, verticalCenter - middle);
 
             this.ctx.save();
             this.path([
@@ -950,7 +954,8 @@ export class CanvasRenderer extends Renderer {
                 // Get the font style for list markers
                 const baseFontSize = (styles.fontSize as {number: number}).number;
 
-                // Disc, circle, and square markers are rendered larger by browsers
+                // Disc, circle, square markers are rendered larger by browsers
+                // Disclosure markers use normal font size
                 const isSymbolMarker = container.styles.listStyleType === LIST_STYLE_TYPE.DISC ||
                                       container.styles.listStyleType === LIST_STYLE_TYPE.CIRCLE ||
                                       container.styles.listStyleType === LIST_STYLE_TYPE.SQUARE;

@@ -339,6 +339,10 @@ export const createCounterText = (value: number, type: LIST_STYLE_TYPE, appendSu
             return '◦' + spaceSuffix;
         case LIST_STYLE_TYPE.SQUARE:
             return '▪' + spaceSuffix;
+        case LIST_STYLE_TYPE.DISCLOSURE_OPEN:
+            return '▼' + spaceSuffix; // Downward triangle for open details
+        case LIST_STYLE_TYPE.DISCLOSURE_CLOSED:
+            return '▶' + spaceSuffix; // Rightward triangle for closed details
         case LIST_STYLE_TYPE.DECIMAL_LEADING_ZERO:
             const string = createCounterStyleFromRange(value, 48, 57, true, defaultSuffix);
             return string.length < 4 ? `0${string}` : string;

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js?v=20251024-1740"></script>
+    <style>
+        .sample {
+            width: 300px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+            border: 2px solid #ddd;
+            padding: 20px;
+            background: white;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+            display: inline-block;
+            width: 300px;
+            text-align: center;
+        }
+
+        .button-group {
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button, input[type="button"], input[type="submit"], input[type="reset"] {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Default browser styles */
+        .default-buttons button {
+            /* No custom styles */
+        }
+
+        /* Styled buttons */
+        .styled-buttons button:nth-child(1) {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .styled-buttons button:nth-child(2) {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .styled-buttons button:nth-child(3) {
+            background: transparent;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+            border-radius: 4px;
+        }
+
+        .styled-buttons button:nth-child(4) {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+
+        /* Disabled buttons */
+        .disabled-buttons button:nth-child(1) {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .disabled-buttons button:nth-child(2) {
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        /* Button states */
+        .state-buttons button:nth-child(1):hover {
+            background: #2980b9;
+        }
+
+        .state-buttons button:nth-child(1):active {
+            background: #21618c;
+        }
+
+        .state-buttons button:nth-child(1) {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        /* Input buttons */
+        .input-buttons input {
+            background: #f39c12;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        /* Accent color buttons */
+        .accent-buttons button {
+            accent-color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Button Test</h1>
+        <p>Testing various button styles and states</p>
+        <div style="background: #fff3cd; padding: 10px; margin: 10px 0; border: 1px solid #856404; border-radius: 4px;">
+            <strong>What this tests:</strong> Button rendering including default styles, custom styles, disabled states, and input[type=button/submit/reset].
+            <br><strong>Variations tested:</strong> Default, styled, disabled, input elements, gradients, borders
+        </div>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="sample">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">Default Buttons</h3>
+                    <div class="button-group default-buttons">
+                        <button>Default Button</button>
+                        <button disabled>Disabled Button</button>
+                        <input type="button" value="Input Button">
+                        <input type="submit" value="Submit Button">
+                        <input type="reset" value="Reset Button">
+                    </div>
+                </div>
+                <div class="label">Default browser styles</div>
+
+                <div class="sample">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">Styled Buttons</h3>
+                    <div class="button-group styled-buttons">
+                        <button>Primary Button</button>
+                        <button>Rounded Button</button>
+                        <button>Outline Button</button>
+                        <button>Gradient Button</button>
+                    </div>
+                </div>
+                <div class="label">Custom styled buttons</div>
+
+                <div class="sample">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">Disabled States</h3>
+                    <div class="button-group disabled-buttons">
+                        <button disabled>Disabled Primary</button>
+                        <button disabled>Disabled Gray</button>
+                    </div>
+                </div>
+                <div class="label">Disabled button states</div>
+
+                <div class="sample">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">Input Buttons</h3>
+                    <div class="button-group input-buttons">
+                        <input type="button" value="Input Type Button">
+                        <input type="submit" value="Input Type Submit">
+                        <input type="reset" value="Input Type Reset">
+                    </div>
+                </div>
+                <div class="label">Input element buttons</div>
+
+                <div class="sample">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">With Accent Color</h3>
+                    <div class="button-group accent-buttons">
+                        <button>Button with accent-color</button>
+                        <button disabled>Disabled with accent-color</button>
+                    </div>
+                </div>
+                <div class="label">accent-color property</div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Buttons</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

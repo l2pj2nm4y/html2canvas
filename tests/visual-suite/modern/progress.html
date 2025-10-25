@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Bar Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js?v=20251024-1735"></script>
+    <style>
+        .sample {
+            width: 350px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+            border: 2px solid #ddd;
+            padding: 20px;
+            background: white;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+            display: inline-block;
+            width: 350px;
+            text-align: center;
+        }
+
+        .progress-group {
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .progress-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .progress-label {
+            font-size: 12px;
+            color: #555;
+        }
+
+        progress {
+            width: 100%;
+            height: 20px;
+        }
+
+        /* Default browser styles */
+        .default-progress progress {
+            /* No custom styles */
+        }
+
+        /* Styled progress bars */
+        .styled-progress progress:nth-of-type(1) {
+            accent-color: #3498db;
+        }
+
+        .styled-progress progress:nth-of-type(2) {
+            accent-color: #2ecc71;
+        }
+
+        .styled-progress progress:nth-of-type(3) {
+            accent-color: #e74c3c;
+        }
+
+        .styled-progress progress:nth-of-type(4) {
+            accent-color: #f39c12;
+        }
+
+        .styled-progress progress:nth-of-type(5) {
+            accent-color: #9b59b6;
+        }
+
+        /* Custom height progress bars */
+        .height-progress progress {
+            accent-color: #3498db;
+        }
+
+        .height-progress progress:nth-of-type(1) {
+            height: 10px;
+        }
+
+        .height-progress progress:nth-of-type(2) {
+            height: 20px;
+        }
+
+        .height-progress progress:nth-of-type(3) {
+            height: 30px;
+        }
+
+        /* Indeterminate progress */
+        .indeterminate-progress progress {
+            accent-color: #3498db;
+        }
+
+        /* Various values */
+        .value-progress progress {
+            accent-color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Progress Bar Test</h1>
+        <p>Testing progress element with various styles and values</p>
+        <div style="background: #fff3cd; padding: 10px; margin: 10px 0; border: 1px solid #856404; border-radius: 4px;">
+            <strong>What this tests:</strong> The HTML5 &lt;progress&gt; element rendering with different values, accent colors, and heights.
+            <br><strong>Variations tested:</strong> Default, accent-color, different heights, various progress values, indeterminate state
+        </div>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="sample">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">Default Progress</h3>
+                    <div class="progress-group default-progress">
+                        <div class="progress-item">
+                            <span class="progress-label">0% Complete</span>
+                            <progress value="0" max="100"></progress>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">25% Complete</span>
+                            <progress value="25" max="100"></progress>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">50% Complete</span>
+                            <progress value="50" max="100"></progress>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">75% Complete</span>
+                            <progress value="75" max="100"></progress>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">100% Complete</span>
+                            <progress value="100" max="100"></progress>
+                        </div>
+                    </div>
+                </div>
+                <div class="label">Default browser styles</div>
+
+                <div class="sample">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">Accent Colors</h3>
+                    <div class="progress-group styled-progress">
+                        <div class="progress-item">
+                            <span class="progress-label">Blue (50%)</span>
+                            <progress value="50" max="100"></progress>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">Green (60%)</span>
+                            <progress value="60" max="100"></progress>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">Red (40%)</span>
+                            <progress value="40" max="100"></progress>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">Orange (70%)</span>
+                            <progress value="70" max="100"></progress>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">Purple (85%)</span>
+                            <progress value="85" max="100"></progress>
+                        </div>
+                    </div>
+                </div>
+                <div class="label">accent-color property</div>
+
+                <div class="sample">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">Different Heights</h3>
+                    <div class="progress-group height-progress">
+                        <div class="progress-item">
+                            <span class="progress-label">10px height</span>
+                            <progress value="50" max="100"></progress>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">20px height</span>
+                            <progress value="50" max="100"></progress>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">30px height</span>
+                            <progress value="50" max="100"></progress>
+                        </div>
+                    </div>
+                </div>
+                <div class="label">Custom height values</div>
+
+                <div class="sample">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">Indeterminate State</h3>
+                    <div class="progress-group indeterminate-progress">
+                        <div class="progress-item">
+                            <span class="progress-label">No value (indeterminate)</span>
+                            <progress></progress>
+                        </div>
+                    </div>
+                </div>
+                <div class="label">Indeterminate progress</div>
+
+                <div class="sample">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">Special Values</h3>
+                    <div class="progress-group value-progress">
+                        <div class="progress-item">
+                            <span class="progress-label">1/20 (5%)</span>
+                            <progress value="1" max="20"></progress>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">10/20 (50%)</span>
+                            <progress value="10" max="20"></progress>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">20/20 (100%)</span>
+                            <progress value="20" max="20"></progress>
+                        </div>
+                    </div>
+                </div>
+                <div class="label">Non-100 max values</div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Progress Bars</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>
