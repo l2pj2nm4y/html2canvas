@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OKLCH/OKLAB Colors Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js?v=20251030-1500"></script>
+    <style>
+        .sample {
+            width: 400px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+            border: 2px solid #ddd;
+            padding: 20px;
+            background: white;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 10px;
+            font-weight: 600;
+            display: inline-block;
+            width: 400px;
+            text-align: center;
+        }
+
+        .color-box {
+            height: 60px;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* OKLCH colors - the one from the government site */
+        .oklch-dark {
+            background-color: oklch(0.21 0.034 264.665);
+        }
+
+        .oklch-blue {
+            background-color: oklch(0.5 0.15 250);
+        }
+
+        .oklch-red {
+            background-color: oklch(0.6 0.2 30);
+        }
+
+        .oklch-green {
+            background-color: oklch(0.65 0.18 145);
+        }
+
+        /* OKLAB colors */
+        .oklab-purple {
+            background-color: oklab(0.5 0.1 -0.1);
+        }
+
+        .oklab-orange {
+            background-color: oklab(0.7 0.08 0.12);
+        }
+
+        .oklab-cyan {
+            background-color: oklab(0.6 -0.1 -0.08);
+        }
+
+        /* Mix with other properties */
+        .oklch-gradient {
+            background: linear-gradient(135deg, oklch(0.5 0.15 250), oklch(0.65 0.18 145));
+        }
+
+        .oklch-border {
+            border: 3px solid oklch(0.6 0.2 30);
+            background-color: oklch(0.95 0.02 30);
+            color: oklch(0.21 0.034 264.665);
+            text-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>OKLCH/OKLAB Colors Test</h1>
+        <p>Testing modern CSS color functions: oklch() and oklab()</p>
+        <div style="background: #fff3cd; padding: 10px; margin: 10px 0; border: 1px solid #856404; border-radius: 4px;">
+            <strong>What this tests:</strong> Support for OKLCH and OKLAB color spaces, which are perceptually uniform color spaces.
+            <br><strong>OKLCH:</strong> Lightness, Chroma, Hue (cylindrical coordinates)
+            <br><strong>OKLAB:</strong> Lightness, a (green-red), b (blue-yellow) (rectangular coordinates)
+        </div>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="sample">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">OKLCH Colors</h3>
+
+                    <div class="color-box oklch-dark">
+                        oklch(0.21 0.034 264.665)
+                        <br><small>Dark blue-gray (from gov site)</small>
+                    </div>
+
+                    <div class="color-box oklch-blue">
+                        oklch(0.5 0.15 250)
+                        <br><small>Medium blue</small>
+                    </div>
+
+                    <div class="color-box oklch-red">
+                        oklch(0.6 0.2 30)
+                        <br><small>Bright red-orange</small>
+                    </div>
+
+                    <div class="color-box oklch-green">
+                        oklch(0.65 0.18 145)
+                        <br><small>Vibrant green</small>
+                    </div>
+                </div>
+                <div class="label">OKLCH color space (Lightness, Chroma, Hue)</div>
+
+                <div class="sample">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">OKLAB Colors</h3>
+
+                    <div class="color-box oklab-purple">
+                        oklab(0.5 0.1 -0.1)
+                        <br><small>Purple</small>
+                    </div>
+
+                    <div class="color-box oklab-orange">
+                        oklab(0.7 0.08 0.12)
+                        <br><small>Orange</small>
+                    </div>
+
+                    <div class="color-box oklab-cyan">
+                        oklab(0.6 -0.1 -0.08)
+                        <br><small>Cyan</small>
+                    </div>
+                </div>
+                <div class="label">OKLAB color space (Lightness, a, b)</div>
+
+                <div class="sample">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">OKLCH in Gradients</h3>
+
+                    <div class="color-box oklch-gradient">
+                        Blue to Green Gradient
+                    </div>
+                </div>
+                <div class="label">OKLCH in CSS gradients</div>
+
+                <div class="sample">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">OKLCH with Borders</h3>
+
+                    <div class="color-box oklch-border">
+                        Border, Background, Text Color
+                        <br><small>All using oklch()</small>
+                    </div>
+                </div>
+                <div class="label">OKLCH in multiple properties</div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - OKLCH/OKLAB Colors</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

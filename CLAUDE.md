@@ -206,6 +206,15 @@ Uses `standard-version` for semantic versioning and CHANGELOG generation.
 - **Browser Support**: Chrome 84+, Firefox 63+, Safari 14.1+, Edge 84+
 - **Native Promises**: No polyfill required
 
+### New HTML Element Support
+- **`<details>` and `<summary>`**: HTML5 disclosure widgets
+  - Supports `open` attribute to show/hide content
+  - Summary elements display disclosure triangle markers (▶ closed, ▼ open)
+  - Properly handles nested details elements
+  - Implementation: [src/dom/elements/details-element-container.ts](src/dom/elements/details-element-container.ts), [src/dom/elements/summary-element-container.ts](src/dom/elements/summary-element-container.ts)
+  - Rendering: List marker logic in [src/render/stacking-context.ts](src/render/stacking-context.ts), disclosure triangles in [src/css/types/functions/counter.ts](src/css/types/functions/counter.ts)
+  - Test page: [tests/visual-suite/modern/details.html](tests/visual-suite/modern/details.html)
+
 ### New CSS Properties
 - **`object-fit`**: Controls how replaced elements (img, video, canvas, svg) scale within containers
   - Values: `fill` (default), `contain`, `cover`, `none`, `scale-down`
@@ -266,6 +275,43 @@ Uses `standard-version` for semantic versioning and CHANGELOG generation.
   - `scroll-snap-type`: Controls snap enforcement (none, x, y, both, block, inline)
   - `scroll-snap-align`: Snap position alignment (none, start, end, center)
   - Implementation: [scroll-snap.ts](src/css/property-descriptors/scroll-snap.ts)
+
+- **Modern Color Functions**: Complete CSS Color Module Level 4 support
+  - **`oklch()`**: Perceptually uniform cylindrical color space (Oklab-based)
+    - Parameters: lightness (0-1 or %), chroma (0+), hue (0-360deg), alpha (optional)
+    - Example: `oklch(0.21 0.034 264.665)` (dark blue-gray)
+    - Best for perceptually uniform gradients and color manipulation
+
+  - **`oklab()`**: Perceptually uniform rectangular color space
+    - Parameters: lightness (0-1 or %), a (-0.4 to 0.4), b (-0.4 to 0.4), alpha (optional)
+    - Example: `oklab(0.5 0.1 -0.1)` (purple)
+    - Direct rectangular coordinates in Oklab space
+
+  - **`lch()`**: CIE LCH cylindrical color space (LAB-based)
+    - Parameters: lightness (0-100 or %), chroma (0+), hue (0-360deg), alpha (optional)
+    - Example: `lch(50 50 180)` (cyan)
+    - Industry-standard perceptual color space
+
+  - **`lab()`**: CIE LAB rectangular color space
+    - Parameters: lightness (0-100 or %), a (-125 to 125), b (-125 to 125), alpha (optional)
+    - Example: `lab(50 40 -20)` (cyan-green)
+    - Direct LAB coordinates for precise color specification
+
+  - **`hwb()`**: Hue, Whiteness, Blackness color model
+    - Parameters: hue (0-360deg), whiteness (0-100%), blackness (0-100%), alpha (optional)
+    - Example: `hwb(194 0% 0%)` (cyan)
+    - Intuitive color model based on paint mixing
+
+  - **`color()`**: Generic color space function
+    - Supported spaces: `srgb`, `srgb-linear`, `display-p3`, `a98-rgb`, `prophoto-rgb`, `rec2020`
+    - Parameters: colorspace c1 c2 c3 [/ alpha]
+    - Examples: `color(srgb 1 0 0)`, `color(display-p3 1 0.5 0)`
+    - Allows explicit color space specification for wide-gamut displays
+
+  - Implementation: [src/css/types/color.ts](src/css/types/color.ts)
+  - Test page: [tests/visual-suite/modern/all-color-functions.html](tests/visual-suite/modern/all-color-functions.html)
+  - Unit tests: 32 tests covering all color functions with alpha, percentages, and edge cases
+  - Note: All colors converted to sRGB for canvas rendering with proper gamma correction and clamping
 
 - **`border-image-*`**: Border image properties (PARTIAL IMPLEMENTATION)
   - `border-image-source`: Image/gradient source for borders
