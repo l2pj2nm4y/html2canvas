@@ -15,15 +15,20 @@ export class SummaryElementContainer extends ElementContainer {
         const detailsParent = element.parentElement;
         this.detailsOpen = !!(detailsParent && detailsParent.tagName === 'DETAILS' && (detailsParent as HTMLDetailsElement).open);
 
-        // Ensure display includes list-item for marker rendering
-        // Browser default for summary is display: list-item
-        // Display is a bitfield, so we use bitwise OR to add the LIST_ITEM flag
-        this.styles.display = this.styles.display | DISPLAY.LIST_ITEM;
+        // Only modify display and list style if the computed style doesn't already include list-item
+        // This prevents interfering with existing styling
+        const hasListItem = (this.styles.display & DISPLAY.LIST_ITEM) !== 0;
 
-        // Set the list style type to disclosure-closed or disclosure-open
-        // These are special marker types for details/summary
-        // The actual marker type will be set during stacking context processing
-        // based on the parent DetailsElementContainer's open state
-        this.styles.listStyleType = this.detailsOpen ? LIST_STYLE_TYPE.DISCLOSURE_OPEN : LIST_STYLE_TYPE.DISCLOSURE_CLOSED;
+        if (!hasListItem) {
+            // Ensure display includes list-item for marker rendering
+            // Browser default for summary is display: list-item
+            this.styles.display = this.styles.display | DISPLAY.LIST_ITEM;
+
+            // Set the list style type to disclosure-closed or disclosure-open
+            // These are special marker types for details/summary
+            // The actual marker type will be set during stacking context processing
+            // based on the parent DetailsElementContainer's open state
+            this.styles.listStyleType = this.detailsOpen ? LIST_STYLE_TYPE.DISCLOSURE_OPEN : LIST_STYLE_TYPE.DISCLOSURE_CLOSED;
+        }
     }
 }

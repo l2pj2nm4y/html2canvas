@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Gov Page Issue</title>
+    <script src="./dist/html2canvas.js?v=20251025-2120"></script>
+    <style>
+        body { margin: 20px; font-family: Arial; }
+        .test { border: 2px solid red; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Testing Details Elements</h1>
+
+    <div class="test">
+        <h2>Test 1: Simple closed details</h2>
+        <details>
+            <summary>Click me</summary>
+            <p>Hidden content</p>
+        </details>
+    </div>
+
+    <div class="test">
+        <h2>Test 2: Closed details with form inside (like cookie banner)</h2>
+        <details>
+            <summary>Cookies info</summary>
+            <div>
+                <p>Cookie text</p>
+                <form>
+                    <button type="submit">Accept</button>
+                    <button type="submit">Reject</button>
+                </form>
+            </div>
+        </details>
+    </div>
+
+    <div class="test">
+        <h2>Test 3: Multiple nested elements</h2>
+        <details>
+            <summary>Summary text</summary>
+            <div class="content">
+                <p>Paragraph 1</p>
+                <p>Paragraph 2</p>
+                <ul>
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                </ul>
+            </div>
+        </details>
+    </div>
+
+    <button onclick="capture()">Capture</button>
+    <div id="output"></div>
+
+    <script>
+        async function capture() {
+            const canvas = await html2canvas(document.body, {
+                logging: true
+            });
+            document.getElementById('output').appendChild(canvas);
+        }
+    </script>
+</body>
+</html>

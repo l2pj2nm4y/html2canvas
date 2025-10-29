@@ -270,10 +270,13 @@ const processListItems = (owner: ElementContainer, elements: ElementPaint[]) => 
     }
 
     // Standard list processing for OL, UL, MENU
+    // Filter out summary elements - they should only be processed by their parent details
+    const validListItems = elements.filter(item => !(item.container instanceof SummaryElementContainer));
+
     let numbering = owner instanceof OLElementContainer ? owner.start : 1;
     const reversed = owner instanceof OLElementContainer ? owner.reversed : false;
-    for (let i = 0; i < elements.length; i++) {
-        const item = elements[i];
+    for (let i = 0; i < validListItems.length; i++) {
+        const item = validListItems[i];
         if (
             item.container instanceof LIElementContainer &&
             typeof item.container.value === 'number' &&

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Whitespace Issue</title>
+    <script src="./dist/html2canvas.js?v=20251030-1415"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        .red-box { background: red; height: 100px; }
+        .blue-box { background: blue; height: 100px; }
+    </style>
+</head>
+<body>
+    <div class="red-box">Top Box (should be at top of canvas)</div>
+    
+    <details>
+        <summary>Closed details</summary>
+        <p>Hidden</p>
+    </details>
+    
+    <div class="blue-box">Bottom Box</div>
+
+    <button onclick="capture()">Capture</button>
+    <div id="output"></div>
+
+    <script>
+        async function capture() {
+            const canvas = await html2canvas(document.body, {
+                logging: false
+            });
+            document.getElementById('output').appendChild(canvas);
+            console.log('Canvas height:', canvas.height);
+            console.log('Body height:', document.body.offsetHeight);
+        }
+    </script>
+</body>
+</html>
