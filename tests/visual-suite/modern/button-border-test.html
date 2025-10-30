@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Border Test</title>
+    <link rel="stylesheet" href="../shared/test-template.css">
+    <script src="../../../dist/html2canvas.js?v=20251030-1700"></script>
+    <style>
+        .test-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .test-button {
+            border: 2px outset buttonborder;
+            padding: 1px 6px;
+            background: buttonface;
+            color: buttontext;
+            font: 400 13.3333px Arial;
+            cursor: pointer;
+        }
+
+        .test-button-solid {
+            border: 2px solid #666;
+            padding: 1px 6px;
+            background: #f0f0f0;
+        }
+
+        .test-button-thick {
+            border: 5px outset buttonborder;
+            padding: 3px 10px;
+            background: buttonface;
+        }
+
+        .test-button-no-padding {
+            border: 2px outset buttonborder;
+            padding: 0;
+            background: buttonface;
+        }
+
+        .label {
+            font-size: 12px;
+            color: #666;
+            min-width: 200px;
+        }
+
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .section h3 {
+            margin: 0 0 15px 0;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Button Border Test</h1>
+        <p>Testing border rendering with padding, especially 'outset' border style</p>
+        <div style="background: #fff3cd; padding: 10px; margin: 10px 0; border: 1px solid #856404; border-radius: 4px;">
+            <strong>Testing:</strong> Border should be exactly 2px thick, not including padding area
+        </div>
+    </header>
+
+    <div class="controls">
+        <button id="capture-btn" class="btn-primary">Capture Canvas</button>
+        <div class="status-group">
+            <span id="status" class="status"></span>
+            <span id="timing" class="timing"></span>
+        </div>
+    </div>
+
+    <div class="split-view">
+        <div class="view-panel">
+            <div class="panel-header">HTML Version</div>
+            <div class="panel-content" id="html-samples">
+
+                <div class="section">
+                    <h3>Outset Border with Padding</h3>
+                    <div class="test-buttons">
+                        <div class="button-row">
+                            <span class="label">2px outset, 1px/6px padding:</span>
+                            <button class="test-button">Button Text</button>
+                        </div>
+                        <div class="button-row">
+                            <span class="label">2px solid, 1px/6px padding:</span>
+                            <button class="test-button-solid">Button Text</button>
+                        </div>
+                        <div class="button-row">
+                            <span class="label">5px outset, 3px/10px padding:</span>
+                            <button class="test-button-thick">Button Text</button>
+                        </div>
+                        <div class="button-row">
+                            <span class="label">2px outset, no padding:</span>
+                            <button class="test-button-no-padding">Text</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Expected Behavior</h3>
+                    <ul style="font-size: 14px; color: #495057;">
+                        <li>Border width should be exactly 2px (or 5px for thick button)</li>
+                        <li>Padding should create space INSIDE the border, not increase border thickness</li>
+                        <li>Outset style should have 3D light/dark effect</li>
+                        <li>Total visual border area should equal border-width, not border-width + padding</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="view-panel">
+            <div class="panel-header">Canvas Version</div>
+            <div class="panel-content" id="canvas-output">
+                <div class="placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p>Click "Capture Canvas" to render</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>html2canvas Visual Testing Suite - Button Border Test</p>
+        <a href="../index.html">← Back to Index</a>
+    </footer>
+
+    <script src="../shared/test-runner.js"></script>
+</body>
+</html>

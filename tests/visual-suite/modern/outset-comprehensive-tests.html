@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outset Border - Comprehensive Tests</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: sans-serif;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .test-case {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .test-case h3 {
+            margin: 0 0 15px 0;
+            color: #495057;
+            font-size: 14px;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 8px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin: 15px 0;
+        }
+
+        .html-view, .canvas-view {
+            flex: 1;
+            text-align: center;
+        }
+
+        .html-view h4, .canvas-view h4 {
+            margin: 0 0 10px 0;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .button-wrapper {
+            display: inline-block;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .canvas-wrapper {
+            display: inline-block;
+            background: #f8f9fa;
+            border-radius: 4px;
+            padding: 10px;
+        }
+
+        .size-info {
+            margin-top: 10px;
+            font-size: 11px;
+            font-family: monospace;
+            text-align: left;
+            background: #e9ecef;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .size-info.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .size-info.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Test button styles */
+        .btn-base {
+            font-size: 16px;
+            cursor: default;
+        }
+
+        /* Test 1: Basic outset */
+        .test1 {
+            border: 2px outset rgb(0, 0, 0);
+            padding: 1px 6px;
+            background: rgb(239, 239, 239);
+        }
+
+        /* Test 2: With appearance auto */
+        .test2 {
+            appearance: auto;
+            border: 2px outset rgb(0, 0, 0);
+            padding: 1px 6px;
+            background: rgb(239, 239, 239);
+        }
+
+        /* Test 3: With nested spans */
+        .test3 {
+            border: 2px outset rgb(0, 0, 0);
+            padding: 1px 6px;
+            background: rgb(239, 239, 239);
+        }
+
+        /* Test 4: With nested spans + image */
+        .test4 {
+            border: 2px outset rgb(0, 0, 0);
+            padding: 1px 6px;
+            background: rgb(239, 239, 239);
+        }
+
+        /* Test 5: Different border widths */
+        .test5 {
+            border: 5px outset rgb(0, 0, 0);
+            padding: 1px 6px;
+            background: rgb(239, 239, 239);
+        }
+
+        /* Test 6: Different padding */
+        .test6 {
+            border: 2px outset rgb(0, 0, 0);
+            padding: 10px 20px;
+            background: rgb(239, 239, 239);
+        }
+
+        /* Test 7: With border-radius */
+        .test7 {
+            border: 2px outset rgb(0, 0, 0);
+            border-radius: 8px;
+            padding: 1px 6px;
+            background: rgb(239, 239, 239);
+        }
+
+        /* Test 8: Box-sizing border-box */
+        .test8 {
+            border: 2px outset rgb(0, 0, 0);
+            padding: 1px 6px;
+            background: rgb(239, 239, 239);
+            box-sizing: border-box;
+            width: 100px;
+            height: 30px;
+        }
+
+        /* Test 9: Different border colors per side */
+        .test9 {
+            border-top: 2px outset rgb(255, 0, 0);
+            border-right: 2px outset rgb(0, 255, 0);
+            border-bottom: 2px outset rgb(0, 0, 255);
+            border-left: 2px outset rgb(255, 255, 0);
+            padding: 1px 6px;
+            background: rgb(239, 239, 239);
+        }
+
+        /* Test 10: Asymmetric borders */
+        .test10 {
+            border-top: 1px outset rgb(0, 0, 0);
+            border-right: 2px outset rgb(0, 0, 0);
+            border-bottom: 3px outset rgb(0, 0, 0);
+            border-left: 4px outset rgb(0, 0, 0);
+            padding: 1px 6px;
+            background: rgb(239, 239, 239);
+        }
+
+        /* Test 11: With display inline-block */
+        .test11 {
+            display: inline-block;
+            border: 2px outset rgb(0, 0, 0);
+            padding: 1px 6px;
+            background: rgb(239, 239, 239);
+        }
+
+        /* Test 12: With transforms */
+        .test12 {
+            border: 2px outset rgb(0, 0, 0);
+            padding: 1px 6px;
+            background: rgb(239, 239, 239);
+            transform: scale(1);
+        }
+
+        .btn-icon {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+
+        .summary {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+
+        .summary h2 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+
+        #summary-content {
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .pass {
+            color: #28a745;
+        }
+
+        .fail {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <h1>Outset Border - Comprehensive Test Suite</h1>
+
+    <div class="summary">
+        <h2>Test Results Summary</h2>
+        <div id="summary-content">Running tests...</div>
+    </div>
+
+    <div class="test-grid" id="test-container">
+        <!-- Tests will be inserted here -->
+    </div>
+
+    <script src="/dist/html2canvas.js"></script>
+    <script>
+        const tests = [
+            {
+                name: 'Test 1: Basic Outset Border',
+                html: '<button class="btn-base test1">Print</button>'
+            },
+            {
+                name: 'Test 2: With appearance: auto',
+                html: '<button class="btn-base test2">Print</button>'
+            },
+            {
+                name: 'Test 3: With Nested Spans',
+                html: '<button class="btn-base test3"><span><span>Print</span></span></button>'
+            },
+            {
+                name: 'Test 4: With Nested Spans + Image',
+                html: '<button class="btn-base test4"><span><span>Print</span><img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' viewBox=\'0 0 16 16\'%3E%3Crect width=\'16\' height=\'16\' fill=\'%23999\'/%3E%3C/svg%3E" class="btn-icon" alt=""></span></button>'
+            },
+            {
+                name: 'Test 5: Thicker Border (5px)',
+                html: '<button class="btn-base test5">Print</button>'
+            },
+            {
+                name: 'Test 6: More Padding',
+                html: '<button class="btn-base test6">Print</button>'
+            },
+            {
+                name: 'Test 7: With Border Radius',
+                html: '<button class="btn-base test7">Print</button>'
+            },
+            {
+                name: 'Test 8: Box-sizing border-box + Fixed Size',
+                html: '<button class="btn-base test8">Print</button>'
+            },
+            {
+                name: 'Test 9: Different Colors Per Side',
+                html: '<button class="btn-base test9">Print</button>'
+            },
+            {
+                name: 'Test 10: Asymmetric Border Widths',
+                html: '<button class="btn-base test10">Print</button>'
+            },
+            {
+                name: 'Test 11: Display inline-block',
+                html: '<span class="btn-base test11">Print</span>'
+            },
+            {
+                name: 'Test 12: With Transform',
+                html: '<button class="btn-base test12">Print</button>'
+            }
+        ];
+
+        let results = [];
+        let completedTests = 0;
+
+        function updateSummary() {
+            const total = tests.length;
+            const passed = results.filter(r => r.passed).length;
+            const failed = results.filter(r => !r.passed).length;
+
+            let summary = `Total Tests: ${total}\n`;
+            summary += `Passed: ${passed} ✓\n`;
+            summary += `Failed: ${failed} ❌\n\n`;
+
+            if (failed > 0) {
+                summary += 'Failed Tests:\n';
+                results.filter(r => !r.passed).forEach(r => {
+                    summary += `  - ${r.name}\n`;
+                    summary += `    Expected: ${r.expected.width}x${r.expected.height}\n`;
+                    summary += `    Got: ${r.actual.width}x${r.actual.height}\n`;
+                    summary += `    Diff: ${r.diff.width > 0 ? '+' : ''}${r.diff.width}w, ${r.diff.height > 0 ? '+' : ''}${r.diff.height}h\n\n`;
+                });
+            }
+
+            document.getElementById('summary-content').innerHTML =
+                `<pre>${summary}</pre>` +
+                `<div style="margin-top: 15px;">` +
+                `<span class="pass">● Passed: ${passed}</span> | ` +
+                `<span class="fail">● Failed: ${failed}</span>` +
+                `</div>`;
+        }
+
+        function runTest(testConfig, index) {
+            const container = document.getElementById('test-container');
+
+            const testCase = document.createElement('div');
+            testCase.className = 'test-case';
+            testCase.innerHTML = `
+                <h3>${testConfig.name}</h3>
+                <div class="button-container">
+                    <div class="html-view">
+                        <h4>HTML</h4>
+                        <div class="button-wrapper" id="html-${index}"></div>
+                        <div class="size-info" id="size-html-${index}"></div>
+                    </div>
+                    <div class="canvas-view">
+                        <h4>Canvas</h4>
+                        <div class="canvas-wrapper" id="canvas-${index}"></div>
+                        <div class="size-info" id="size-canvas-${index}"></div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(testCase);
+
+            // Create button
+            const htmlContainer = document.getElementById(`html-${index}`);
+            htmlContainer.innerHTML = testConfig.html;
+            const button = htmlContainer.querySelector('button, span');
+
+            // Get dimensions
+            const offsetWidth = button.offsetWidth;
+            const offsetHeight = button.offsetHeight;
+            const styles = window.getComputedStyle(button);
+
+            document.getElementById(`size-html-${index}`).innerHTML = `
+                Size: ${offsetWidth} x ${offsetHeight}<br>
+                Border: ${styles.borderTopWidth}<br>
+                Padding: ${styles.paddingTop} ${styles.paddingRight} ${styles.paddingBottom} ${styles.paddingLeft}
+            `;
+
+            // Capture to canvas
+            html2canvas(button, {
+                logging: false,
+                backgroundColor: '#f8f9fa',
+                scale: 1
+            }).then(canvas => {
+                document.getElementById(`canvas-${index}`).appendChild(canvas);
+
+                const widthDiff = canvas.width - offsetWidth;
+                const heightDiff = canvas.height - offsetHeight;
+                const tolerance = 1;
+                const passed = Math.abs(widthDiff) <= tolerance && Math.abs(heightDiff) <= tolerance;
+
+                const sizeDiv = document.getElementById(`size-canvas-${index}`);
+                sizeDiv.className = 'size-info ' + (passed ? 'success' : 'error');
+                sizeDiv.innerHTML = `
+                    Canvas: ${canvas.width} x ${canvas.height}<br>
+                    Expected: ${offsetWidth} x ${offsetHeight}<br>
+                    Diff: ${widthDiff > 0 ? '+' : ''}${widthDiff}w, ${heightDiff > 0 ? '+' : ''}${heightDiff}h<br>
+                    ${passed ? '✓ PASS' : '❌ FAIL'}
+                `;
+
+                results.push({
+                    name: testConfig.name,
+                    passed: passed,
+                    expected: { width: offsetWidth, height: offsetHeight },
+                    actual: { width: canvas.width, height: canvas.height },
+                    diff: { width: widthDiff, height: heightDiff }
+                });
+
+                completedTests++;
+                if (completedTests === tests.length) {
+                    updateSummary();
+                }
+            }).catch(err => {
+                console.error(`Test ${index} failed:`, err);
+                document.getElementById(`size-canvas-${index}`).innerHTML = `Error: ${err.message}`;
+
+                completedTests++;
+                results.push({
+                    name: testConfig.name,
+                    passed: false,
+                    error: err.message
+                });
+
+                if (completedTests === tests.length) {
+                    updateSummary();
+                }
+            });
+        }
+
+        // Run all tests
+        document.addEventListener('DOMContentLoaded', () => {
+            tests.forEach((test, index) => {
+                setTimeout(() => runTest(test, index), index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

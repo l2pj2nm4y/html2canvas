@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outset Border Debug</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: sans-serif;
+        }
+
+        .test-button {
+            /* Exact styles from your button */
+            border-bottom-color: rgb(0, 0, 0);
+            border-bottom-style: outset;
+            border-bottom-width: 2px;
+            border-left-color: rgb(0, 0, 0);
+            border-left-style: outset;
+            border-left-width: 2px;
+            border-right-color: rgb(0, 0, 0);
+            border-right-style: outset;
+            border-right-width: 2px;
+            border-top-color: rgb(0, 0, 0);
+            border-top-style: outset;
+            border-top-width: 2px;
+            border-radius: 8px; /* Adding border-radius to match your screenshot */
+            padding-inline-start: 6px;
+            padding-inline-end: 6px;
+            padding-block-start: 1px;
+            padding-block-end: 1px;
+            background-color: rgb(239, 239, 239);
+            font-size: 16px;
+            cursor: default;
+        }
+
+        /* Test with different radius values */
+        .test-button-r4 {
+            border-radius: 4px;
+        }
+
+        .test-button-r12 {
+            border-radius: 12px;
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+            margin: 20px;
+        }
+
+        .section {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        #canvas-output {
+            background: white;
+            border: 1px solid #ccc;
+        }
+
+        #canvas-output > div {
+            margin: 0;
+            padding: 0;
+        }
+
+        #canvas-output canvas {
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Outset Border Debug Test</h1>
+
+    <div class="container">
+        <div class="section">
+            <h2>HTML Buttons</h2>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <button class="test-button" type="submit" id="btn1">
+                    <span>Print (8px radius)</span>
+                </button>
+                <button class="test-button test-button-r4" type="submit" id="btn2">
+                    <span>Print (4px radius)</span>
+                </button>
+                <button class="test-button test-button-r12" type="submit" id="btn3">
+                    <span>Print (12px radius)</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Canvas Renders</h2>
+            <div id="canvas-output" style="display: flex; flex-direction: column; gap: 15px;"></div>
+        </div>
+    </div>
+
+    <script src="/dist/html2canvas.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.test-button');
+            const output = document.getElementById('canvas-output');
+
+            buttons.forEach((button, index) => {
+                html2canvas(button, {
+                    logging: true,
+                    backgroundColor: '#f5f5f5',
+                    scale: 2
+                }).then(canvas => {
+                    const wrapper = document.createElement('div');
+                    wrapper.appendChild(canvas);
+                    output.appendChild(wrapper);
+
+                    console.log(`Button ${index + 1} dimensions:`, button.offsetWidth, 'x', button.offsetHeight);
+                    console.log(`Canvas ${index + 1} dimensions:`, canvas.width, 'x', canvas.height);
+
+                    // Measure actual displayed sizes and spacing after a frame
+                    requestAnimationFrame(() => {
+                        const canvasRect = canvas.getBoundingClientRect();
+                        const wrapperRect = wrapper.getBoundingClientRect();
+
+                        console.log(`Canvas ${index + 1} displayed:`, {
+                            canvasRect: `${canvasRect.width.toFixed(2)} x ${canvasRect.height.toFixed(2)}`,
+                            wrapperRect: `${wrapperRect.width.toFixed(2)} x ${wrapperRect.height.toFixed(2)}`,
+                            canvasStyle: canvas.style.cssText,
+                            wrapperStyle: window.getComputedStyle(wrapper).cssText
+                        });
+
+                        // Measure gap to next element
+                        if (index < buttons.length - 1) {
+                            const nextWrapper = output.children[index + 1];
+                            if (nextWrapper) {
+                                const nextRect = nextWrapper.getBoundingClientRect();
+                                const gap = nextRect.top - wrapperRect.bottom;
+                                console.log(`Gap after canvas ${index + 1}: ${gap.toFixed(2)}px`);
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Also measure HTML button spacing
+            setTimeout(() => {
+                console.log('\n=== HTML BUTTON MEASUREMENTS ===');
+                const htmlButtons = document.querySelectorAll('.test-button');
+                htmlButtons.forEach((btn, i) => {
+                    const rect = btn.getBoundingClientRect();
+                    console.log(`HTML Button ${i + 1}: ${rect.width.toFixed(2)} x ${rect.height.toFixed(2)}`);
+
+                    if (i < htmlButtons.length - 1) {
+                        const nextBtn = htmlButtons[i + 1];
+                        const nextRect = nextBtn.getBoundingClientRect();
+                        const gap = nextRect.top - rect.bottom;
+                        console.log(`Gap after HTML button ${i + 1}: ${gap.toFixed(2)}px`);
+                    }
+                });
+
+                console.log('\n=== CANVAS OUTPUT MEASUREMENTS ===');
+                const outputStyle = window.getComputedStyle(output);
+                console.log('Canvas container gap:', outputStyle.gap);
+                console.log('Canvas container display:', outputStyle.display);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

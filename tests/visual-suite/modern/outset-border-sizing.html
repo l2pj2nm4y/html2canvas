@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outset Border Sizing Bug</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: sans-serif;
+            background: #f5f5f5;
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+            margin: 20px 0;
+        }
+
+        .section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        /* Exact button from user's page */
+        .test-button {
+            border: 2px outset rgb(0, 0, 0);
+            padding: 1px 6px;
+            background: rgb(239, 239, 239);
+            font-size: 16px;
+            cursor: default;
+            box-sizing: border-box;
+        }
+
+        .size-info {
+            margin-top: 10px;
+            font-size: 12px;
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .size-info div {
+            margin: 3px 0;
+        }
+
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .canvas-wrapper {
+            display: inline-block;
+            border: 2px solid #007bff;
+            margin-top: 10px;
+        }
+
+        .info-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Outset Border Sizing Bug</h1>
+
+    <div class="info-box">
+        <strong>Bug Report:</strong> Buttons with <code>border-style: outset</code> render at incorrect size in canvas.<br>
+        <strong>Expected:</strong> Canvas size should match button offsetWidth/offsetHeight<br>
+        <strong>Actual:</strong> Canvas is ~20px wider and taller than it should be
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <h2>HTML Button</h2>
+            <button class="test-button" id="test-btn">
+                <span>Print</span>
+            </button>
+            <div class="size-info" id="html-size">
+                <!-- Size info will be inserted here -->
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Canvas Render</h2>
+            <div id="canvas-output">
+                <!-- Canvas will be inserted here -->
+            </div>
+            <div class="size-info" id="canvas-size">
+                <!-- Size info will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Debug Information</h2>
+        <div id="debug-info" style="font-family: monospace; font-size: 12px; white-space: pre-wrap;"></div>
+    </div>
+
+    <script src="/dist/html2canvas.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.getElementById('test-btn');
+            const htmlSizeDiv = document.getElementById('html-size');
+            const canvasSizeDiv = document.getElementById('canvas-size');
+            const canvasOutput = document.getElementById('canvas-output');
+            const debugInfo = document.getElementById('debug-info');
+
+            // Get HTML button dimensions
+            const offsetWidth = button.offsetWidth;
+            const offsetHeight = button.offsetHeight;
+            const clientWidth = button.clientWidth;
+            const clientHeight = button.clientHeight;
+            const styles = window.getComputedStyle(button);
+
+            htmlSizeDiv.innerHTML = `
+                <div><strong>Offset (total):</strong> ${offsetWidth} x ${offsetHeight}</div>
+                <div><strong>Client (content):</strong> ${clientWidth} x ${clientHeight}</div>
+                <div><strong>Border:</strong> ${styles.borderTopWidth} (all sides)</div>
+                <div><strong>Padding:</strong> ${styles.paddingTop} ${styles.paddingRight} ${styles.paddingBottom} ${styles.paddingLeft}</div>
+                <div><strong>Box-sizing:</strong> ${styles.boxSizing}</div>
+            `;
+
+            debugInfo.textContent = `HTML Button Computed Styles:
+border-style: ${styles.borderTopStyle}
+border-width: ${styles.borderTopWidth}
+border-color: ${styles.borderTopColor}
+padding: ${styles.paddingTop} ${styles.paddingRight} ${styles.paddingBottom} ${styles.paddingLeft}
+box-sizing: ${styles.boxSizing}
+width: ${styles.width}
+height: ${styles.height}`;
+
+            // Capture button
+            html2canvas(button, {
+                logging: true,
+                backgroundColor: '#ffffff',
+                scale: 1  // Use scale 1 to match exact pixels
+            }).then(canvas => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'canvas-wrapper';
+                wrapper.appendChild(canvas);
+                canvasOutput.appendChild(wrapper);
+
+                const widthDiff = canvas.width - offsetWidth;
+                const heightDiff = canvas.height - offsetHeight;
+                const hasError = Math.abs(widthDiff) > 1 || Math.abs(heightDiff) > 1; // Allow 1px tolerance
+
+                canvasSizeDiv.innerHTML = `
+                    <div><strong>Canvas size:</strong> ${canvas.width} x ${canvas.height}</div>
+                    <div><strong>Expected:</strong> ${offsetWidth} x ${offsetHeight}</div>
+                    <div class="${hasError ? 'error' : 'success'}">
+                        <strong>Difference:</strong> ${widthDiff > 0 ? '+' : ''}${widthDiff} width, ${heightDiff > 0 ? '+' : ''}${heightDiff} height
+                    </div>
+                    ${hasError ? '<div class="error">❌ SIZE MISMATCH - THIS IS THE BUG!</div>' : '<div class="success">✓ Size matches</div>'}
+                `;
+
+                debugInfo.textContent += `\n\nCanvas Output:
+Canvas width: ${canvas.width}
+Canvas height: ${canvas.height}
+Expected width: ${offsetWidth}
+Expected height: ${offsetHeight}
+Width difference: ${widthDiff}
+Height difference: ${heightDiff}
+Scale: 1x
+
+Bug Status: ${hasError ? 'REPRODUCED ❌' : 'NOT REPRODUCED ✓'}`;
+
+                console.log('Size comparison:', {
+                    html: { width: offsetWidth, height: offsetHeight },
+                    canvas: { width: canvas.width, height: canvas.height },
+                    diff: { width: widthDiff, height: heightDiff }
+                });
+            }).catch(err => {
+                canvasSizeDiv.innerHTML = `<div class="error">Error: ${err.message}</div>`;
+                console.error('html2canvas error:', err);
+            });
+        });
+    </script>
+</body>
+</html>
